@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seite nicht gefunden | Fachschaft Psychologie Heidelberg</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Redirect SPA route requests to hash route on static hosts
+    (function() {
+      var path = window.location.pathname;
+      var repo = path.split('/')[1]; // In case hosted in a subfolder like /repo-name/
+      // If path points to a non-existent file, redirect to index.html with appropriate hash
+      if (path && path !== '/' && !path.endsWith('.html')) {
+        window.location.replace('/#' + path);
+      }
+    })();
+  </script>
+</head>
+<body style="min-height: 100dvh; display: grid; place-items: center; padding: 2rem; text-align: center;">
+  <div style="max-width: 480px;">
+    <div style="font-size: 3rem; margin-bottom: 1rem; color: var(--accent);">ψ</div>
+    <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Seite nicht gefunden</h1>
+    <p style="color: var(--text2); margin-bottom: 1.5rem; line-height: 1.6;">
+      Die angeforderte Seite existiert leider nicht oder ist umgezogen.
+    </p>
+    <a class="btn btn-primary" href="index.html#/" style="display: inline-flex; text-decoration: none;">
+      Zurück zur Startseite
+    </a>
+  </div>
+</body>
+</html>

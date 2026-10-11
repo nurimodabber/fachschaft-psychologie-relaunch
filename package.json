@@ -1,0 +1,23 @@
+{
+  "name": "fachschaft-psychologie-heidelberg",
+  "version": "1.0.0",
+  "description": "Website der Fachschaft Psychologie an der Universität Heidelberg",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "python3 -m http.server 3000"
+  },
+  "keywords": [
+    "fachschaft",
+    "psychologie",
+    "universitaet-heidelberg",
+    "website"
+  ],
+  "author": "Fachschaft Psychologie Heidelberg",
+  "license": "CC-BY-SA-4.0",
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}
