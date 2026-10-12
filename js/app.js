@@ -209,10 +209,69 @@ function notFound(){
 }
 
 /* ============ Navigation ============ */
+const SEC_ICONS = {
+  fachschaft: 'users',
+  studium: 'cap',
+  leben: 'spark',
+  hopo: 'bank'
+};
+
+const NAV_TAGS = {
+  'studium/bachelor/eks': 'Ersti-Woche',
+  'leben/blackbox': 'Zeitschrift',
+  'leben/ersti-we': 'Wochenende',
+  'hopo/psyfako': 'Bundesweit'
+};
+
+const DRAWER_GROUPS = {
+  fachschaft: [
+    { label: 'Über uns', items: ['fachschaft', 'fachschaft/aktive'] },
+    { label: 'Kontakt & Satzung', items: ['fachschaft/kontakt', 'fachschaft/downloads'] }
+  ],
+  studium: [
+    { label: 'Studiengänge & Start', items: ['studium', 'studium/bachelor', 'studium/bachelor/eks', 'studium/master', 'studium/approbation'] },
+    { label: 'Praxis & Ausland', items: ['studium/praktika', 'studium/ausland'] },
+    { label: 'Orientierung & Hilfe', items: ['studium/faq', 'studium/lehrgestaltung', 'studium/links'] }
+  ],
+  leben: [
+    { label: 'Kultur & Medien', items: ['leben', 'leben/psychoparty', 'leben/blackbox', 'leben/psychokino'] },
+    { label: 'Events & Treffen', items: ['leben/ersti-we', 'leben/grillen', 'leben/pumpkinparty', 'leben/wechslertreffen'] }
+  ],
+  hopo: [
+    { label: 'Am Institut', items: ['hopo', 'hopo/fachrat', 'hopo/fachschaftsrat', 'hopo/pruefungsausschuss'] },
+    { label: 'Fakultät & Universität', items: ['hopo/fakrat', 'hopo/stura', 'hopo/qsm'] },
+    { label: 'Überregional', items: ['hopo/psyfako'] }
+  ]
+};
+
 function buildNav(){
   const mains=TREE.filter(([r])=>r!=='impressum');
   $('#mainnav').innerHTML=mains.map(([r])=>`<li><a href="#/${r}" data-sec="${r}">${navTitle(r)}</a></li>`).join('');
-  $('#drawerBody').innerHTML=mains.filter(([,k])=>k.length).map(([r,kids])=>`<section><h2><a href="#/${r}">${navTitle(r)}</a></h2><ul><li><a href="#/${r}">Übersicht</a></li>${kids.map(k=>`<li><a href="#/${k}" class="${depth(k)===2?'lvl2':''}">${PAGES[k].t}</a></li>`).join('')}</ul></section>`).join('');
+  $('#drawerBody').innerHTML=mains.filter(([,k])=>k.length).map(([r])=>{
+    const groups=DRAWER_GROUPS[r]||[{label:'',items:[r,...kidsOf(r)]}];
+    const icon=SEC_ICONS[r]||'folder';
+    return `<section class="sheet-col">
+      <header class="sheet-col-head">
+        <a class="sheet-col-title" href="#/${r}">
+          <span class="sheet-col-ico" aria-hidden="true">${ic(icon)}</span>
+          <span class="sheet-col-name">${navTitle(r)}</span>
+        </a>
+      </header>
+      <div class="sheet-col-body">
+        ${groups.map(g=>`<div class="sheet-group">
+          ${g.label?`<div class="sheet-group-label">${g.label}</div>`:''}
+          <ul class="sheet-group-list">
+            ${g.items.map(k=>{
+              const isOverview=k===r;
+              const title=isOverview?'Übersicht':PAGES[k].t;
+              const tag=NAV_TAGS[k]?`<span class="m-tag">${NAV_TAGS[k]}</span>`:'';
+              return `<li><a href="#/${k}" class="sheet-link${isOverview?' is-overview':''}"><span>${title}</span>${tag}</a></li>`;
+            }).join('')}
+          </ul>
+        </div>`).join('')}
+      </div>
+    </section>`;
+  }).join('');
   $('#menuQuick').innerHTML=[['','Startseite'],['aktuelles','Aktuelles'],['fachschaft/kontakt','Kontakt'],['impressum','Impressum']].map(([r,t])=>`<a href="#/${r}">${t}</a>`).join('');
 }
 function markNav(route){
@@ -550,6 +609,7 @@ applyPref(getPref());
 document.addEventListener('click',e=>{const t=e.target.closest('[data-theme-set]');if(t)applyPref(t.dataset.themeSet);});
 $('#openMenu').addEventListener('click',()=>$('#drawer').showModal());
 $('#openSearch').addEventListener('click',openSearch);
+$$('[data-opensearch]').forEach(b=>b.addEventListener('click',()=>{const d=b.closest('dialog');if(d)d.close();openSearch();}));
 $$('dialog [data-close]').forEach(b=>b.addEventListener('click',()=>b.closest('dialog').close()));
 $$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close();}));
 $('#drawer').addEventListener('click',e=>{const a=e.target.closest('a[href^="#/"]');if(a){setTimeout(()=>$('#drawer').close(),0);if(a.getAttribute('href')===location.hash)router();}});
