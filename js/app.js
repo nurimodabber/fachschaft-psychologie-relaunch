@@ -142,17 +142,33 @@ function home(){
 <section class="sec" aria-labelledby="map-h">
  <div class="wrap">
   <div class="shead rv"><div><h2 class="sh2" id="map-h">So findest du uns</h2><p class="sub">Mitten in der Altstadt, an der Hauptstraße zwischen Bismarckplatz und Universitätsplatz.</p></div></div>
-  <div class="mapwrap rv">
-   ${mapSvg('mapsvg')}
-   <span class="pin" style="left:${MAP_META.ix}%;top:${MAP_META.iy}%"></span>
-   <span class="pin-label" style="left:${MAP_META.ix}%;top:${MAP_META.iy}%">Psychologisches Institut</span>
+  <div class="mapwrap rv" data-zoomable>
+   <div class="map-viewport">
+    <div class="map-layer">
+     ${mapSvg('mapsvg')}
+     <span class="pin" style="left:${MAP_META.ix}%;top:${MAP_META.iy}%"></span>
+     <span class="pin-label" style="left:${MAP_META.ix}%;top:${MAP_META.iy}%">Psychologisches Institut</span>
+    </div>
+   </div>
+   <div class="map-ctrls" role="toolbar" aria-label="Karte zoomen">
+    <button type="button" class="mctrl-btn" data-mzoom="in" title="Vergrößern (Reinzoomen)" aria-label="Vergrößern"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    <button type="button" class="mctrl-btn" data-mzoom="out" title="Verkleinern (Rauszoomen)" aria-label="Verkleinern"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    <button type="button" class="mctrl-btn" data-mzoom="reset" title="Zentrieren / Zurücksetzen" aria-label="Zentrieren"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+   </div>
    <div class="mapcard">
     <h3>Fachschaftskeller</h3>
     <p><b>Hauptstraße 47-51, 69117 Heidelberg.</b> Durch das Tor in den Innenhof, der Keller liegt direkt rechts.</p>
     <p>Sitzungen montags von 18 bis 20 Uhr in der Vorlesungszeit.</p>
-    <div class="btns"><a class="btn btn-primary btn-small" href="#/fachschaft/kontakt">Kontakt</a><a class="tlink noext" href="${OSM_LINK}">In Karte öffnen${ic('chevr')}</a></div>
+    <div class="btns">
+     <a class="btn btn-primary btn-small" href="#/fachschaft/kontakt">Kontakt</a>
+     <a class="btn btn-ghost btn-small noext" href="${GMAPS_LINK}" target="_blank" rel="noopener" title="In Google Maps öffnen">Google Maps</a>
+     <a class="btn btn-ghost btn-small noext" href="${APPLE_MAPS_LINK}" target="_blank" rel="noopener" title="In Apple Maps öffnen">Apple Maps</a>
+    </div>
+    <div class="mapcard-sublinks">
+     <a class="tlink noext" href="${MAP_DEFAULT_LINK}" target="_blank" rel="noopener">In Karte öffnen${ic('chevr')}</a>
+    </div>
    </div>
-   <p class="mapcredit">Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a></p>
+   <p class="mapcredit">Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a> • Zoomen & Bewegen aktiv</p>
   </div>
  </div>
 </section>`;
@@ -173,7 +189,7 @@ function page(route){
   const lnav=hasLocal?`<nav class="lnav" aria-label="${navTitle(s)}"><div class="in"><a class="lt" href="#/${s}">${navTitle(s)}</a><ul>${list.map(r=>`<li><a href="#/${r}" ${r===route?'aria-current="page"':''}>${r===s?'Übersicht':PAGES[r].t}</a></li>`).join('')}</ul></div></nav>`:'';
   let banner='';
   if(route===s&&SECTION_IMG[s]) banner=`<figure class="banner rv"><div class="bi">${pic(SECTION_IMG[s],'',true)}</div><figcaption>${credit(SECTION_IMG[s])}</figcaption></figure>`;
-  else if(route==='hopo') banner=`<figure class="banner map rv"><div class="bi">${mapSvg('')}</div><figcaption>Heidelberger Altstadt. Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a></figcaption></figure>`;
+  else if(route==='hopo') banner=`<figure class="banner map rv" data-zoomable><div class="bi"><div class="map-viewport"><div class="map-layer">${mapSvg('')}</div></div><div class="map-ctrls" role="toolbar" aria-label="Karte zoomen"><button type="button" class="mctrl-btn" data-mzoom="in" title="Vergrößern"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><button type="button" class="mctrl-btn" data-mzoom="out" title="Verkleinern"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg></button><button type="button" class="mctrl-btn" data-mzoom="reset" title="Zurücksetzen"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button></div></div><figcaption>Heidelberger Altstadt. Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a> • <a class="noext" href="${GMAPS_LINK}" target="_blank" rel="noopener">Google Maps</a> • <a class="noext" href="${APPLE_MAPS_LINK}" target="_blank" rel="noopener">Apple Maps</a></figcaption></figure>`;
   return `${lnav}
   <header class="phead">${banner?'':mapSvg('mapbg')}<div class="in rv">${crumbs(route)}<h1 tabindex="-1">${p.t}</h1>${p.lead?`<p class="lead">${p.lead}</p>`:''}</div></header>
   ${banner}
@@ -225,8 +241,164 @@ function decorateLinks(root){
     if(!$('.sr',a)) a.insertAdjacentHTML('beforeend','<span class="sr"> (öffnet in neuem Tab)</span>');
   });
 }
+/* ============ Interaktive Karten (Zoom & Pan) ============ */
+function initZoomableMaps(root){
+  $$('[data-zoomable]', root).forEach(container => {
+    const vp = $('.map-viewport', container);
+    const layer = $('.map-layer', container);
+    if(!vp || !layer || container._zoomInited) return;
+    container._zoomInited = true;
+
+    let scale = 1;
+    let x = 0, y = 0;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let initialDist = 0, initialScale = 1;
+
+    function applyTransform(animated = false){
+      const rect = vp.getBoundingClientRect();
+      const maxPanX = Math.max(0, (rect.width * (scale - 1)) / 2);
+      const maxPanY = Math.max(0, (rect.height * (scale - 1)) / 2);
+
+      if(scale <= 1){
+        x = 0; y = 0; scale = 1;
+      } else {
+        x = Math.max(-maxPanX, Math.min(maxPanX, x));
+        y = Math.max(-maxPanY, Math.min(maxPanY, y));
+      }
+
+      container.style.setProperty('--map-scale', scale.toFixed(2));
+      layer.style.transition = animated ? 'transform .26s cubic-bezier(.16,1,.3,1)' : 'none';
+      layer.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+      
+      const resetBtn = $('[data-mzoom="reset"]', container);
+      if(resetBtn) resetBtn.classList.toggle('active', scale > 1.05 || Math.abs(x) > 4 || Math.abs(y) > 4);
+      vp.style.cursor = scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'crosshair';
+    }
+
+    $$('[data-mzoom]', container).forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        const action = btn.dataset.mzoom;
+        if(action === 'in'){
+          scale = Math.min(5, scale * 1.4);
+          applyTransform(true);
+        } else if(action === 'out'){
+          scale = Math.max(1, scale / 1.4);
+          applyTransform(true);
+        } else if(action === 'reset'){
+          scale = 1; x = 0; y = 0;
+          applyTransform(true);
+        }
+      });
+    });
+
+    vp.addEventListener('wheel', e => {
+      e.preventDefault();
+      const rect = vp.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left - rect.width / 2;
+      const mouseY = e.clientY - rect.top - rect.height / 2;
+
+      const delta = e.deltaY < 0 ? 1.25 : 0.8;
+      const prevScale = scale;
+      const nextScale = Math.min(5, Math.max(1, scale * delta));
+      if(nextScale === prevScale) return;
+
+      const factor = nextScale / prevScale;
+      x = mouseX - factor * (mouseX - x);
+      y = mouseY - factor * (mouseY - y);
+      scale = nextScale;
+      applyTransform(false);
+    }, { passive: false });
+
+    vp.addEventListener('mousedown', e => {
+      if(e.button !== 0) return;
+      isDragging = true;
+      startX = e.clientX - x;
+      startY = e.clientY - y;
+      vp.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+
+    const onMove = e => {
+      if(!isDragging) return;
+      x = e.clientX - startX;
+      y = e.clientY - startY;
+      applyTransform(false);
+    };
+
+    const onUp = () => {
+      if(!isDragging) return;
+      isDragging = false;
+      applyTransform(true);
+    };
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+
+    vp.addEventListener('dblclick', e => {
+      e.preventDefault();
+      const rect = vp.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left - rect.width / 2;
+      const mouseY = e.clientY - rect.top - rect.height / 2;
+
+      if(scale < 2){
+        const nextScale = 2.4;
+        const factor = nextScale / scale;
+        x = mouseX - factor * (mouseX - x);
+        y = mouseY - factor * (mouseY - y);
+        scale = nextScale;
+      } else {
+        scale = 1; x = 0; y = 0;
+      }
+      applyTransform(true);
+    });
+
+    vp.addEventListener('touchstart', e => {
+      if(e.touches.length === 1){
+        isDragging = true;
+        startX = e.touches[0].clientX - x;
+        startY = e.touches[0].clientY - y;
+      } else if(e.touches.length === 2){
+        isDragging = false;
+        initialDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        initialScale = scale;
+      }
+    }, { passive: true });
+
+    vp.addEventListener('touchmove', e => {
+      if(e.touches.length === 1 && isDragging && scale > 1){
+        x = e.touches[0].clientX - startX;
+        y = e.touches[0].clientY - startY;
+        applyTransform(false);
+        e.preventDefault();
+      } else if(e.touches.length === 2){
+        const dist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        scale = Math.min(5, Math.max(1, initialScale * (dist / initialDist)));
+        applyTransform(false);
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    vp.addEventListener('touchend', () => {
+      isDragging = false;
+      applyTransform(true);
+    });
+
+    applyTransform(false);
+  });
+}
+
 function hydrate(root){
   decorateLinks(root);
+  initZoomableMaps(root);
   $$('[data-tabs]',root).forEach(t=>{
     const btns=$$('[role=tab]',t);
     const sel=b=>{btns.forEach(x=>{const on=x===b;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;$('#'+x.getAttribute('aria-controls')).hidden=!on;});};

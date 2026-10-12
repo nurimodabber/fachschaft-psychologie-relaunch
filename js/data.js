@@ -601,6 +601,9 @@ const credit=k=>`Foto: <a class="noext" href="${IMG[k].src}">${IMG[k].by}</a>, <
 const pic=(k,cls,eager)=>`<img${cls?` class="${cls}"`:''} src="${HD_IMG[k]}" alt="${IMG[k].alt}" decoding="async"${eager?' fetchpriority="high"':' loading="lazy"'}>`;
 const OSM='https://www.openstreetmap.org/copyright';
 const OSM_LINK='https://www.openstreetmap.org/?mlat=49.41054&mlon=8.69767#map=18/49.41054/8.69767';
+const GMAPS_LINK='https://www.google.com/maps/search/?api=1&query=Psychologisches+Institut+Universit%C3%A4t+Heidelberg,+Hauptstra%C3%9Fe+47-51,+69117+Heidelberg';
+const APPLE_MAPS_LINK='https://maps.apple.com/?q=Psychologisches+Institut+Universit%C3%A4t+Heidelberg&ll=49.41054,8.69767';
+const MAP_DEFAULT_LINK=(typeof navigator!=='undefined'&&/Macintosh|iPhone|iPad|iPod/.test(navigator.userAgent))?APPLE_MAPS_LINK:GMAPS_LINK;
 const mapSvg=cls=>`<svg class="${cls||''}" viewBox="0 0 1600 ${MAP_META.h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><use href="#hd-map"/></svg>`;
 const SECTION_IMG={fachschaft:'valley',studium:'city',leben:'night'};
 PAGES.impressum.body+=`
@@ -619,6 +622,7 @@ if (typeof window !== "undefined") {
     P, OLD, U, PI, UNI, MAIL, MAIL_FIN, BBB, CAL, ICS, IG, FB, PSYTREFF, DSGVO,
     PHOTOS, HERO_KEY, HD_IMG, MAP_META, IMG, SECTION_IMG, TREE, POSTS, ISSUES,
     OLDMAG, ROOMS, PAGES, ic, L, X, M, copyBtn, facts, callout, initials, people,
-    rows, photo, fmtD, terms, sessionBox, pic, credit, mapSvg
+    rows, photo, fmtD, terms, sessionBox, pic, credit, mapSvg,
+    OSM, OSM_LINK, GMAPS_LINK, APPLE_MAPS_LINK, MAP_DEFAULT_LINK
   });
 }
