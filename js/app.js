@@ -25,137 +25,415 @@ function nextSession(){
   return {live,wd,day:d.getDate(),mo:d.toLocaleDateString('de-DE',{month:'long',year:'numeric'}),iso:d.toISOString()};
 }
 
-/* ============ Startseite ============ */
-function home(){
-  const s=nextSession(), p0=POSTS[0], d0=new Date(p0.d+'T12:00:00');
-  const quick=[['studium/bachelor','book','Bachelor'],['studium/master','cap','Master'],['studium/bachelor/eks','users','EKS'],['studium/approbation','heart','Approbation'],['studium/ausland','compass','Ausland'],['studium/praktika','briefcase','Praktika'],['studium/faq','question','FAQ'],['fachschaft/downloads','download','Protokolle']];
-  const why=[['spark','Mitgestalten','Von der Psychoparty bis zum PsychoKino: Du bringst deine Ideen ein und setzt sie mit uns um.'],
-    ['bank','Hochschulpolitik','Du erlebst, wie Entscheidungen über Studium und Lehre entstehen, und redest mit.'],
-    ['users','Alle Semester','Du lernst engagierte Studierende kennen, die du sonst nie getroffen hättest.'],
-    ['handshake','Verantwortung','Für Projekte, Finanzen und die Interessen deiner Kommiliton:innen.']];
+/* ============ Startseite (Zero-Scroll Interactive Portal) ============ */
+let currentPortalTab = 'overview';
+
+function setPortalTab(tabName){
+  currentPortalTab = tabName;
+  const tabs = $$('.portal-tabs .ptab');
+  const panels = $$('.portal-view');
+  tabs.forEach(t=>{
+    const on = t.dataset.tab === tabName;
+    t.setAttribute('aria-selected', on);
+    t.tabIndex = on ? 0 : -1;
+    if(on) t.classList.add('active'); else t.classList.remove('active');
+  });
+  panels.forEach(p=>{
+    const on = p.id === 'view-' + tabName;
+    p.hidden = !on;
+    if(on) p.classList.add('active'); else p.classList.remove('active');
+  });
+}
+
+function home(activeTab){
+  if(activeTab) currentPortalTab = activeTab;
+  const tab = currentPortalTab || 'overview';
+  const s = nextSession(), p0 = POSTS[0], d0 = new Date(p0.d+'T12:00:00');
+  const quick = [
+    ['studium/bachelor','book','Bachelor'],
+    ['studium/master','cap','Master'],
+    ['studium/bachelor/eks','users','EKS'],
+    ['studium/approbation','heart','Approbation'],
+    ['studium/ausland','compass','Ausland'],
+    ['studium/praktika','briefcase','Praktika'],
+    ['studium/faq','question','FAQ'],
+    ['fachschaft/downloads','download','Protokolle']
+  ];
+
   return `
-<section class="hero" aria-labelledby="hero-h">
- ${pic('hero','',true)}
- <div class="in">
-  <p class="eb">Universität Heidelberg</p>
-  <h1 id="hero-h" tabindex="-1">Fachschaft Psychologie</h1>
-  <p class="lead">Herzlich willkommen! Wir sind die Studierendenvertretung am Psychologischen Institut.</p>
-  <div class="btns"><a class="btn btn-primary" href="#/fachschaft">Über uns</a><a class="tlink" href="#/studium">Infos zum Studium${ic('chevr')}</a></div>
- </div>
- <p class="credit">${credit('hero')}</p>
-</section>
+<div class="portal" role="region" aria-label="Portal der Fachschaft Psychologie">
 
-<nav class="quick" aria-label="Schnellzugriff"><ul>${quick.map(([h,i,t])=>`<li><a href="#/${h}"><span class="qi">${ic(i)}</span>${t}</a></li>`).join('')}</ul></nav>
-
-<section class="sec">
- <div class="wrap intro">
-  <div class="rv">
-   <p class="statement">Du hast dich schon immer gefragt, was wir als Fachschaft machen? Du möchtest wissen, was am Institut passiert? Du suchst Informationen zum Studium? <b>Dann bist du hier genau richtig.</b></p>
-   <p class="more"><a class="tlink" href="#/fachschaft">Mehr über die Fachschaft${ic('chevr')}</a></p>
+ <nav class="portal-nav" aria-label="Portal-Navigation">
+  <div class="portal-tabs" role="tablist">
+   <button type="button" role="tab" class="ptab ${tab==='overview'?'active':''}" data-tab="overview" id="tab-overview" aria-controls="view-overview" aria-selected="${tab==='overview'}" tabindex="${tab==='overview'?0:-1}">
+    <span class="ptab-icon">${ic('spark')}</span>
+    <span class="ptab-label">Übersicht</span>
+   </button>
+   <button type="button" role="tab" class="ptab ${tab==='why'?'active':''}" data-tab="why" id="tab-why" aria-controls="view-why" aria-selected="${tab==='why'}" tabindex="${tab==='why'?0:-1}">
+    <span class="ptab-icon">${ic('users')}</span>
+    <span class="ptab-label">Warum mitmachen?</span>
+   </button>
+   <button type="button" role="tab" class="ptab ${tab==='study'?'active':''}" data-tab="study" id="tab-study" aria-controls="view-study" aria-selected="${tab==='study'}" tabindex="${tab==='study'?0:-1}">
+    <span class="ptab-icon">${ic('book')}</span>
+    <span class="ptab-label">Studium</span>
+   </button>
+   <button type="button" role="tab" class="ptab ${tab==='news'?'active':''}" data-tab="news" id="tab-news" aria-controls="view-news" aria-selected="${tab==='news'}" tabindex="${tab==='news'?0:-1}">
+    <span class="ptab-icon">${ic('newspaper')}</span>
+    <span class="ptab-label">Aktuelles & BlackBox</span>
+   </button>
+   <button type="button" role="tab" class="ptab ${tab==='campus'?'active':''}" data-tab="campus" id="tab-campus" aria-controls="view-campus" aria-selected="${tab==='campus'}" tabindex="${tab==='campus'?0:-1}">
+    <span class="ptab-icon">${ic('pin')}</span>
+    <span class="ptab-label">Campus & Räume</span>
+   </button>
   </div>
-  <aside class="session rv" aria-labelledby="sess-h">
-   <h2 id="sess-h">Nächste Sitzung${s.live?'<span class="live">läuft gerade</span>':''}</h2>
-   <div class="date"><time class="day" datetime="${s.iso}">${s.day}</time><span class="wd">${s.wd}</span><span class="mo">${s.mo}, 18-20 Uhr</span></div>
-   <dl>
-    <div><dt>${ic('pin')}<span class="sr">Ort</span></dt><dd>Fachschaftskeller, Hauptstraße 47-51. Durch das Tor in den Innenhof, direkt rechts.</dd></div>
-    <div><dt>${ic('video')}<span class="sr">Online</span></dt><dd>Oder nach Absprache online.</dd></div>
-    <div><dt>${ic('cal')}<span class="sr">Hinweis</span></dt><dd>In der Vorlesungszeit, jede Woche. Neue Gesichter sind immer willkommen.</dd></div>
-   </dl>
-   <div class="btns"><a class="btn btn-primary btn-small noext" href="${BBB}">Online teilnehmen</a><a class="tlink noext" href="${CAL}">Alle Termine${ic('chevr')}</a></div>
-  </aside>
- </div>
-</section>
+ </nav>
 
-<section class="sec tight" aria-labelledby="ex-h">
- <div class="wrap">
-  <div class="shead rv"><div><h2 class="sh2" id="ex-h">Was interessiert euch gerade?</h2></div></div>
-  <div class="bento3">
-   <article class="tile t-study rv">
-    <figure>${pic('city')}</figure><span class="cap">${credit('city')}</span>
-    <div class="tb"><h3><a href="#/studium">Infos zum Studium</a></h3>
-     <p>Bewerbung, Studienaufbau, Praktika und Auslandssemester. Dazu Antworten auf die Fragen, die Erstis am häufigsten stellen.</p>
-     <div class="subl"><a href="#/studium/bachelor">Bachelor${ic('chevr')}</a><a href="#/studium/master">Master${ic('chevr')}</a><a href="#/studium/approbation">Approbation${ic('chevr')}</a><a href="#/studium/faq">FAQ${ic('chevr')}</a></div></div>
-   </article>
-   <article class="tile t-events rv" style="--i:1">
-    <figure>${pic('night')}</figure><span class="cap">${credit('night')}</span>
-    <div class="tb"><h3><a href="#/leben">Veranstaltungen</a></h3>
-     <p>Psychoparty, Ersti-Wochenende, PsychoKino und Institutsgrillen.</p>
-     <div class="subl"><a href="#/leben/psychoparty">Psychoparty${ic('chevr')}</a><a href="#/leben/ersti-we">Ersti-Wochenende${ic('chevr')}</a></div></div>
-   </article>
-   <article class="tile t-fs rv" style="--i:2">
-    <figure>${pic('valley')}</figure><span class="cap">${credit('valley')}</span>
-    <div class="tb"><h3><a href="#/fachschaft">Die Fachschaft</a></h3>
-     <p>Wer wir sind, wie du mitmachst und wo wir dich vertreten.</p>
-     <div class="subl"><a href="#/fachschaft/aktive">Aktive Fachschaft${ic('chevr')}</a><a href="#/hopo">Hochschulpolitik${ic('chevr')}</a></div></div>
-   </article>
-  </div>
- </div>
-</section>
+ <div class="portal-stage">
 
-<section class="sec alt" aria-labelledby="why-h">
- <div class="wrap gal-head rv">
-  <div><h2 class="sh2" id="why-h">Warum mitmachen?</h2><p class="sub">Was die Arbeit in der Fachschaft ausmacht, in vier Punkten. Und ein fünfter, der eigentlich der wichtigste ist.</p></div>
-  <div class="gal-ctrl"><button type="button" data-gal="gal" data-dir="prev" aria-label="Zurück" disabled>${ic('chevl')}</button><button type="button" data-gal="gal" data-dir="next" aria-label="Weiter">${ic('chevr')}</button></div>
- </div>
- <ul class="gallery" id="gal">
-  ${why.map(([i,t,d])=>`<li><span class="gi">${ic(i)}</span><h3>${t}</h3><p>${d}</p></li>`).join('')}
-  <li class="cta"><span class="gi">${ic('smiley')}</span><h3>Spaß und Partys</h3><p>Fachschaftsarbeit ist auch einfach eine richtig gute Zeit. Komm montags vorbei und schau es dir an.</p><a href="#/fachschaft/kontakt">So erreichst du uns${ic('chevr')}</a></li>
- </ul>
-</section>
+  <!-- ================= TAB 1: ÜBERSICHT ================= -->
+  <div class="portal-view ${tab==='overview'?'active':''}" id="view-overview" role="tabpanel" aria-labelledby="tab-overview" ${tab==='overview'?'':'hidden'}>
+   <div class="pv-grid pv-overview">
+    
+    <!-- Hero Bento Card -->
+    <article class="pcard pcard-hero rv">
+     <div class="pcard-badge">
+      <span class="pcard-seal-dot"></span>
+      <span>Universität Heidelberg • Psychologisches Institut</span>
+     </div>
+     <h1 class="phero-title">Deine Stimme am Institut.</h1>
+     <p class="phero-lead">Wir sind die gewählte Studierendenvertretung am Psychologischen Institut in Heidelberg. Wir beraten dich im Studium, organisieren Events von der Psychoparty bis zum Ersti-Wochenende und vertreten deine Anliegen.</p>
+     <div class="phero-actions">
+      <button type="button" class="btn btn-primary" data-switch-tab="why">${ic('users')}Warum mitmachen?</button>
+      <button type="button" class="btn btn-ghost" data-switch-tab="study">${ic('book')}Infos zum Studium</button>
+      <a class="tlink" href="#/fachschaft">Über uns${ic('chevr')}</a>
+     </div>
+     <div class="phero-chips">
+      <span class="chips-title">Schnellzugriff:</span>
+      <div class="chips-list">
+       ${quick.map(([h,i,t])=>`<a href="#/${h}" class="chip-pill"><span class="c-ico">${ic(i)}</span><span>${t}</span></a>`).join('')}
+      </div>
+     </div>
+    </article>
 
-<section class="sec" aria-labelledby="news-h">
- <div class="wrap">
-  <div class="shead rv"><h2 class="sh2" id="news-h">Was gibt’s Neues?</h2><a class="tlink" href="#/aktuelles">Alle Beiträge${ic('chevr')}</a></div>
-  <div class="news-grid">
-   <article class="feat rv">
-    <time datetime="${p0.d}">${d0.toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'})}</time>
-    <h3><a class="noext" href="${P+p0.u}">${p0.t}</a></h3><p>${p0.x}</p>
-    <div class="tags">${['Aktuelles',...p0.c].map(c=>`<span class="tag">${c}</span>`).join('')}</div>
-   </article>
-   <div class="side-news rv" style="--i:1">${newsList(POSTS.slice(1,4))}</div>
-  </div>
- </div>
-</section>
+    <!-- Side Column: Session + Teasers -->
+    <div class="pv-side">
+     
+     <!-- Session Card -->
+     <aside class="pcard pcard-session rv" aria-labelledby="sess-h">
+      <div class="pcard-top">
+       <span class="pcard-kicker">Wöchentliche Sitzung</span>
+       ${s.live?'<span class="live-pill"><span class="live-dot"></span>läuft gerade</span>':'<span class="badge-subtle">Vorlesungszeit</span>'}
+      </div>
+      <div class="sess-hero">
+       <div class="sess-date-badge">
+        <span class="sdb-month">${s.mo.split(' ')[0]}</span>
+        <span class="sdb-day">${s.day}</span>
+        <span class="sdb-wd">${s.wd}</span>
+       </div>
+       <div class="sess-details">
+        <h2 id="sess-h" class="sess-time">Montags, 18–20 Uhr</h2>
+        <p class="sess-place">${ic('pin')}<b>Fachschaftskeller</b>, Hauptstraße 47–51</p>
+        <p class="sess-note">Durch das Tor in den Innenhof, direkt rechts. Komm einfach vorbei!</p>
+       </div>
+      </div>
+      <div class="sess-actions">
+       <a class="btn btn-primary btn-small noext" href="${BBB}">${ic('video')}Online teilnehmen (BBB)</a>
+       <a class="tlink btn-small noext" href="${CAL}">${ic('cal')}Alle Termine${ic('chevr')}</a>
+      </div>
+     </aside>
 
-<section class="sec tight" aria-labelledby="bb-h">
- <div class="wrap">
-  <div class="bbox rv">
-   <div>
-    <p class="kick">Die Zeitschrift am Institut</p>
-    <h2 class="sh2" id="bb-h">BlackBox</h2>
-    <p>Jedes Semester eine neue Ausgabe mit Artikeln von Studierenden und Dozierenden, Umfragen und Memes. Das Archiv reicht bis 1983 zurück.</p>
-    <ul class="issues-mini">${ISSUES.slice(0,4).map(([n,s,f])=>`<li><a class="noext" href="${U+f}"><b>Nr. ${n}</b>${s}</a></li>`).join('')}</ul>
-    <div class="btns"><a class="btn btn-primary noext" href="${U+ISSUES[0][2]}">${ic('download')}Neue Ausgabe lesen</a><a class="tlink" href="#/leben/blackbox">Zum Archiv${ic('chevr')}</a></div>
+     <!-- Split Duo Cards -->
+     <div class="pv-duo">
+      <article class="pcard pcard-mini rv">
+       <div class="pcard-top">
+        <span class="pcard-kicker">Aktuelles</span>
+        <time datetime="${p0.d}">${d0.toLocaleDateString('de-DE',{day:'numeric',month:'short'})}</time>
+       </div>
+       <h3 class="mini-title"><a class="noext" href="${P+p0.u}">${p0.t}</a></h3>
+       <button type="button" class="mini-more" data-switch-tab="news">Alle Meldungen & BlackBox${ic('chevr')}</button>
+      </article>
+
+      <article class="pcard pcard-mini rv">
+       <div class="pcard-top">
+        <span class="pcard-kicker">Orientierung</span>
+        <span class="badge-subtle">Altstadt</span>
+       </div>
+       <h3 class="mini-title">Fachschaftskeller & Räume</h3>
+       <button type="button" class="mini-more" data-switch-tab="campus">Karte & Raumfinder${ic('chevr')}</button>
+      </article>
+     </div>
+
+    </div>
+
    </div>
-   <div class="orb" data-face="a">
-    <svg viewBox="0 0 240 220" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
-     <path class="fa" d="M30 80H150V200H30Z"/><path class="fb" d="M90 20H210V140H90Z"/>
-     <path d="M30 80H150V200H30ZM90 20H210V140H90ZM30 80 90 20M150 80 210 20M150 200 210 140M30 200 90 140"/>
-    </svg>
-    <button class="btn btn-ghost btn-small" type="button" data-necker aria-pressed="false">Perspektive wechseln</button>
-    <small>Der Necker-Würfel: Du siehst ihn von oben oder von unten, aber nie beides zugleich.</small>
-   </div>
   </div>
- </div>
-</section>
 
-<section class="sec" aria-labelledby="map-h">
- <div class="wrap">
-  <div class="shead rv"><div><h2 class="sh2" id="map-h">So findest du uns</h2><p class="sub">Mitten in der Altstadt, an der Hauptstraße zwischen Bismarckplatz und Universitätsplatz.</p></div></div>
-  <div class="mapwrap rv">
-   ${mapSvg('mapsvg')}
-   <span class="pin" style="left:${MAP_META.ix}%;top:${MAP_META.iy}%"></span>
-   <span class="pin-label" style="left:${MAP_META.ix}%;top:${MAP_META.iy}%">Psychologisches Institut</span>
-   <div class="mapcard">
-    <h3>Fachschaftskeller</h3>
-    <p><b>Hauptstraße 47-51, 69117 Heidelberg.</b> Durch das Tor in den Innenhof, der Keller liegt direkt rechts.</p>
-    <p>Sitzungen montags von 18 bis 20 Uhr in der Vorlesungszeit.</p>
-    <div class="btns"><a class="btn btn-primary btn-small" href="#/fachschaft/kontakt">Kontakt</a><a class="tlink noext" href="${OSM_LINK}">In Karte öffnen${ic('chevr')}</a></div>
+  <!-- ================= TAB 2: WARUM MITMACHEN? (ZERO-SCROLL 5-PILLAR GRID) ================= -->
+  <div class="portal-view ${tab==='why'?'active':''}" id="view-why" role="tabpanel" aria-labelledby="tab-why" ${tab==='why'?'':'hidden'}>
+   <div class="pv-why-wrap">
+    
+    <div class="psection-head rv">
+     <div class="psection-badge"><span class="badge-accent">🤝 Aktive Fachschaft</span></div>
+     <h2 class="sh2">Warum mitmachen?</h2>
+     <p class="sub">Was die Arbeit in der Fachschaft Heidelberg ausmacht – fünf Gründe, montags um 18 Uhr im Keller vorbeizuschauen.</p>
+    </div>
+
+    <!-- 5-Card Balanced Bento Grid: 3 top + 2 bottom (No Carousel, Zero Scroll!) -->
+    <div class="why-5grid">
+     
+     <article class="pcard why-card rv">
+      <span class="why-icon">${ic('spark')}</span>
+      <h3 class="why-title">Mitgestalten</h3>
+      <p class="why-desc">Von der legendären Psychoparty bis zum PsychoKino: Du bringst deine eigenen Ideen ein und setzt sie direkt mit uns im Institut um.</p>
+     </article>
+
+     <article class="pcard why-card rv">
+      <span class="why-icon">${ic('bank')}</span>
+      <h3 class="why-title">Hochschulpolitik</h3>
+      <p class="why-desc">Erlebe Gremien und Studienkommissionen hautnah. Gestalte Prüfungsordnungen, Lehrevaluationen und Berufungen auf Augenhöhe mit.</p>
+     </article>
+
+     <article class="pcard why-card rv">
+      <span class="why-icon">${ic('users')}</span>
+      <h3 class="why-title">Alle Semester</h3>
+      <p class="why-desc">Vernetze dich mit engagierten Studierenden über alle Semester hinweg – vom Erstsemester über den Master bis zur Promotion.</p>
+     </article>
+
+     <article class="pcard why-card rv">
+      <span class="why-icon">${ic('handshake')}</span>
+      <h3 class="why-title">Verantwortung</h3>
+      <p class="why-desc">Übernimm Verantwortung für reale Projekte, Budgetverwaltung, Erstsemester-Einführung und die gemeinsamen Interessen aller Studierenden.</p>
+     </article>
+
+     <!-- Featured Card: Spaß & Gemeinschaft (Spans across with warm glow highlight) -->
+     <article class="pcard why-card why-featured rv">
+      <div class="why-feat-badge">Besonders wichtig</div>
+      <div class="why-feat-body">
+       <span class="why-icon feat-icon">${ic('smiley')}</span>
+       <div>
+        <h3 class="why-title">Spaß, Zusammenhalt & legendäre Zeiten</h3>
+        <p class="why-desc">Fachschaftsarbeit ist vor allem eine richtig gute Zeit. Nach den Sitzungen zusammensitzen, Grillabende am Neckar, Partys und echte Freundschaften fürs ganze Studium.</p>
+       </div>
+      </div>
+     </article>
+
+    </div>
+
+    <!-- Bottom Action Bar -->
+    <div class="why-bottom-bar rv">
+     <div class="wbb-info">
+      <span class="wbb-pin">${ic('pin')}</span>
+      <span>Montags 18–20 Uhr • Hauptstraße 47–51 (Innenhof rechts im Keller)</span>
+     </div>
+     <div class="wbb-actions">
+      <a class="btn btn-primary btn-small" href="#/fachschaft/kontakt">${ic('mail')}Kontakt aufnehmen</a>
+      <a class="btn btn-ghost btn-small" href="#/fachschaft/aktive">Aktive Fachschaft${ic('chevr')}</a>
+      <button type="button" class="btn btn-ghost btn-small" data-switch-tab="overview">Zurück zur Übersicht</button>
+     </div>
+    </div>
+
    </div>
-   <p class="mapcredit">Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a></p>
   </div>
+
+  <!-- ================= TAB 3: STUDIUM ================= -->
+  <div class="portal-view ${tab==='study'?'active':''}" id="view-study" role="tabpanel" aria-labelledby="tab-study" ${tab==='study'?'':'hidden'}>
+   <div class="pv-study-wrap">
+    
+    <div class="psection-head rv">
+     <div class="psection-badge"><span class="badge-accent">🎓 Studienberatung</span></div>
+     <h2 class="sh2">Infos zum Studium</h2>
+     <p class="sub">Alles Wichtige zu Bewerbung, Studienaufbau, Prüfungen, Praktika und Auslandssemestern.</p>
+    </div>
+
+    <div class="study-3grid">
+     
+     <article class="pcard study-card rv">
+      <div class="study-card-top">
+       <span class="study-icon">${ic('book')}</span>
+       <span class="badge-subtle">Bachelor</span>
+      </div>
+      <h3 class="study-title">Bachelor of Science</h3>
+      <p class="study-desc">Regelstudienzeit 6 Semester. Alle Details zu Modulen, Orientierungsprüfung, BaPsy-Test, EKS und Praktikumsanforderungen.</p>
+      <div class="study-links">
+       <a href="#/studium/bachelor">Bachelor-Übersicht${ic('chevr')}</a>
+       <a href="#/studium/bachelor/eks">EKS (Empirische Klausuren)${ic('chevr')}</a>
+       <a href="#/studium/praktika">Praktika & Berufsfelder${ic('chevr')}</a>
+      </div>
+     </article>
+
+     <article class="pcard study-card rv">
+      <div class="study-card-top">
+       <span class="study-icon">${ic('cap')}</span>
+       <span class="badge-subtle">Master & Reform</span>
+      </div>
+      <h3 class="study-title">Master & Approbation</h3>
+      <p class="study-desc">Master-Schwerpunkte am Institut (Klinische Psychologie, Kognition) und der Übergang in die neue Psychotherapie-Ausbildung.</p>
+      <div class="study-links">
+       <a href="#/studium/master">Master-Studiengänge${ic('chevr')}</a>
+       <a href="#/studium/approbation">Psychotherapie-Approbation${ic('chevr')}</a>
+       <a href="#/studium/master/bewerbung">Bewerbungsverfahren${ic('chevr')}</a>
+      </div>
+     </article>
+
+     <article class="pcard study-card rv">
+      <div class="study-card-top">
+       <span class="study-icon">${ic('compass')}</span>
+       <span class="badge-subtle">Orientierung</span>
+      </div>
+      <h3 class="study-title">Ausland, Ersti-Hilfe & FAQ</h3>
+      <p class="study-desc">ERASMUS-Partneruniversitäten in ganz Europa, FAQs zu Studienorganisation und Unterstützung für Erstsemester.</p>
+      <div class="study-links">
+       <a href="#/studium/ausland">Auslandssemester & ERASMUS${ic('chevr')}</a>
+       <a href="#/studium/faq">Häufige Fragen (FAQ)${ic('chevr')}</a>
+       <a href="#/studium/faq?raum">Raumfinder (F104 & Co.)${ic('chevr')}</a>
+      </div>
+     </article>
+
+    </div>
+
+   </div>
+  </div>
+
+  <!-- ================= TAB 4: AKTUELLES & BLACKBOX ================= -->
+  <div class="portal-view ${tab==='news'?'active':''}" id="view-news" role="tabpanel" aria-labelledby="tab-news" ${tab==='news'?'':'hidden'}>
+   <div class="pv-news-wrap">
+    
+    <div class="news-split-grid">
+     
+     <!-- Featured Post -->
+     <article class="pcard news-feat-card rv">
+      <div class="pcard-top">
+       <span class="badge-accent">Neuester Beitrag</span>
+       <time datetime="${p0.d}">${d0.toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'})}</time>
+      </div>
+      <h2 class="news-feat-title"><a class="noext" href="${P+p0.u}">${p0.t}</a></h2>
+      <p class="news-feat-lead">${p0.x}</p>
+      <div class="news-feat-tags">
+       ${['Aktuelles',...p0.c].map(c=>`<span class="tag">${c}</span>`).join('')}
+      </div>
+      <div class="news-feat-actions">
+       <a class="btn btn-primary btn-small noext" href="${P+p0.u}">Beitrag lesen${ic('chevr')}</a>
+       <a class="btn btn-ghost btn-small" href="#/aktuelles">Alle Meldungen archiviert</a>
+      </div>
+     </article>
+
+     <!-- Side: Recent List + BlackBox -->
+     <div class="news-side-col">
+      
+      <div class="pcard news-recent-card rv">
+       <div class="pcard-top"><span class="pcard-kicker">Weitere Meldungen</span><a class="tlink btn-small" href="#/aktuelles">Archiv${ic('chevr')}</a></div>
+       <ul class="news-compact-list">
+        ${POSTS.slice(1,4).map(p=>`
+         <li>
+          <time datetime="${p.d}">${new Date(p.d+'T12:00:00').toLocaleDateString('de-DE',{day:'numeric',month:'short'})}</time>
+          <a class="noext" href="${P+p.u}"><b>${p.t}</b></a>
+         </li>
+        `).join('')}
+       </ul>
+      </div>
+
+      <div class="pcard blackbox-mini-card rv">
+       <div class="bbox-in">
+        <div>
+         <span class="pcard-kicker">Institutsmagazin</span>
+         <h3 class="bbox-title">BlackBox</h3>
+         <p class="bbox-desc">Artikel von Studierenden & Dozierenden, Umfragen, Memes und Archiv seit 1983.</p>
+         <div class="bbox-btns">
+          <a class="btn btn-primary btn-small noext" href="${U+ISSUES[0][2]}">${ic('download')}Ausgabe Nr. ${ISSUES[0][0]} lesen</a>
+          <a class="tlink btn-small" href="#/leben/blackbox">Archiv${ic('chevr')}</a>
+         </div>
+        </div>
+        <div class="orb mini-orb" data-face="a">
+         <svg viewBox="0 0 240 220" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
+          <path class="fa" d="M30 80H150V200H30Z"/><path class="fb" d="M90 20H210V140H90Z"/>
+          <path d="M30 80H150V200H30ZM90 20H210V140H90ZM30 80 90 20M150 80 210 20M150 200 210 140M30 200 90 140"/>
+         </svg>
+         <button class="btn btn-ghost btn-small" type="button" data-necker aria-pressed="false">Perspektive</button>
+        </div>
+       </div>
+      </div>
+
+     </div>
+
+    </div>
+
+   </div>
+  </div>
+
+  <!-- ================= TAB 5: CAMPUS & RÄUME ================= -->
+  <div class="portal-view ${tab==='campus'?'active':''}" id="view-campus" role="tabpanel" aria-labelledby="tab-campus" ${tab==='campus'?'':'hidden'}>
+   <div class="pv-campus-wrap">
+    
+    <div class="campus-split-grid">
+     
+     <div class="pcard campus-info-card rv">
+      <div class="pcard-top">
+       <span class="badge-accent">📍 Anfahrt & Räume</span>
+       <span class="badge-subtle">Heidelberg Altstadt</span>
+      </div>
+      <h2 class="campus-info-title">Psychologisches Institut</h2>
+      <p class="campus-addr"><b>Hauptstraße 47–51, 69117 Heidelberg</b><br>Mitten in der Altstadt zwischen Bismarckplatz und Universitätsplatz.</p>
+      
+      <div class="campus-details-list">
+       <div class="cd-item">
+        <span class="cd-ico">${ic('door')}</span>
+        <div><b>Fachschaftskeller:</b> Durch das Tor in den Innenhof, der Keller liegt direkt rechts im Souterrain.</div>
+       </div>
+       <div class="cd-item">
+        <span class="cd-ico">${ic('clock')}</span>
+        <div><b>Sitzungszeit:</b> Montags 18–20 Uhr in der Vorlesungszeit. Offen für alle Studierenden.</div>
+       </div>
+       <div class="cd-item">
+        <span class="cd-ico">${ic('question')}</span>
+        <div><b>Hörsäle & Seminarräume:</b> F104, F105, F008 und Versuchsräume schnell finden.</div>
+       </div>
+      </div>
+
+      <div class="campus-actions">
+       <a class="btn btn-primary btn-small" href="#/studium/faq?raum">${ic('search')}Raumfinder öffnen</a>
+       <a class="btn btn-ghost btn-small" href="#/fachschaft/kontakt">Kontakt aufnehmen</a>
+       <a class="tlink btn-small noext" href="${OSM_LINK}">In OpenStreetMap öffnen${ic('chevr')}</a>
+      </div>
+     </div>
+
+     <div class="pcard campus-map-card rv">
+      <div class="cmap-container">
+       ${mapSvg('mapsvg')}
+       <span class="pin" style="left:${MAP_META.ix}%;top:${MAP_META.iy}%"></span>
+       <span class="pin-label" style="left:${MAP_META.ix}%;top:${MAP_META.iy}%">Psychologisches Institut</span>
+      </div>
+      <div class="cmap-foot">
+       <span>Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a></span>
+       <a class="tlink btn-small noext" href="${OSM_LINK}">Vollbild${ic('chevr')}</a>
+      </div>
+     </div>
+
+    </div>
+
+   </div>
+  </div>
+
  </div>
-</section>`;
+
+ <!-- Portal Status Strip (Zero-scroll footer replacement on homepage) -->
+ <footer class="portal-status-strip">
+  <div class="pss-in">
+   <div class="pss-left">
+    <span>© ${new Date().getFullYear()} Fachschaft Psychologie Heidelberg</span>
+    <span class="pss-sep">•</span>
+    <span>Hauptstr. 47–51</span>
+    <span class="pss-sep">•</span>
+    <a href="mailto:${MAIL}">${MAIL}</a>
+   </div>
+   <div class="pss-right">
+    <a href="#/fachschaft/kontakt">Kontakt</a>
+    <a href="#/impressum">Impressum</a>
+    <a class="noext" href="${DSGVO}">Datenschutz</a>
+   </div>
+  </div>
+ </footer>
+
+</div>`;
 }
 
 /* ============ Unterseite ============ */
@@ -227,6 +505,25 @@ function decorateLinks(root){
 }
 function hydrate(root){
   decorateLinks(root);
+  $$('.portal-tabs .ptab', root).forEach((btn, idx, all)=>{
+    btn.addEventListener('click', () => setPortalTab(btn.dataset.tab));
+    btn.addEventListener('keydown', e=>{
+      let nextIdx = null;
+      if(e.key === 'ArrowRight') nextIdx = (idx + 1) % all.length;
+      if(e.key === 'ArrowLeft') nextIdx = (idx - 1 + all.length) % all.length;
+      if(nextIdx !== null){
+        e.preventDefault();
+        setPortalTab(all[nextIdx].dataset.tab);
+        all[nextIdx].focus();
+      }
+    });
+  });
+  $$('[data-switch-tab]', root).forEach(el=>{
+    el.addEventListener('click', e=>{
+      e.preventDefault();
+      setPortalTab(el.dataset.switchTab);
+    });
+  });
   $$('[data-tabs]',root).forEach(t=>{
     const btns=$$('[role=tab]',t);
     const sel=b=>{btns.forEach(x=>{const on=x===b;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;$('#'+x.getAttribute('aria-controls')).hidden=!on;});};
@@ -310,9 +607,16 @@ function router(){
   let [r,anchor]=h.split('?'); r=(r||'').replace(/\/+$/,'');
   if(location.hash&&!location.hash.startsWith('#/')){const el=document.getElementById(location.hash.slice(1)); if(el){el.scrollIntoView();return;}}
   $$('dialog[open]').forEach(d=>d.close());
-  app.innerHTML=r===''?home():(PAGES[r]?page(r):notFound());
-  document.title=r===''?'Fachschaft Psychologie Heidelberg':((PAGES[r]?PAGES[r].t:'Seite nicht gefunden')+' | Fachschaft Psychologie Heidelberg');
-  markNav(r); hydrate(app);
+  if(r==='' || r==='portal' || r==='warum-mitmachen' || r==='uebersicht'){
+    const initialTab = r === 'warum-mitmachen' ? 'why' : (currentPortalTab || 'overview');
+    app.innerHTML=home(initialTab);
+    document.title = (r === 'warum-mitmachen' ? 'Warum mitmachen? | ' : '') + 'Fachschaft Psychologie Heidelberg';
+    markNav(r); hydrate(app);
+  } else {
+    app.innerHTML=PAGES[r]?page(r):notFound();
+    document.title=(PAGES[r]?PAGES[r].t:'Seite nicht gefunden')+' | Fachschaft Psychologie Heidelberg';
+    markNav(r); hydrate(app);
+  }
   if(anchor){requestAnimationFrame(()=>openQA(anchor));}
   else{window.scrollTo({top:0,behavior:'auto'}); if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}}
   first=false;
