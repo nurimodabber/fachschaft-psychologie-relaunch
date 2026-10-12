@@ -29,10 +29,12 @@ function nextSession(){
 function home(){
   const s=nextSession(), p0=POSTS[0], d0=new Date(p0.d+'T12:00:00');
   const quick=[['studium/bachelor','book','Bachelor'],['studium/master','cap','Master'],['studium/bachelor/eks','users','EKS'],['studium/approbation','heart','Approbation'],['studium/ausland','compass','Ausland'],['studium/praktika','briefcase','Praktika'],['studium/faq','question','FAQ'],['fachschaft/downloads','download','Protokolle']];
-  const why=[['spark','Mitgestalten','Von der Psychoparty bis zum PsychoKino: Du bringst deine Ideen ein und setzt sie mit uns um.'],
-    ['bank','Hochschulpolitik','Du erlebst, wie Entscheidungen über Studium und Lehre entstehen, und redest mit.'],
-    ['users','Alle Semester','Du lernst engagierte Studierende kennen, die du sonst nie getroffen hättest.'],
-    ['handshake','Verantwortung','Für Projekte, Finanzen und die Interessen deiner Kommiliton:innen.']];
+  const why=[
+    ['spark','Mitgestalten','Von der Psychoparty bis zum PsychoKino: Du bringst deine Ideen ein und setzt sie mit uns um.',[['leben/psychoparty','Psychoparty'],['leben/psychokino','PsychoKino'],['leben/ersti-we','Ersti-WE']]],
+    ['bank','Hochschulpolitik','Du erlebst, wie Entscheidungen über Studium und Lehre entstehen, und bestimmst mit.',[['hopo/fachrat','FachRat'],['hopo/fakrat','Fakultät'],['hopo/stura','StuRa']]],
+    ['users','Alle Semester','Du lernst engagierte Studierende kennen, die du sonst im Studienalltag nie getroffen hättest.',[['studium/bachelor','Bachelor'],['studium/master','Master'],['fachschaft/aktive','Aktive']]],
+    ['handshake','Verantwortung','Erfahrung sammeln: Für Projekte, Finanzen und die echten Anliegen aller Studierenden.',[['fachschaft/kontakt','Sitzung'],['hopo/qsm','QSM-Mittel'],['studium/lehrgestaltung','Lehre']]]
+  ];
   return `
 <section class="hero" aria-labelledby="hero-h">
  ${pic('hero','',true)}
@@ -94,14 +96,48 @@ function home(){
 </section>
 
 <section class="sec alt" aria-labelledby="why-h">
- <div class="wrap gal-head rv">
-  <div><h2 class="sh2" id="why-h">Warum mitmachen?</h2><p class="sub">Was die Arbeit in der Fachschaft ausmacht, in vier Punkten. Und ein fünfter, der eigentlich der wichtigste ist.</p></div>
-  <div class="gal-ctrl"><button type="button" data-gal="gal" data-dir="prev" aria-label="Zurück" disabled>${ic('chevl')}</button><button type="button" data-gal="gal" data-dir="next" aria-label="Weiter">${ic('chevr')}</button></div>
+ <div class="wrap">
+  <div class="shead why-head rv">
+   <div>
+    <h2 class="sh2" id="why-h">Warum mitmachen?</h2>
+    <p class="sub">Was die Arbeit in der Fachschaft ausmacht, in vier Punkten. Und ein fünfter, der eigentlich der wichtigste ist.</p>
+   </div>
+  </div>
+  <div class="why-grid">
+   ${why.map(([icon,t,desc,chips],idx)=>`
+    <article class="why-card rv" style="--i:${idx}">
+     <div class="why-card-top">
+      <span class="why-ico" aria-hidden="true">${ic(icon)}</span>
+      <span class="why-idx">0${idx+1}</span>
+     </div>
+     <h3>${t}</h3>
+     <p>${desc}</p>
+     <div class="why-chips">
+      ${chips.map(([href,label])=>`<a class="why-chip" href="#/${href}">${label}</a>`).join('')}
+     </div>
+    </article>
+   `).join('')}
+   <article class="why-card why-card-hero rv" style="--i:4">
+    <div>
+     <div class="why-hero-badge">${ic('smiley')} <span>05 · Der wichtigste Punkt</span></div>
+     <h3>Spaß und Partys</h3>
+     <p>Fachschaftsarbeit ist vor allem eine richtig gute Zeit. Neue Freundschaften, legendäre Abende und echter Zusammenhalt am Institut.</p>
+    </div>
+    <div>
+     <div class="why-hero-session">
+      <span class="pulse-dot"></span>
+      <div>
+       <b>Jede Woche montags</b>
+       <span>18–20 Uhr im Fachschaftskeller</span>
+      </div>
+     </div>
+     <a class="btn btn-primary why-hero-cta" href="#/fachschaft/kontakt">
+      <span>So erreichst du uns</span>${ic('chevr')}
+     </a>
+    </div>
+   </article>
+  </div>
  </div>
- <ul class="gallery" id="gal">
-  ${why.map(([i,t,d])=>`<li><span class="gi">${ic(i)}</span><h3>${t}</h3><p>${d}</p></li>`).join('')}
-  <li class="cta"><span class="gi">${ic('smiley')}</span><h3>Spaß und Partys</h3><p>Fachschaftsarbeit ist auch einfach eine richtig gute Zeit. Komm montags vorbei und schau es dir an.</p><a href="#/fachschaft/kontakt">So erreichst du uns${ic('chevr')}</a></li>
- </ul>
 </section>
 
 <section class="sec sec-news" aria-labelledby="news-h">
@@ -535,14 +571,12 @@ function hydrate(root){
   $$('[data-opensearch]',root).forEach(b=>b.addEventListener('click',openSearch));
   if(root.classList&&document.documentElement.classList.contains('rv-on')&&RV){$$('.rv',root).forEach((el,k)=>{if(!el.style.getPropertyValue('--i'))el.style.setProperty('--i',Math.min(k,4));RV.observe(el);});}
   $$('[data-theme-set]',root).forEach(b=>b.setAttribute('aria-pressed',b.dataset.themeSet===getPref()));
-  $$('.gallery',root).forEach(t=>{
-    const btns=$$(`[data-gal="${t.id}"]`,root), items=$$('li',t);
-    const step=dir=>{const w=items[0].getBoundingClientRect().width+20;t.scrollBy({left:dir*w,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});};
-    btns.forEach(b=>b.addEventListener('click',()=>step(b.dataset.dir==='prev'?-1:1)));
-    if('IntersectionObserver' in window&&items.length){
-      const io=new IntersectionObserver(es=>es.forEach(en=>{const b=btns.find(x=>x.dataset.dir===(en.target===items[0]?'prev':'next'));if(b)b.disabled=en.intersectionRatio>=.98;}),{root:t,threshold:[0,.5,.98,1]});
-      io.observe(items[0]);io.observe(items[items.length-1]);
-    }
+  $$('.why-card',root).forEach(c=>{
+    c.addEventListener('mousemove',e=>{
+      const r=c.getBoundingClientRect();
+      c.style.setProperty('--x',`${e.clientX-r.left}px`);
+      c.style.setProperty('--y',`${e.clientY-r.top}px`);
+    });
   });
   const sub=$('.lnav ul',root), cur=sub&&$('a[aria-current]',sub);
   if(cur&&sub.scrollWidth>sub.clientWidth) sub.scrollLeft=cur.parentElement.offsetLeft-sub.clientWidth/2+cur.offsetWidth/2;

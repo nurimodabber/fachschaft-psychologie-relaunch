@@ -250,24 +250,50 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 .t-events figure,.t-fs figure{aspect-ratio:16/8}
 @media (max-width:980px){.t-study,.t-events,.t-fs{grid-column:1/-1;grid-row:auto}.t-study figure{aspect-ratio:16/10;min-height:0}}
 
-/* ---------- Warum mitmachen (Galerie) ---------- */
-.gal-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
-.gal-ctrl{display:flex;gap:10px}
-.gal-ctrl button{width:44px;height:44px;border-radius:50%;border:0;background:var(--bg3);color:var(--text);display:grid;place-items:center;cursor:pointer;transition:background .2s,opacity .2s}
-.gal-ctrl button:hover{background:var(--hair)}
-.gal-ctrl button:disabled{opacity:.35;cursor:default}
-.gal-ctrl .i{width:18px;height:18px}
-.gallery{display:flex;gap:20px;list-style:none;margin:40px 0 0;padding:4px max(var(--gut),calc((100vw - var(--maxw))/2 + var(--gut))) 24px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 max(var(--gut),calc((100vw - var(--maxw))/2 + var(--gut)));scrollbar-width:none}
-.gallery::-webkit-scrollbar{display:none}
-.gallery li{flex:none;width:clamp(272px,29vw,372px);scroll-snap-align:start;background:var(--bg);border-radius:28px;padding:34px 32px 36px;display:flex;flex-direction:column;min-height:400px;box-shadow:var(--shadow)}
-.gallery .gi{width:56px;height:56px;border-radius:16px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;flex:none}
-.gallery .gi .i{width:28px;height:28px}
-.gallery h3{font-size:28px;line-height:1.1;font-weight:700;letter-spacing:-.035em;margin:96px 0 12px}
-.gallery p{margin:0;color:var(--text2)}
-.gallery li.cta{background:var(--accent);color:var(--on-accent);box-shadow:none}
-.gallery li.cta h3,.gallery li.cta p{color:var(--on-accent)}
-.gallery li.cta .gi{background:rgba(255,255,255,.16);color:var(--on-accent)}
-.gallery li.cta a{color:var(--on-accent);margin-top:auto;padding-top:22px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+/* ---------- Warum mitmachen (Interaktives Bento-Grid, kein horizontales Scrollen) ---------- */
+.why-head{margin-bottom:clamp(32px,4vw,44px)}
+.why-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto auto;gap:18px}
+.why-card{position:relative;background:var(--raise);border:1px solid var(--hair2);border-radius:26px;padding:26px 26px 22px;display:flex;flex-direction:column;box-shadow:0 4px 16px rgba(0,0,0,.03);transition:transform .25s var(--ease),border-color .25s,box-shadow .25s;overflow:hidden}
+.why-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(420px circle at var(--x, 50%) var(--y, 50%),var(--why-spotlight,rgba(0,0,0,.03)),transparent 68%);opacity:0;transition:opacity .25s ease}
+:root[data-theme="dark"] .why-card::before,
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .why-card::before{--why-spotlight:rgba(255,255,255,.07)}}
+.why-card:hover{transform:translateY(-3px);border-color:var(--hair);box-shadow:0 14px 36px -6px rgba(0,0,0,.08)}
+.why-card:hover::before{opacity:1}
+
+.why-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.why-ico{width:48px;height:48px;border-radius:15px;background:var(--accent-soft);color:var(--accent-text);display:inline-flex;align-items:center;justify-content:center;transition:transform .28s var(--ease),background .28s;flex-shrink:0}
+.why-ico .i{width:22px;height:22px}
+.why-card:hover .why-ico{transform:scale(1.08) rotate(3deg)}
+.why-idx{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--text3);padding:3px 9px;border-radius:999px;background:var(--bg2)}
+
+.why-card h3{font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-.03em;margin:0 0 10px;color:var(--text)}
+.why-card p{margin:0 0 16px;color:var(--text2);font-size:15px;line-height:1.48}
+
+.why-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.why-chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:550;color:var(--text2);background:var(--bg2);border:1px solid transparent;padding:4px 10px;border-radius:999px;text-decoration:none;transition:all .18s var(--ease)}
+.why-chip:hover{background:var(--raise);color:var(--accent-text);border-color:var(--accent-soft);transform:translateY(-1px);text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+
+/* Card 5: Der 5. Punkt (Hero Bento Card) */
+.why-card-hero{grid-column:3;grid-row:1 / span 2;background:var(--glass-card-bg);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:1px solid var(--glass-card-border);box-shadow:var(--glass-card-shadow);padding:32px 28px;display:flex;flex-direction:column;justify-content:space-between}
+.why-card-hero:hover{border-color:var(--accent-text);box-shadow:0 20px 52px -8px rgba(163,25,45,.15)}
+.why-hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.03em;padding:5px 12px;border-radius:999px;background:var(--accent);color:var(--on-accent);margin-bottom:18px;width:fit-content}
+.why-hero-badge .i{width:14px;height:14px}
+.why-card-hero h3{font-size:clamp(26px,2.4vw,34px);line-height:1.15;font-weight:800;letter-spacing:-.04em;margin:0 0 12px;color:var(--text)}
+.why-card-hero p{font-size:15.5px;line-height:1.52;color:var(--text2);margin-bottom:20px}
+
+.why-hero-session{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--raise);border:1px solid var(--hair2);margin-bottom:16px}
+.pulse-dot{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.7);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%{transform:scale(.95);box-shadow:0 0 0 0 rgba(34,197,94,.7)}70%{transform:scale(1);box-shadow:0 0 0 8px rgba(34,197,94,0)}100%{transform:scale(.95);box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+.why-hero-session div{font-size:13px;line-height:1.35}
+.why-hero-session b{display:block;color:var(--text);font-weight:650}
+.why-hero-session span{color:var(--text2)}
+
+.why-hero-cta{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;border-radius:13px;font-size:14.5px;font-weight:650;text-decoration:none}
+.why-hero-cta .i{width:16px;height:16px;transition:transform .2s var(--ease)}
+.why-hero-cta:hover .i{transform:translateX(3px)}
+
+@media (max-width:980px){.why-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.why-card-hero{grid-column:1 / -1;grid-row:auto}}
+@media (max-width:620px){.why-grid{grid-template-columns:1fr;gap:14px}.why-card-hero{grid-column:1;padding:24px 20px}}
 
 /* ---------- Neuigkeiten ---------- */
 .news-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start}
