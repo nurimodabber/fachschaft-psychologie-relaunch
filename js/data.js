@@ -18,8 +18,23 @@ const DSGVO=OLD+'datenschutzerklaerung/';
 /* ============ Fotos ============
    Echte Fotos der Fachschaft. Schlüssel = Dateiname auf der bisherigen Website.
    Sobald Bilder vorliegen: PHOTOS['DSC00364-Kopie-2-scaled.jpg']={src:'data:image/webp;base64,...',alt:'...'} */
-const PHOTOS={};
-const HERO_KEY='DSC00364-Kopie-2-scaled.jpg';
+const PHOTOS={
+  'fs-wochenende.jpg':{src:'assets/images/fachschaft/fs-wochenende.jpg',alt:'Fachschaftswochenende im April 2024'},
+  'fs-team.jpg':{src:'assets/images/fachschaft/fs-team.jpg',alt:'Gruppe der Fachschaft Psychologie beim FS-Wochenende'},
+  'institutsgrillen-2024.jpg':{src:'assets/images/fachschaft/institutsgrillen-2024.jpg',alt:'Institutsgrillen im Innenhof im Juni 2024'},
+  'silent-disco-2024.jpg':{src:'assets/images/fachschaft/silent-disco-2024.jpg',alt:'Silent Disco Party im Juni 2024'},
+  'ersti-wochenende-2023.jpg':{src:'assets/images/fachschaft/ersti-wochenende-2023.jpg',alt:'Ersti-Wochenende im Dezember 2023'},
+  'sommersemester-2015.jpg':{src:'assets/images/fachschaft/sommersemester-2015.jpg',alt:'Fachschaftsgruppe Sommersemester 2015'},
+  'institutsgrillen-archiv.jpg':{src:'assets/images/fachschaft/institutsgrillen-archiv.jpg',alt:'Institutsgrillen im Innenhof'},
+  'DSC00364-Kopie-scaled.jpg':{src:'assets/images/fachschaft/fs-wochenende.jpg',alt:'Fachschaftswochenende im April 2024'},
+  'DSC00364-Kopie-2-scaled.jpg':{src:'assets/images/fachschaft/fs-team.jpg',alt:'Gruppe der Fachschaft Psychologie beim FS-Wochenende'},
+  'IMG-20240622-WA0022-1.jpg':{src:'assets/images/fachschaft/institutsgrillen-2024.jpg',alt:'Institutsgrillen im Innenhof im Juni 2024'},
+  'IMG-20240607-WA0002.jpg':{src:'assets/images/fachschaft/silent-disco-2024.jpg',alt:'Silent Disco Party im Juni 2024'},
+  'PXL_20231202_154432955-scaled.jpg':{src:'assets/images/fachschaft/ersti-wochenende-2023.jpg',alt:'Ersti-Wochenende im Dezember 2023'},
+  'Foto-15.10.18-18-13-55.jpg':{src:'assets/images/fachschaft/sommersemester-2015.jpg',alt:'Fachschaftsgruppe Sommersemester 2015'},
+  'Institutsgrillen.jpg':{src:'assets/images/fachschaft/institutsgrillen-archiv.jpg',alt:'Institutsgrillen im Innenhof'}
+};
+const HERO_KEY='fs-wochenende.jpg';
 
 /* ============ Bausteine ============ */
 const ic=(n,c)=>`<svg class="i${c?' '+c:''}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
@@ -33,8 +48,8 @@ const initials=n=>n.replace(/\(.*?\)/g,'').split(/[\s-]+/).filter(w=>/^[A-ZÄÖ�
 const people=arr=>`<ul class="people">${arr.map(n=>`<li><span class="mono" aria-hidden="true">${initials(n)}</span>${n}</li>`).join('')}</ul>`;
 const rows=items=>`<ul class="linkrows">${items.map(([href,icon,t,s])=>`<li><a href="${href}"><span class="ico">${ic(icon)}</span><span class="txt"><b>${t}</b>${s?`<span>${s}</span>`:''}</span><span class="end">${ic(href.startsWith('#')?'chevr':(icon==='download'?'download':'ext'))}</span></a></li>`).join('')}</ul>`;
 const photo=(cap,href,sub)=>{const k=href.split('/').pop(),p=PHOTOS[k];
-  return p?`<figure class="ph"><img src="${p.src}" alt="${p.alt||cap}" loading="lazy" decoding="async"><figcaption>${cap}</figcaption></figure>`
-   :`<a class="photo-link noext" href="${href}"><span class="ico">${ic('camera')}</span><span class="txt"><b>${cap}</b><span>${sub?sub+'. ':''}Foto auf der bisherigen Website</span></span>${ic('ext')}</a>`;};
+  const src=p?p.src:href, alt=(p&&p.alt)?p.alt:cap;
+  return `<figure class="ph"><img src="${src}" alt="${alt}" loading="lazy" decoding="async"><figcaption><b>${cap}</b>${sub?`<span>${sub}</span>`:''}</figcaption></figure>`;};
 const fmtD=d=>new Date(d+'T12:00:00').toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'});
 
 function terms(list,opt){
@@ -131,7 +146,11 @@ const PAGES={
 <p>Die Fachschaft umfasst alle Studierenden eines Fachs. Bei uns sind das sämtliche Psychologiestudierenden. Jede und jeder von euch gehört also dazu und kann mitmachen.</p>
 <h2>Und wer sind dann wir?</h2>
 <p>Innerhalb der Fachschaft trifft sich regelmäßig eine kleinere Gruppe von Studierenden, organisiert Veranstaltungen und vertritt die Studierenden am Institut. Diese Gruppe heißt aktive Fachschaft, und das sind wir.</p>
-<div class="photos">${photo('FS-Wochenende, April 2024',U+'2024/07/DSC00364-Kopie-scaled.jpg')}</div>
+<div class="photos">
+  ${photo('Fachschaftswochenende, April 2024','fs-wochenende.jpg','Gemeinsame Klausurtagung & Semesterplanung')}
+  ${photo('Institutsgrillen im Innenhof, Juni 2024','institutsgrillen-2024.jpg','Gemütlicher Austausch von Studierenden und Dozierenden')}
+  ${photo('Silent Disco am Institut, Juni 2024','silent-disco-2024.jpg','Kopfhörer-Party im Innenhof des Psychologischen Instituts')}
+</div>
 <h2>Was machen wir?</h2>
 <div class="trio">
  <div><h3>Gute Studienbedingungen</h3><p>Wir setzen uns dafür ein, dass euer Studium möglichst viele Freiräume bietet und flexibel bleibt, etwa wenn sich Prüfungsordnung, Modulhandbuch oder Studienzulassung ändern.</p></div>
@@ -143,16 +162,15 @@ ${sessionBox()}`},
 'fachschaft/aktive':{t:'Aktive Fachschaft',d:'Gesichter, Momente und Alumni',lead:'Ein Ausschnitt aus unserer Fachschaft und alle, die uns über die Jahre begleitet haben.',body:`
 <h2>Momente</h2>
 <div class="photos">
-${photo('FS-Wochenende, April 2024',U+'2024/07/DSC00364-Kopie-2-scaled.jpg','Nur ein Ausschnitt unserer Fachschaft')}
-${photo('Institutsgrillen, Juni 2024',U+'2024/07/IMG-20240622-WA0022-1.jpg')}
-${photo('Silent Disco, Juni 2024',U+'2024/07/IMG-20240607-WA0002.jpg')}
+${photo('Fachschafts-Team, April 2024','fs-team.jpg','Gemeinsam unterwegs auf dem Klausur-Wochenende')}
+${photo('Ersti-Wochenende, Dezember 2023','ersti-wochenende-2023.jpg','Gemeinsames Kennenlernen im Odenwald')}
+${photo('Institutsgrillen Tradition','institutsgrillen-archiv.jpg','Gemütlicher Austausch im Innenhof')}
 </div>
 <h2>Alumni, Mentor:innen und Freund:innen</h2>
 <p>Sie haben die Fachschaft mitgeprägt und sind jederzeit herzlich eingeladen, wieder vorbeizuschauen.</p>
 <ul class="monos">${[['Kim','2019/06/Foto-03.06.19-20-26-24'],['Aaron','2019/06/Foto-03.06.19-20-23-33'],['Aki','2019/06/Foto-03.06.19-20-32-04'],['Annalena','2019/06/Foto-03.06.19-20-22-31'],['Caro','2019/06/Foto-03.06.19-20-32-27'],['Elena','2019/06/Foto-03.06.19-20-25-27'],['Elli','2019/06/Foto-03.06.19-20-26-01'],['Florie','2019/06/Foto-03.06.19-20-29-49'],['Franzi','2019/06/Foto-03.06.19-20-31-38'],['Franzi','2019/06/Foto-03.06.19-20-28-11'],['Jill','2019/06/Foto-03.06.19-20-30-18'],['Joana','2019/06/Foto-03.06.19-20-24-25'],['Johanna','2019/07/Foto-03.06.19-20-29-17'],['Kathi','2019/06/Foto-03.06.19-20-28-50'],['Kauli','2019/06/Foto-11.06.19-19-29-35'],['Laura','2019/06/Foto-03.06.19-20-21-50'],['Luisa','2019/06/Foto-03.06.19-20-23-52'],['Marie','2019/06/Foto-03.06.19-20-27-06'],['Nuno','2019/06/Foto-11.06.19-19-33-39'],['Rieke','2019/06/Foto-03.06.19-20-23-07'],['Vincent','2019/06/Foto-03.06.19-20-30-45']].map(([n,f])=>{const k=f.split('/').pop()+'.jpg',p=PHOTOS[k];return `<li><a class="noext" href="${U+f}.jpg" aria-label="Foto von ${n} ansehen">${p?`<img class="mono" src="${p.src}" alt="" loading="lazy">`:`<span class="mono" aria-hidden="true">${n[0]}</span>`}${n}</a></li>`;}).join('')}</ul>
 <h2>Gruppenbilder-Archiv</h2>
-<div class="photos">${photo('Sommersemester 2015','https://www.fs-psychologie.stura.uni-heidelberg.de/wp-content/uploads/2018/10/Foto-15.10.18-18-13-55.jpg')}</div>
-${sessionBox()}`},
+<div class="photos">${photo('Sommersemester 2015','sommersemester-2015.jpg','Fachschaftsgruppe Sommersemester 2015')}</div>`},
 
 'fachschaft/kontakt':{t:'Kontakt',d:'Sitzungen, E-Mail und Verteiler',lead:'Du hast Fragen an uns? Dann komm vorbei oder schreib uns eine Mail.',body:`
 <div class="contact-grid">

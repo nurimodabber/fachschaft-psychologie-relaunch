@@ -8,6 +8,7 @@ const $=(s,r)=>(r||document).querySelector(s);
 const $$=(s,r)=>[...(r||document).querySelectorAll(s)];
 const app=$('#app');
 const sec=r=>r.split('/')[0];
+const secId=r=>'sec-'+r.replace(/\//g,'-');
 const kidsOf=s=>{const n=TREE.find(x=>x[0]===s);return n?n[1]:[];};
 const navTitle=r=>({'studium':'Infos zum Studium','leben':'Leben am Institut'}[r]||PAGES[r].t);
 const depth=r=>r.split('/').length-1;
@@ -238,18 +239,58 @@ function crumbs(route){
 }
 function page(route){
   const p=PAGES[route]; const s=sec(route); const list=[s,...kidsOf(s)];
-  const hasLocal=list.length>1, idx=list.indexOf(route);
-  const prev=hasLocal&&idx>0?list[idx-1]:null, next=hasLocal&&idx<list.length-1?list[idx+1]:null;
-  const lnav=hasLocal?`<nav class="lnav" aria-label="${navTitle(s)}"><div class="in"><a class="lt" href="#/${s}">${navTitle(s)}</a><ul>${list.map(r=>`<li><a href="#/${r}" ${r===route?'aria-current="page"':''}>${r===s?'Übersicht':PAGES[r].t}</a></li>`).join('')}</ul></div></nav>`:'';
+  const hasLocal=list.length>1;
+  const isMulti=kidsOf(s).length>0;
+
+  const lnav=hasLocal?`<nav class="lnav" aria-label="${navTitle(s)}" data-topic-nav><div class="in"><a class="lt" href="#/${s}" data-sec-target="${secId(s)}">${navTitle(s)}</a><ul>${list.map(r=>`<li><a href="#/${r}" data-sec-target="${secId(r)}" ${r===route?'aria-current="page"':''}>${r===s?'Übersicht':PAGES[r].t}</a></li>`).join('')}</ul></div></nav>`:'';
+
   let banner='';
-  if(route===s&&SECTION_IMG[s]) banner=`<figure class="banner rv"><div class="bi">${pic(SECTION_IMG[s],'',true)}</div><figcaption>${credit(SECTION_IMG[s])}</figcaption></figure>`;
-  else if(route==='hopo') banner=`<figure class="banner map rv" data-zoomable><div class="bi"><div class="map-viewport"><div class="map-layer">${mapSvg('')}</div></div><div class="map-ctrls" role="toolbar" aria-label="Karte zoomen"><button type="button" class="mctrl-btn" data-mzoom="in" title="Vergrößern"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><button type="button" class="mctrl-btn" data-mzoom="out" title="Verkleinern"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg></button><button type="button" class="mctrl-btn" data-mzoom="reset" title="Zurücksetzen"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button></div></div><figcaption>Heidelberger Altstadt. Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a> • <a class="noext" href="${GMAPS_LINK}" target="_blank" rel="noopener">Google Maps</a> • <a class="noext" href="${APPLE_MAPS_LINK}" target="_blank" rel="noopener">Apple Maps</a></figcaption></figure>`;
+  if(s==='hopo') banner=`<figure class="banner map rv" data-zoomable><div class="bi"><div class="map-viewport"><div class="map-layer">${mapSvg('')}</div></div><div class="map-ctrls" role="toolbar" aria-label="Karte zoomen"><button type="button" class="mctrl-btn" data-mzoom="in" title="Vergrößern"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><button type="button" class="mctrl-btn" data-mzoom="out" title="Verkleinern"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg></button><button type="button" class="mctrl-btn" data-mzoom="reset" title="Zurücksetzen"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button></div></div><figcaption>Heidelberger Altstadt. Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a> • <a class="noext" href="${GMAPS_LINK}" target="_blank" rel="noopener">Google Maps</a> • <a class="noext" href="${APPLE_MAPS_LINK}" target="_blank" rel="noopener">Apple Maps</a></figcaption></figure>`;
+  else if(SECTION_IMG[s]) banner=`<figure class="banner rv"><div class="bi">${pic(SECTION_IMG[s],'',true)}</div><figcaption>${credit(SECTION_IMG[s])}</figcaption></figure>`;
+
+  if(!isMulti){
+    return `${lnav}
+    <header class="phead">${banner?'':mapSvg('mapbg')}<div class="in rv">${crumbs(route)}<h1 tabindex="-1">${p.t}</h1>${p.lead?`<p class="lead">${p.lead}</p>`:''}</div></header>
+    ${banner}
+    <article class="doc prose rv" style="--i:1">
+     ${p.body}
+    </article>`;
+  }
+
+  const mainP=PAGES[s];
+  const overviewHtml=`
+    <section class="topic-section topic-overview rv" id="${secId(s)}" data-route="${s}">
+      ${mainP.body}
+    </section>`;
+
+  const childrenHtml=kidsOf(s).map((childRoute,idx)=>{
+    const cp=PAGES[childRoute];
+    return `
+    <section class="topic-section rv" id="${secId(childRoute)}" data-route="${childRoute}" style="--i:${(idx%3)+1}">
+      <header class="topic-section-head">
+        <div class="topic-section-meta">
+          <span class="topic-badge">${navTitle(s)}</span>
+          <span class="topic-dot">·</span>
+          <span class="topic-sub">${cp.t}</span>
+        </div>
+        <h2 class="topic-section-title">${cp.t}</h2>
+        ${cp.lead?`<p class="topic-section-lead">${cp.lead}</p>`:''}
+      </header>
+      <div class="topic-section-body">
+        ${cp.body}
+      </div>
+    </section>`;
+  }).join('');
+
   return `${lnav}
-  <header class="phead">${banner?'':mapSvg('mapbg')}<div class="in rv">${crumbs(route)}<h1 tabindex="-1">${p.t}</h1>${p.lead?`<p class="lead">${p.lead}</p>`:''}</div></header>
+  <header class="phead">${banner?'':mapSvg('mapbg')}<div class="in rv">${crumbs(s)}<h1 tabindex="-1">${mainP.t}</h1>${mainP.lead?`<p class="lead">${mainP.lead}</p>`:''}</div></header>
   ${banner}
-  <article class="doc prose rv" style="--i:1">
-   ${p.body}
-   ${hasLocal?`<nav class="pager" aria-label="Blättern">${prev?`<a href="#/${prev}"><span>Zurück</span><b>${prev===s?navTitle(s):PAGES[prev].t}</b></a>`:'<span></span>'}${next?`<a class="next" href="#/${next}"><span>Weiter</span><b>${PAGES[next].t}</b></a>`:''}</nav>`:''}
+  <article class="doc prose" style="--i:1">
+    ${overviewHtml}
+    ${childrenHtml}
+    <div class="topic-bottom-nav">
+      <a class="btn btn-ghost btn-small" href="#/${s}" data-sec-target="${secId(s)}">${ic('chevr')} Zur Übersicht von ${navTitle(s)}</a>
+    </div>
   </article>`;
 }
 function notFound(){
@@ -327,6 +368,16 @@ function markNav(route){
   const s=route?sec(route):'';
   $$('#mainnav a').forEach(a=>{if(a.dataset.sec===s)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});
   $$('#drawer a').forEach(a=>{if(a.getAttribute('href')==='#/'+route)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+}
+function markLnav(route){
+  $$('.lnav ul a').forEach(a=>{
+    if(a.getAttribute('href')==='#/'+route) a.setAttribute('aria-current','page');
+    else a.removeAttribute('aria-current');
+  });
+  const sub=$('.lnav ul'), cur=sub&&$('a[aria-current]',sub);
+  if(cur&&sub.scrollWidth>sub.clientWidth){
+    cur.scrollIntoView({inline:'nearest',behavior:'smooth'});
+  }
 }
 function themeSeg(){
   return `<div class="seg" role="group" aria-label="Darstellung">${[['system','monitor','System'],['light','sun','Hell'],['dark','moon','Dunkel']].map(([v,i,t])=>`<button type="button" data-theme-set="${v}" aria-pressed="false">${ic(i)}${t}</button>`).join('')}</div>`;
@@ -530,7 +581,7 @@ function hydrate(root){
   const idx=$('#faq-index',root);
   if(idx){
     const body=$('.help-body',root), secs=$$('section.qa',body), groups=[];let cur=null;
-    $$('h2.qa-group, section.qa',body).forEach(el=>{if(el.tagName==='H2'){cur={el,h:el.textContent,q:[]};groups.push(cur);}else cur.q.push(el);});
+    $$('h2.qa-group, section.qa',body).forEach(el=>{if(el.tagName==='H2'){cur={el,h:el.textContent,q:[]};groups.push(cur);}else if(cur){cur.q.push(el);}});
     idx.innerHTML=`<label for="faqq">Fragen filtern</label><div class="fld">${ic('funnel')}<input id="faqq" type="search" placeholder="z. B. Wohnung, NC, Ticket" autocomplete="off"></div>`+
       groups.map(g=>`<div class="grp"><h3>${g.h}</h3><ul>${g.q.map(d=>`<li><button type="button" data-open="${d.id}">${$('h3',d).textContent}</button></li>`).join('')}</ul></div>`).join('')+'<p class="none" hidden>Keine passende Frage gefunden. Versuch es mit der Suche oben.</p>';
     idx.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)openQA(b.dataset.open,true);});
@@ -589,13 +640,118 @@ function openQA(id,focus){
 
 /* ============ Router ============ */
 let first=true;
+let currentSec=null;
+let topicObserver=null;
+let isScrollSpyNavigating=false;
+
+function initTopicScrollSpy(s){
+  if(topicObserver){topicObserver.disconnect(); topicObserver=null;}
+  const sections=$$('.topic-section',app);
+  if(!sections.length) return;
+
+  if(!('IntersectionObserver' in window)) return;
+
+  topicObserver=new IntersectionObserver((entries)=>{
+    if(isScrollSpyNavigating) return;
+    const visible=entries.filter(e=>e.isIntersecting);
+    if(!visible.length) return;
+    visible.sort((a,b)=>Math.abs(a.boundingClientRect.top-120)-Math.abs(b.boundingClientRect.top-120));
+    const best=visible[0];
+    const route=best.target.dataset.route;
+    if(route){
+      markLnav(route);
+      markNav(route);
+      if(history.replaceState){
+        history.replaceState(null,'','#'+route);
+      }
+      if(PAGES[route]){
+        document.title=PAGES[route].t+' | Fachschaft Psychologie Heidelberg';
+      }
+    }
+  },{
+    rootMargin:'-100px 0px -55% 0px',
+    threshold:[0, 0.2, 0.5]
+  });
+
+  sections.forEach(secEl=>topicObserver.observe(secEl));
+}
+
 function router(){
   let h=decodeURIComponent(location.hash.replace(/^#\/?/,''));
   let [r,anchor]=h.split('?'); r=(r||'').replace(/\/+$/,'');
-  if(location.hash&&!location.hash.startsWith('#/')){const el=document.getElementById(location.hash.slice(1)); if(el){el.scrollIntoView();return;}}
+  if(location.hash&&!location.hash.startsWith('#/')){
+    const el=document.getElementById(location.hash.slice(1));
+    if(el){el.scrollIntoView({behavior:'smooth'});return;}
+  }
   $$('dialog[open]').forEach(d=>d.close());
-  app.innerHTML=r===''?home():(PAGES[r]?page(r):notFound());
-  document.title=r===''?'Fachschaft Psychologie Heidelberg':((PAGES[r]?PAGES[r].t:'Seite nicht gefunden')+' | Fachschaft Psychologie Heidelberg');
+
+  if(r===''){
+    currentSec=null;
+    if(topicObserver){topicObserver.disconnect(); topicObserver=null;}
+    app.innerHTML=home();
+    document.title='Fachschaft Psychologie Heidelberg';
+    markNav(r); hydrate(app);
+    window.scrollTo({top:0,behavior:'auto'});
+    if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}
+    first=false;
+    return;
+  }
+
+  if(!PAGES[r]){
+    currentSec=null;
+    if(topicObserver){topicObserver.disconnect(); topicObserver=null;}
+    app.innerHTML=notFound();
+    document.title='Seite nicht gefunden | Fachschaft Psychologie Heidelberg';
+    markNav(r); hydrate(app);
+    window.scrollTo({top:0,behavior:'auto'});
+    first=false;
+    return;
+  }
+
+  const s=sec(r);
+  const isMulti=kidsOf(s).length>0;
+
+  if(isMulti){
+    if(currentSec===s){
+      markNav(r); markLnav(r);
+      document.title=PAGES[r].t+' | Fachschaft Psychologie Heidelberg';
+      const target=document.getElementById(secId(r));
+      if(target){
+        isScrollSpyNavigating=true;
+        target.scrollIntoView({behavior:first?'auto':'smooth'});
+        setTimeout(()=>{isScrollSpyNavigating=false;},700);
+      }
+      if(anchor){requestAnimationFrame(()=>openQA(anchor));}
+      first=false;
+      return;
+    }
+
+    currentSec=s;
+    app.innerHTML=page(r);
+    document.title=PAGES[r].t+' | Fachschaft Psychologie Heidelberg';
+    markNav(r); markLnav(r); hydrate(app);
+    initTopicScrollSpy(s);
+
+    if(r!==s){
+      const target=document.getElementById(secId(r));
+      if(target){
+        requestAnimationFrame(()=>{
+          target.scrollIntoView({behavior:'auto'});
+        });
+      }
+    } else {
+      window.scrollTo({top:0,behavior:'auto'});
+    }
+    if(anchor){requestAnimationFrame(()=>openQA(anchor));}
+    if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}
+    first=false;
+    return;
+  }
+
+  currentSec=s;
+  if(topicObserver){topicObserver.disconnect(); topicObserver=null;}
+  app.innerHTML=page(r);
+  document.title=PAGES[r].t+' | Fachschaft Psychologie Heidelberg';
   markNav(r); hydrate(app);
   if(anchor){requestAnimationFrame(()=>openQA(anchor));}
   else{window.scrollTo({top:0,behavior:'auto'}); if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}}
@@ -653,7 +809,30 @@ const RV=('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion
 if(RV) root.classList.add('rv-on');
 buildNav(); footer(); $('#menuTheme').innerHTML=themeSeg(); decorateLinks($('#footer'));
 applyPref(getPref());
-document.addEventListener('click',e=>{const t=e.target.closest('[data-theme-set]');if(t)applyPref(t.dataset.themeSet);});
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-theme-set]');
+  if(t)applyPref(t.dataset.themeSet);
+  const onPageLink=e.target.closest('a[href^="#/"]');
+  if(onPageLink&&currentSec){
+    const rawHref=onPageLink.getAttribute('href');
+    const targetRoute=rawHref.replace(/^#\/?/,'').split('?')[0];
+    if(sec(targetRoute)===currentSec){
+      const targetEl=document.getElementById(secId(targetRoute));
+      if(targetEl){
+        e.preventDefault();
+        isScrollSpyNavigating=true;
+        targetEl.scrollIntoView({behavior:'smooth'});
+        history.pushState(null,'',rawHref);
+        markNav(targetRoute);
+        markLnav(targetRoute);
+        if(PAGES[targetRoute]){
+          document.title=PAGES[targetRoute].t+' | Fachschaft Psychologie Heidelberg';
+        }
+        setTimeout(()=>{isScrollSpyNavigating=false;},800);
+      }
+    }
+  }
+});
 $('#openMenu').addEventListener('click',()=>$('#drawer').showModal());
 $('#openSearch').addEventListener('click',openSearch);
 $$('[data-opensearch]').forEach(b=>b.addEventListener('click',()=>{const d=b.closest('dialog');if(d)d.close();openSearch();}));
