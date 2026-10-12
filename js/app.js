@@ -105,12 +105,10 @@ function home(){
 </section>
 
 <section class="sec sec-news" aria-labelledby="news-h">
- <div class="sec-bg-map" aria-hidden="true">${mapSvg('mapbg-ambient')}</div>
  <div class="wrap">
   <div class="shead rv"><h2 class="sh2" id="news-h">Was gibt’s Neues?</h2><a class="tlink" href="#/aktuelles">Alle Beiträge${ic('chevr')}</a></div>
   <div class="news-grid">
    <article class="feat rv">
-    <div class="feat-bg-map" aria-hidden="true">${mapSvg('mapbg-watermark')}</div>
     <time datetime="${p0.d}">${d0.toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'})}</time>
     <h3><a class="noext" href="${P+p0.u}">${p0.t}</a></h3><p>${p0.x}</p>
     <div class="tags">${['Aktuelles',...p0.c].map(c=>`<span class="tag">${c}</span>`).join('')}</div>
@@ -123,7 +121,6 @@ function home(){
 <section class="sec tight sec-blackbox" aria-labelledby="bb-h">
  <div class="wrap">
   <div class="bbox rv">
-   <div class="bbox-bg-map" aria-hidden="true">${mapSvg('mapbg-ambient')}</div>
    <div>
     <p class="kick">Die Zeitschrift am Institut</p>
     <h2 class="sh2" id="bb-h">BlackBox</h2>
@@ -198,7 +195,6 @@ function page(route){
   <header class="phead">${banner?'':mapSvg('mapbg')}<div class="in rv">${crumbs(route)}<h1 tabindex="-1">${p.t}</h1>${p.lead?`<p class="lead">${p.lead}</p>`:''}</div></header>
   ${banner}
   <article class="doc prose rv" style="--i:1">
-   ${route==='aktuelles'?`<div class="doc-bg-map" aria-hidden="true">${mapSvg('mapbg-watermark')}</div>`:''}
    ${p.body}
    ${hasLocal?`<nav class="pager" aria-label="Blättern">${prev?`<a href="#/${prev}"><span>Zurück</span><b>${prev===s?navTitle(s):PAGES[prev].t}</b></a>`:'<span></span>'}${next?`<a class="next" href="#/${next}"><span>Weiter</span><b>${PAGES[next].t}</b></a>`:''}</nav>`:''}
   </article>`;
