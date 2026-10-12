@@ -157,16 +157,33 @@ function home(){
     <button type="button" class="mctrl-btn" data-mzoom="reset" title="Zentrieren / Zurücksetzen" aria-label="Zentrieren"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
    </div>
    <div class="mapcard">
-    <h3>Fachschaftskeller</h3>
-    <p><b>Hauptstraße 47-51, 69117 Heidelberg.</b> Durch das Tor in den Innenhof, der Keller liegt direkt rechts.</p>
-    <p>Sitzungen montags von 18 bis 20 Uhr in der Vorlesungszeit.</p>
-    <div class="btns">
-     <a class="btn btn-primary btn-small" href="#/fachschaft/kontakt">Kontakt</a>
-     <a class="btn btn-ghost btn-small noext" href="${GMAPS_LINK}" target="_blank" rel="noopener" title="In Google Maps öffnen">Google Maps</a>
-     <a class="btn btn-ghost btn-small noext" href="${APPLE_MAPS_LINK}" target="_blank" rel="noopener" title="In Apple Maps öffnen">Apple Maps</a>
+    <div class="mapcard-main">
+     <div class="mapcard-spot">
+      <span class="spot-pill">${ic('pin')}Vor Ort</span>
+      <h3>Fachschaftskeller</h3>
+     </div>
+     <p class="mapcard-addr"><b>Hauptstraße 47–51, 69117 Heidelberg</b><span>Durch das Tor in den Innenhof, der Keller liegt direkt rechts.</span></p>
+     <div class="mapcard-time">
+      <span class="mt-icon">${ic('clock')}</span>
+      <span>Sitzungen montags 18–20 Uhr (Vorlesungszeit)</span>
+     </div>
+     <div class="mapcard-route-zone">
+      <span class="m-route-label">Route in Karten öffnen</span>
+      <div class="m-route-btns">
+       <a class="btn-route noext" href="${GMAPS_LINK}" target="_blank" rel="noopener">${ic('map')}<span>Google Maps</span></a>
+       <a class="btn-route noext" href="${APPLE_MAPS_LINK}" target="_blank" rel="noopener">${ic('compass')}<span>Apple Maps</span></a>
+      </div>
+     </div>
     </div>
-    <div class="mapcard-sublinks">
-     <a class="tlink noext" href="${MAP_DEFAULT_LINK}" target="_blank" rel="noopener">In Karte öffnen${ic('chevr')}</a>
+    <div class="mapcard-contact-zone">
+     <div class="mc-head">
+      <span class="mc-ico">${ic('chat')}</span>
+      <div>
+       <b>Fragen an die Fachschaft?</b>
+       <span>Schreib uns oder schau zur Sitzung vorbei.</span>
+      </div>
+     </div>
+     <a class="btn btn-primary btn-small mc-btn" href="#/fachschaft/kontakt">${ic('mail')}Zur Kontaktübersicht</a>
     </div>
    </div>
    <p class="mapcredit">Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a> • Zoomen & Bewegen aktiv</p>
