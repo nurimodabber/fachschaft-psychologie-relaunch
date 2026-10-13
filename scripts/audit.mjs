@@ -68,21 +68,72 @@ async function main(){
     // Wait for initial load
     await new Promise(r => setTimeout(r, 1000));
 
-    console.log('🧭 Teste Seiten...\n');
+    console.log('🧭 Teste Seiten in Dark und Light Mode sowie Menü-Drawer...\n');
     const results = [];
 
-    for(const route of ROUTES){
-      // Navigate via hash change
-      await send('Runtime.evaluate', {
-        expression: `window.location.hash = ${JSON.stringify(route.hash)};`
-      });
+    const THEMES = [
+      { name: 'Dunkel (Standard)', code: "document.documentElement.dataset.theme = 'dark';" },
+      { name: 'Hell', code: "document.documentElement.dataset.theme = 'light';" }
+    ];
 
-      await new Promise(r => setTimeout(r, 500));
+    for(const theme of THEMES){
+      await send('Runtime.evaluate', { expression: theme.code });
+      for(const route of ROUTES){
+        // Navigate via hash change
+        await send('Runtime.evaluate', {
+          expression: `window.location.hash = ${JSON.stringify(route.hash)};`
+        });
 
-      // Inject axe-core
+        await new Promise(r => setTimeout(r, 400));
+
+        // Inject axe-core
+        await send('Runtime.evaluate', { expression: AXE_SRC });
+
+        const axeRunScript = `
+          new Promise((resolve) => {
+            axe.run(document, {
+              runOnly: {
+                type: 'tag',
+                values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
+              }
+            }).then(results => {
+              resolve(JSON.stringify({
+                violations: results.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, nodes: v.nodes.map(n => ({ target: n.target, failureSummary: n.failureSummary })) })),
+                passes: results.passes.length,
+                incomplete: results.incomplete.length
+              }));
+            });
+          })
+        `;
+
+        const evalRes = await send('Runtime.evaluate', {
+          expression: axeRunScript,
+          awaitPromise: true,
+          returnByValue: true
+        });
+
+        let rawVal = evalRes.result?.result?.value || evalRes.result?.value;
+        let axeData = { violations: [], passes: 0, incomplete: 0 };
+        if(rawVal){
+          axeData = JSON.parse(rawVal);
+        }
+
+        results.push({
+          theme: theme.name,
+          route: route.name,
+          hash: route.hash,
+          violations: axeData.violations,
+          passes: axeData.passes,
+          incomplete: axeData.incomplete
+        });
+      }
+    }
+
+    // Zusätzlicher Test: Menü Drawer geöffnet
+    for(const theme of THEMES){
+      await send('Runtime.evaluate', { expression: `${theme.code} $('#openMenu').click();` });
+      await new Promise(r => setTimeout(r, 400));
       await send('Runtime.evaluate', { expression: AXE_SRC });
-
-      // Run axe.run()
       const axeRunScript = `
         new Promise((resolve) => {
           axe.run(document, {
@@ -92,51 +143,53 @@ async function main(){
             }
           }).then(results => {
             resolve(JSON.stringify({
-              violations: results.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, nodes: v.nodes.length })),
+              violations: results.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description, nodes: v.nodes.map(n => ({ target: n.target, failureSummary: n.failureSummary })) })),
               passes: results.passes.length,
               incomplete: results.incomplete.length
             }));
           });
         })
       `;
-
-      const evalRes = await send('Runtime.evaluate', {
-        expression: axeRunScript,
-        awaitPromise: true,
-        returnByValue: true
-      });
-
+      const evalRes = await send('Runtime.evaluate', { expression: axeRunScript, awaitPromise: true, returnByValue: true });
       let rawVal = evalRes.result?.result?.value || evalRes.result?.value;
-      let axeData = { violations: [], passes: 0, incomplete: 0 };
-      if(rawVal){
-        axeData = JSON.parse(rawVal);
-      }
-
+      let axeData = rawVal ? JSON.parse(rawVal) : { violations: [], passes: 0, incomplete: 0 };
       results.push({
-        route: route.name,
-        hash: route.hash,
+        theme: theme.name,
+        route: 'Menü-Drawer (offen)',
+        hash: '#drawer',
         violations: axeData.violations,
         passes: axeData.passes,
         incomplete: axeData.incomplete
       });
+      await send('Runtime.evaluate', { expression: "$('#drawer').close();" });
     }
 
     ws.close();
 
     console.log('📊 --- AXE-CORE AUDIT ERGEBNISSE ---');
-    console.log('-------------------------------------------------------------------------------------');
-    console.log('| Seite                | Route               | Passes | Incomplete | Violations     |');
-    console.log('-------------------------------------------------------------------------------------');
+    console.log('-------------------------------------------------------------------------------------------------------');
+    console.log('| Thema                | Seite                | Route               | Passes | Incomp. | Violations     |');
+    console.log('-------------------------------------------------------------------------------------------------------');
+    let totalViolations = 0;
     for(const r of results){
       const vText = r.violations.length === 0 ? '0 (Keine Fehler 🎉)' : `${r.violations.length} Fehler`;
-      console.log(`| ${r.route.padEnd(20)} | ${r.hash.padEnd(19)} | ${String(r.passes).padEnd(6)} | ${String(r.incomplete).padEnd(10)} | ${vText.padEnd(14)} |`);
+      totalViolations += r.violations.length;
+      console.log(`| ${r.theme.padEnd(20)} | ${r.route.padEnd(20)} | ${r.hash.padEnd(19)} | ${String(r.passes).padEnd(6)} | ${String(r.incomplete).padEnd(7)} | ${vText.padEnd(14)} |`);
       if(r.violations.length > 0){
         for(const v of r.violations){
-          console.log(`    ❌ [${v.impact}] ${v.id}: ${v.description} (${v.nodes} Elemente)`);
+          console.log(`    ❌ [${v.impact}] ${v.id}: ${v.description} (${v.nodes.length} Elemente)`);
+          for(const n of v.nodes.slice(0, 4)){
+            console.log(`       Target: ${n.target.join(' ')}`);
+            console.log(`       Failure: ${n.failureSummary}`);
+          }
         }
       }
     }
-    console.log('-------------------------------------------------------------------------------------\n');
+    console.log('-------------------------------------------------------------------------------------------------------\n');
+
+    if(totalViolations > 0){
+      process.exitCode = 1;
+    }
 
   } finally {
     chrome.kill();

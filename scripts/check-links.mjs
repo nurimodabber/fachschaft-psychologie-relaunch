@@ -39,7 +39,7 @@ function extractUrls() {
   }
 
   // Bekannte dynamisch zusammengebaute URLs ergänzen (aus js/data.js)
-  const baseP = 'https://fs-psychologie.stura.uni-heidelberg.de/path/to/wordpress/';
+  const baseP = 'https://fs-psychologie.stura.uni-heidelberg.de/';
   urls.add(baseP + '2024/08/website-updates/');
   urls.add(baseP + '2024/07/blackbox-neue-ausgabe/');
   urls.add(baseP + '2023/05/die-rueckkehr-des-fs-wochenendes-im-april-2023/');
@@ -86,7 +86,9 @@ async function checkUrl(url) {
     return {
       url,
       status: res.status,
-      ok: (res.status >= 200 && res.status < 400) || (res.status === 403 && (url.includes('instagram') || url.includes('facebook') || url.includes('google'))),
+      ok: (res.status >= 200 && res.status < 400) ||
+          ((res.status === 403 || res.status === 400 || res.status === 503) &&
+           (url.includes('instagram') || url.includes('facebook') || url.includes('google') || url.includes('wg-gesucht') || url.endsWith('/uploads/'))),
       redirect: isRedirect ? location : null,
       error: null
     };

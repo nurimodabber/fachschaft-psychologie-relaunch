@@ -13,7 +13,7 @@
    ===================================================================== */
 :root{
   --bg:#fbfbfd; --bg2:#f2f2f5; --bg3:#e8e8ed; --raise:#ffffff;
-  --text:#1d1d1f; --text2:#6e6e73; --text3:#86868b;
+  --text:#1d1d1f; --text2:#505055; --text3:#59595e;
   --hair:rgba(0,0,0,.12); --hair2:rgba(0,0,0,.07);
   --accent:#a3192d; --accent-hover:#8a1426; --accent-text:#a3192d; --on-accent:#fbfbfd;
   --accent-soft:rgba(163,25,45,.08);
