@@ -116,8 +116,8 @@ function terms(list,opt){
   }).join('');
   const panels=list.map((t,i)=>`<div role="tabpanel" id="${id}-p${i}" aria-labelledby="${id}-b${i}" ${i===cur?'':'hidden'}>
     ${t.from?`<p class="term-dates">${ic('cal')} Amtszeit vom ${fmtD(t.from)} bis ${fmtD(t.to)}</p>`:''}${t.note?`<p class="term-dates">${t.note}</p>`:''}
-    <h4>${t.mLabel||'Mitglieder'}</h4>${people(t.m)}
-    ${t.s&&t.s.length?`<h4>${t.sLabel||'Stellvertretung'}</h4>${people(t.s)}`:''}
+    <h3>${t.mLabel||'Mitglieder'}</h3>${people(t.m)}
+    ${t.s&&t.s.length?`<h3>${t.sLabel||'Stellvertretung'}</h3>${people(t.s)}`:''}
   </div>`).join('');
   return `<div class="tabs" data-tabs><div class="tablist" role="tablist" aria-label="Amtszeiten">${tabs}</div>${panels}</div>`;
 }
@@ -154,7 +154,7 @@ function newsList(list){
   return `<ul class="news">${list.map(p=>{const d=new Date(p.d+'T12:00:00');
    const fullDate=d.toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'});
    return `<li data-cats="${['Aktuelles',...p.c].join('|')}"><time datetime="${p.d}" aria-label="${fullDate}"><span class="d-day" aria-hidden="true"><b>${d.getDate()}.</b></span> <span class="d-mo" aria-hidden="true">${d.toLocaleDateString('de-DE',{month:'long',year:'numeric'})}</span><span class="sr">${fullDate}</span></time>
-   <div><h3><a class="noext" href="${P+p.u}">${p.t}</a></h3><p>${p.x}</p><div class="tags">${['Aktuelles',...p.c].map(c=>`<span class="tag">${c}</span>`).join('')}</div></div></li>`}).join('')}</ul>`;
+   <div><h3><a class="noext" href="${P+p.u}" aria-describedby="ext-tab-msg">${p.t}<span class="ext-ico" aria-hidden="true">↗</span></a></h3><p>${p.x}</p><div class="tags">${['Aktuelles',...p.c].map(c=>`<span class="tag">${c}</span>`).join('')}</div></div></li>`}).join('')}</ul>`;
 }
 
 /* ============ BlackBox ============ */
@@ -627,8 +627,8 @@ ${people(['Carlotta Jacobi','Henriette Neuschwander','Benedikt Voß','Felicitas 
 ${facts([['Professor:innen','2','eine:r davon im Vorsitz'],['Mittelbau','1'],['Studierende','1','beratend']])}
 <p>Den Vorsitz hat derzeit Prof. Dr. Andreas Voß. Wir Studierende haben in diesem Gremium leider kein echtes Stimmrecht, sondern beraten nur. Trotzdem können wir uns dort für die Interessen der Studierenden am Institut einsetzen.</p>
 <h2>Studentische Vertretung</h2>
-<h4>Mitglied</h4>${people(['Steffen Tietz'])}
-<h4>Vertretung</h4>${people(['Rahel Kröning'])}
+<h3>Mitglied</h3>${people(['Steffen Tietz'])}
+<h3>Vertretung</h3>${people(['Rahel Kröning'])}
 <p class="term-dates">${ic('cal')} Nächste Entsendung: Oktober 2025</p>`},
 
 'hopo/psyfako':{t:'PsyFaKo',d:'Die Psychologie-Fachschaften-Konferenz',lead:'Die PsyFaKo ist die Bundesfachschaftentagung der Psychologiestudierenden.',body:`
@@ -667,7 +667,7 @@ const IMG={
   valley:{alt:'Der Neckar bei Sonnenuntergang, Blick über Heidelberg bis in die Rheinebene',by:'Fachschaft MathPhysInfo (Ersti-Info 2023)',src:SRC_ERSTI},
   night:{alt:'Heidelberger Schlossbeleuchtung: das rot angestrahlte Schloss mit Feuerwerk über der nächtlichen Altstadt',by:'Fachschaft MathPhysInfo (ZaPF-Tagungsheft 2018)',src:SRC_ZAPF}
 };
-const credit=k=>`Foto: <a class="noext" href="${IMG[k].src}">${IMG[k].by}</a>, <a class="noext" href="${CCBYSA}">CC BY-SA 4.0</a>`;
+const credit=k=>`<span class="credit-txt" aria-label="Foto: ${IMG[k].by}, Lizenz CC BY-SA 4.0"><span aria-hidden="true">Foto: </span><a class="noext" href="${IMG[k].src}" aria-label="Fotoquelle ${IMG[k].by}">${IMG[k].by}</a><span aria-hidden="true">, </span><a class="noext" href="${CCBYSA}" aria-label="Lizenz CC BY-SA 4.0">CC BY-SA 4.0</a></span>`;
 const pic=(k,cls,eager)=>`<img${cls?` class="${cls}"`:''} src="${HD_IMG[k]}" alt="${IMG[k].alt}" decoding="async"${eager?' fetchpriority="high"':' loading="lazy"'}>`;
 const OSM='https://www.openstreetmap.org/copyright';
 const OSM_LINK='https://www.openstreetmap.org/?mlat=49.41054&mlon=8.69767#map=18/49.41054/8.69767';

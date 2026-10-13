@@ -159,7 +159,7 @@ function home(){
   <div class="news-grid">
    <article class="feat rv">
     <time datetime="${p0.d}">${d0.toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'})}</time>
-    <h3><a class="noext" href="${P+p0.u}">${p0.t}</a></h3><p>${p0.x}</p>
+    <h3><a class="noext" href="${P+p0.u}" aria-describedby="ext-tab-msg">${p0.t}<span class="ext-ico" aria-hidden="true">↗</span></a></h3><p>${p0.x}</p>
     <div class="tags">${['Aktuelles',...p0.c].map(c=>`<span class="tag">${c}</span>`).join('')}</div>
    </article>
    <div class="side-news rv" style="--i:1">${newsList(POSTS.slice(1,4))}</div>
@@ -178,7 +178,8 @@ function home(){
     <div class="btns"><a class="btn btn-primary noext" href="${U+ISSUES[0][2]}">${ic('download')}Neue Ausgabe lesen</a><a class="tlink" href="#/leben/blackbox">Zum Archiv${ic('chevr')}</a></div>
    </div>
    <div class="orb" data-face="a">
-    <svg viewBox="0 0 240 220" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
+    <svg viewBox="0 0 240 220" role="img" aria-labelledby="necker-title" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
+     <title id="necker-title">Optische Täuschung: Necker-Würfel mit bistabiler Wahrnehmung</title>
      <path class="fa" d="M30 80H150V200H30Z"/><path class="fb" d="M90 20H210V140H90Z"/>
      <path d="M30 80H150V200H30ZM90 20H210V140H90ZM30 80 90 20M150 80 210 20M150 200 210 140M30 200 90 140"/>
     </svg>
@@ -342,25 +343,30 @@ function buildNav(){
   $('#drawerBody').innerHTML=mains.filter(([,k])=>k.length).map(([r])=>{
     const groups=DRAWER_GROUPS[r]||[{label:'',items:[r,...kidsOf(r)]}];
     const icon=SEC_ICONS[r]||'folder';
-    return `<section class="sheet-col">
-      <header class="sheet-col-head">
-        <a class="sheet-col-title" href="#/${r}">
-          <span class="sheet-col-ico" aria-hidden="true">${ic(icon)}</span>
-          <span class="sheet-col-name">${navTitle(r)}</span>
-        </a>
-      </header>
+    return `<section class="sheet-col" aria-labelledby="col-title-${r}">
+      <div class="sheet-col-head">
+        <h2 class="sheet-col-title-wrap" id="col-title-${r}">
+          <a class="sheet-col-title" href="#/${r}">
+            <span class="sheet-col-ico" aria-hidden="true">${ic(icon)}</span>
+            <span class="sheet-col-name">${navTitle(r)}</span>
+          </a>
+        </h2>
+      </div>
       <div class="sheet-col-body">
-        ${groups.map(g=>`<div class="sheet-group">
-          ${g.label?`<div class="sheet-group-label">${g.label}</div>`:''}
-          <ul class="sheet-group-list">
-            ${g.items.map(k=>{
-              const isOverview=k===r;
-              const title=isOverview?'Übersicht':PAGES[k].t;
-              const tag=NAV_TAGS[k]?`<span class="m-tag">${NAV_TAGS[k]}</span>`:'';
-              return `<li><a href="#/${k}" class="sheet-link${isOverview?' is-overview':''}"><span>${title}</span>${tag}</a></li>`;
-            }).join('')}
-          </ul>
-        </div>`).join('')}
+        ${groups.map((g,gi)=>{
+          const gid=`group-${r}-${gi}`;
+          return `<div class="sheet-group">
+            ${g.label?`<h3 id="${gid}" class="sheet-group-label">${g.label}</h3>`:''}
+            <ul class="sheet-group-list"${g.label?` aria-labelledby="${gid}"`:''}>
+              ${g.items.map(k=>{
+                const isOverview=k===r;
+                const title=isOverview?'Übersicht':PAGES[k].t;
+                const tag=NAV_TAGS[k]?`<span class="m-tag">${NAV_TAGS[k]}</span>`:'';
+                return `<li><a href="#/${k}" class="sheet-link${isOverview?' is-overview':''}"><span>${title}</span>${tag}</a></li>`;
+              }).join('')}
+            </ul>
+          </div>`;
+        }).join('')}
       </div>
     </section>`;
   }).join('');
@@ -387,7 +393,7 @@ function themeSeg(){
 function footer(){
   const col=(r,extra)=>`<div><h2><a href="#/${r}">${navTitle(r)}</a></h2><ul>${kidsOf(r).map(k=>`<li><a href="#/${k}">${PAGES[k].t}</a></li>`).join('')}${extra||''}</ul></div>`;
   $('#footer').innerHTML=`<div class="f-in">
-   <p class="f-note">Fotos von Heidelberg: Samuel Scherer und Fachschaft MathPhysInfo, <a class="noext" href="${CCBYSA}">CC BY-SA 4.0</a>. Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a>. Einzelheiten unter <a href="#/impressum">Bildnachweise</a>.</p>
+   <p class="f-note" aria-label="Fotos von Heidelberg: Samuel Scherer und Fachschaft MathPhysInfo, Lizenz CC BY-SA 4.0. Kartendaten © OpenStreetMap-Mitwirkende. Einzelheiten unter Bildnachweise.">Fotos von Heidelberg: Samuel Scherer und Fachschaft MathPhysInfo, <a class="noext" href="${CCBYSA}" aria-label="Lizenz CC BY-SA 4.0">CC BY-SA 4.0</a>. Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a>. Einzelheiten unter <a href="#/impressum">Bildnachweise</a>.</p>
    <nav class="f-dir" aria-label="Alle Seiten">
     ${col('fachschaft',`<li><a href="#/aktuelles">Aktuelles</a></li>`)}${col('studium')}${col('leben')}${col('hopo')}
     <div><h2>Kontakt</h2><ul><li><a href="mailto:${MAIL}">E-Mail schreiben</a></li><li><a class="noext" href="${BBB}">Online-Sitzung</a></li><li><a class="noext" href="${PSYTREFF}">Psychotreff-Verteiler</a></li><li><a class="noext" href="${IG}">Instagram</a></li><li><a class="noext" href="${FB}">Facebook</a></li><li><a class="noext" href="https://www.psychologie.uni-heidelberg.de/">Psychologisches Institut</a></li><li><a class="noext" href="https://www.stura.uni-heidelberg.de/">StuRa</a></li></ul></div>
@@ -405,7 +411,7 @@ function decorateLinks(root){
   $$('a[href^="http"]',root).forEach(a=>{
     a.target='_blank'; a.rel='noopener';
     if(!a.classList.contains('noext')&&!a.classList.contains('btn')&&!a.closest('.linkrows,.gnav,footer,.tile,.hero,.mapwrap,.banner,.lnav,.quick,.issues-mini')) a.classList.add('ext');
-    if(!$('.sr',a)) a.insertAdjacentHTML('beforeend','<span class="sr"> (öffnet in neuem Tab)</span>');
+    if(!a.closest('h1,h2,h3,h4,h5,h6')&&!$('.sr',a)&&!a.hasAttribute('aria-describedby')) a.insertAdjacentHTML('beforeend','<span class="sr"> (öffnet in neuem Tab)</span>');
   });
 }
 /* ============ Interaktive Karten (Zoom & Pan) ============ */
@@ -760,6 +766,11 @@ function initTopicScrollSpy(s){
   sections.forEach(secEl=>topicObserver.observe(secEl));
 }
 
+function announcePage(title){
+  const el=$('#routeAnnouncer');
+  if(el) el.textContent=title;
+}
+
 function router(){
   let h=decodeURIComponent(location.hash.replace(/^#\/?/,''));
   let [r,anchor]=h.split('?'); r=(r||'').replace(/\/+$/,'');
@@ -774,6 +785,7 @@ function router(){
     if(topicObserver){topicObserver.disconnect(); topicObserver=null;}
     app.innerHTML=home();
     document.title='Fachschaft Psychologie Heidelberg';
+    announcePage(document.title);
     markNav(r); hydrate(app);
     window.scrollTo({top:0,behavior:'auto'});
     if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}
@@ -786,8 +798,10 @@ function router(){
     if(topicObserver){topicObserver.disconnect(); topicObserver=null;}
     app.innerHTML=notFound();
     document.title='Seite nicht gefunden | Fachschaft Psychologie Heidelberg';
+    announcePage(document.title);
     markNav(r); hydrate(app);
     window.scrollTo({top:0,behavior:'auto'});
+    if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}
     first=false;
     return;
   }
@@ -799,6 +813,7 @@ function router(){
     if(currentSec===s){
       markNav(r); markLnav(r);
       document.title=PAGES[r].t+' | Fachschaft Psychologie Heidelberg';
+      announcePage(document.title);
       const target=document.getElementById(secId(r));
       if(target){
         isScrollSpyNavigating=true;
@@ -806,6 +821,7 @@ function router(){
         setTimeout(()=>{isScrollSpyNavigating=false;},700);
       }
       if(anchor){requestAnimationFrame(()=>openQA(anchor));}
+      if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}
       first=false;
       return;
     }
@@ -813,6 +829,7 @@ function router(){
     currentSec=s;
     app.innerHTML=page(r);
     document.title=PAGES[r].t+' | Fachschaft Psychologie Heidelberg';
+    announcePage(document.title);
     markNav(r); markLnav(r); hydrate(app);
     initTopicScrollSpy(s);
 
@@ -836,6 +853,7 @@ function router(){
   if(topicObserver){topicObserver.disconnect(); topicObserver=null;}
   app.innerHTML=page(r);
   document.title=PAGES[r].t+' | Fachschaft Psychologie Heidelberg';
+  announcePage(document.title);
   markNav(r); hydrate(app);
   if(anchor){requestAnimationFrame(()=>openQA(anchor));}
   else{window.scrollTo({top:0,behavior:'auto'}); if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}}
@@ -874,7 +892,16 @@ function doSearch(q){
   }).join('');
 }
 function moveSel(d){const as=$$('#sres a');if(!as.length)return;sel=(sel+d+as.length)%as.length;as.forEach((a,i)=>a.setAttribute('aria-selected',i===sel));as[sel].scrollIntoView({block:'nearest'});}
-function openSearch(){const d=$('#search');if(!d.open){d.showModal();$('#q').value='';doSearch('');$('#q').focus();}}
+function openSearch(){
+  const d=$('#search');
+  if(!d.open){
+    d.showModal();
+    const b=$('#openSearch'); if(b) b.setAttribute('aria-expanded','true');
+    $('#q').value='';
+    doSearch('');
+    $('#q').focus();
+  }
+}
 
 /* ============ Darstellung: System / Hell / Dunkel ============ */
 const root=document.documentElement;
@@ -917,8 +944,24 @@ document.addEventListener('click',e=>{
     }
   }
 });
-$('#openMenu').addEventListener('click',()=>$('#drawer').showModal());
+$('#openMenu').addEventListener('click',()=>{
+  $('#drawer').showModal();
+  $('#openMenu').setAttribute('aria-expanded','true');
+});
 $('#openSearch').addEventListener('click',openSearch);
+$('#drawer').addEventListener('close',()=>{
+  $('#openMenu').setAttribute('aria-expanded','false');
+  if(document.activeElement===document.body || $('#drawer').contains(document.activeElement)){
+    $('#openMenu').focus();
+  }
+});
+$('#search').addEventListener('close',()=>{
+  const b=$('#openSearch');
+  if(b) b.setAttribute('aria-expanded','false');
+  if(document.activeElement===document.body || $('#search').contains(document.activeElement)){
+    if(b) b.focus();
+  }
+});
 $$('[data-opensearch]').forEach(b=>b.addEventListener('click',()=>{const d=b.closest('dialog');if(d)d.close();openSearch();}));
 $$('dialog [data-close]').forEach(b=>b.addEventListener('click',()=>b.closest('dialog').close()));
 $$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close();}));
