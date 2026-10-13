@@ -296,8 +296,22 @@ function page(route){
   </article>`;
 }
 function notFound(){
-  return `<header class="phead">${mapSvg('mapbg')}<div class="in">${crumbs('')}<h1 tabindex="-1">Seite nicht gefunden</h1><p class="lead">Diese Adresse gibt es auf unserer Website nicht. Versuch es mit der Suche oder starte auf der Startseite.</p></div></header>
-  <div class="doc"><div class="btns"><a class="btn btn-primary" href="#/">Zur Startseite</a><button class="btn btn-ghost" type="button" data-opensearch>${ic('search')}Suchen</button></div></div>`;
+  return `<header class="phead">${mapSvg('mapbg')}<div class="in rv">${crumbs('')}<h1 tabindex="-1">Seite nicht gefunden</h1><p class="lead">Diese Adresse gibt es auf unserer Website nicht oder sie wurde im Zuge des Relaunchs verschoben.</p></div></header>
+  <article class="doc prose rv" style="--i:1">
+    <div class="panel stone">
+      <h2 style="font-size:18px;margin-top:0">Was suchst du?</h2>
+      <p>Hier sind einige der am häufigsten besuchten Seiten:</p>
+      <div class="bento3" style="margin-top:16px">
+        <a class="card" href="#/studium"><h3>${ic('book')} Infos zum Studium</h3><p>Bachelor, Master, BaPsy und FAQs.</p></a>
+        <a class="card" href="#/fachschaft/kontakt"><h3>${ic('pin')} Fachschaft & Kontakt</h3><p>Sitzungstermine und Ansprechpersonen.</p></a>
+        <a class="card" href="#/aktuelles"><h3>${ic('newspaper')} Aktuelles</h3><p>Neuigkeiten rund ums Institut.</p></a>
+      </div>
+      <div class="btns" style="margin-top:20px">
+        <a class="btn btn-primary" href="#/">Zur Startseite</a>
+        <button class="btn btn-ghost" type="button" data-opensearch>${ic('search')}Website durchsuchen</button>
+      </div>
+    </div>
+  </article>`;
 }
 
 /* ============ Navigation ============ */
@@ -419,7 +433,7 @@ function initZoomableMaps(root){
   const isMac = typeof navigator !== 'undefined' && /Macintosh|Mac OS X|iPhone|iPad|iPod/.test(navigator.userAgent);
   const zoomHint = isMac ? '⌘ + Scrollen zum Zoomen' : 'Strg + Scrollen zum Zoomen';
 
-  $$('[data-zoomable]', root).forEach(container => {
+  const setupMap = container => {
     const vp = $('.map-viewport', container);
     const layer = $('.map-layer', container);
     if(!vp || !layer || container._zoomInited) return;
@@ -648,6 +662,22 @@ function initZoomableMaps(root){
     });
 
     applyTransform(false);
+  };
+
+  $$('[data-zoomable]', root).forEach(container => {
+    if('IntersectionObserver' in window && !container._zoomInited){
+      const obs = new IntersectionObserver((entries, observer)=>{
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            observer.unobserve(container);
+            setupMap(container);
+          }
+        });
+      }, {rootMargin:'250px 0px'});
+      obs.observe(container);
+    } else {
+      setupMap(container);
+    }
   });
 }
 
@@ -885,11 +915,37 @@ const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').re
 let sel=0, results=[];
 function doSearch(q){
   const box=$('#sres'); const words=norm(q).split(/\s+/).filter(w=>w.length>0);
-  if(!words.length){results=[];box.innerHTML=`<div class="s-quick">${['Bachelor','BaPsy','Praktikum','ERASMUS','Raum','Psychoparty','Protokolle','FachRat'].map(w=>`<button class="chip" type="button" data-q="${w}">${w}</button>`).join('')}</div>`;return;}
+  if(!words.length){
+    results=[];
+    box.innerHTML=`<div class="s-quick">
+      <div class="s-quick-title">Häufig gesucht</div>
+      <div class="s-quick-chips">
+        ${['Bachelor','Master','BaPsy','Praktikum','Ausland','FAQ','Raumfinder','Psychoparty','Protokolle','FachRat'].map(w=>`<button class="chip" type="button" data-q="${w}">${w}</button>`).join('')}
+      </div>
+      <div class="s-quick-links">
+        <a href="#/studium/faq">${ic('question')} Häufige Fragen (FAQ)</a>
+        <a href="#/studium/faq?raum">${ic('search')} Raumfinder Institut</a>
+        <a href="#/fachschaft/kontakt">${ic('pin')} Fachschaft & Kontakt</a>
+      </div>
+    </div>`;
+    return;
+  }
   if(!IDX) buildIndex();
   results=IDX.map(it=>{const T=norm(it.t),Xn=norm(it.x);let sc=0;for(const w of words){const inT=T.includes(w),inX=Xn.includes(w);const stem=w.length>5&&T.includes(w.slice(0,Math.max(4,w.length-3)));if(!inT&&!inX&&!stem)return null;sc+=(inT?12:0)+(stem&&!inT?10:0)+(T.startsWith(w)?6:0)+Math.min((Xn.split(w).length-1),6);}if(!it.ext&&!it.r.includes('?'))sc+=3;if(it.ext)sc-=2;return {...it,sc};}).filter(Boolean).sort((a,b)=>b.sc-a.sc).slice(0,14);
   sel=0;
-  if(!results.length){box.innerHTML=`<p class="s-empty">Keine Treffer für „${q.replace(/[<>&]/g,'')}“. Versuch es mit einem anderen Begriff.</p>`;return;}
+  if(!results.length){
+    const safeQ=q.replace(/[<>&]/g,'');
+    box.innerHTML=`<div class="s-empty">
+      <p>Keine Treffer für „${safeQ}“. Versuch es mit einem anderen Begriff.</p>
+      <div class="s-empty-suggestions">
+        <div class="s-quick-title">Suchvorschläge</div>
+        <div class="s-quick-chips">
+          ${['Bachelor','Master','Praktikum','FAQ','Raum','Kontakt'].map(w=>`<button class="chip" type="button" data-q="${w}">${w}</button>`).join('')}
+        </div>
+      </div>
+    </div>`;
+    return;
+  }
   const re=new RegExp('('+words.map(esc).join('|')+')','gi');
   const hl=s=>s.replace(/[<>&]/g,'').replace(re,'<mark>$1</mark>');
   box.innerHTML=results.map((it,i)=>{
