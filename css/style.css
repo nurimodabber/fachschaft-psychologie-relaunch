@@ -91,7 +91,8 @@
 html{background:var(--bg);scroll-padding-top:calc(env(safe-area-inset-top,0px) + 124px);-webkit-text-size-adjust:100%}
 body{margin:0;background-color:var(--bg);background-image:radial-gradient(at 15% 15%,rgba(163,25,45,.03) 0px,transparent 45%),radial-gradient(at 85% 65%,rgba(163,25,45,.02) 0px,transparent 40%);color:var(--text);font:400 17px/1.52 var(--font);letter-spacing:-.011em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
 img,svg{max-width:100%}
-h1,h2,h3,h4,h5,h6,.sh2,.lead,.statement,.phead h1,.phead .lead,.hero h1{font-family:var(--font);color:var(--text);text-wrap:balance;overflow-wrap:anywhere;hyphens:auto}
+h1,h2,h3,h4,h5,h6,.sh2,.phead h1,.hero h1{font-family:var(--font);color:var(--text);text-wrap:balance;overflow-wrap:break-word;hyphens:auto}
+.lead{font-family:var(--font);color:var(--text);text-wrap:balance;overflow-wrap:break-word;hyphens:none}
 p{text-wrap:pretty}
 a{color:var(--accent-text);text-decoration:none}
 a:hover{text-decoration:underline;text-underline-offset:.18em}
@@ -205,10 +206,12 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 @keyframes heroTxt{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 
 /* ---------- Begrüßung + Themen-Einstiege Spacing ---------- */
-.intro{display:flex;flex-direction:column;max-width:54ch;gap:24px}
-.statement{font-size:clamp(26px,3.2vw,44px);line-height:1.2;font-weight:650;letter-spacing:-.03em;margin:0;color:var(--text2)}
+.sec-intro{position:relative;overflow:hidden;padding:clamp(60px,7.5vw,104px) 0}
+.intro{display:flex;flex-direction:column;max-width:min(960px,100%);gap:28px}
+.statement{font-size:clamp(26px,3.3vw,42px);line-height:1.28;font-weight:600;letter-spacing:-.025em;margin:0;color:var(--text);hyphens:none;-webkit-hyphens:none;overflow-wrap:normal;text-wrap:pretty}
 .statement b{color:var(--text);font-weight:700}
-.intro .more{margin-top:8px}
+.intro .more{margin-top:4px}
+.intro .tlink{font-size:16.5px;font-weight:600}
 .sec-entries{padding-top:clamp(48px,6vw,84px)}
 .session{background:var(--glass-card-bg);-webkit-backdrop-filter:blur(28px) saturate(190%);backdrop-filter:blur(28px) saturate(190%);border:1px solid var(--glass-card-border);border-radius:28px;padding:30px 30px 28px;box-shadow:var(--glass-card-shadow),inset 0 1px 0 var(--glass-highlight)}
 .session h2{font-size:15px;font-weight:600;color:var(--text2);margin:0;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -256,7 +259,7 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 .why-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto auto;gap:18px}
 .why-card{position:relative;background:var(--glass-card-bg);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glass-card-border);border-radius:26px;padding:26px 26px 22px;display:flex;flex-direction:column;box-shadow:var(--glass-card-shadow),inset 0 1px 0 var(--glass-highlight);transition:transform .25s var(--ease),border-color .25s,box-shadow .25s}
 .why-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(420px circle at var(--x, 50%) var(--y, 50%),var(--why-spotlight,rgba(0,0,0,.03)),transparent 68%);opacity:0;transition:opacity .25s ease}
-:root[data-theme="dark"] .why-card::before,
+:root[data-theme="dark"] .why-card::before{--why-spotlight:rgba(255,255,255,.07)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .why-card::before{--why-spotlight:rgba(255,255,255,.07)}}
 .why-card:hover{transform:translateY(-3px);border-color:var(--glass-border);box-shadow:0 18px 44px -6px rgba(0,0,0,.09),inset 0 1px 0 var(--glass-highlight)}
 .why-card:hover::before{opacity:1}
@@ -424,8 +427,9 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 @media (max-width:760px){.mapcard{position:relative;left:auto;top:auto;width:auto;margin:0;border-radius:0;background:var(--glass-card-bg);border:0;border-bottom:1px solid var(--glass-border);box-shadow:none;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);padding:20px var(--gut)}.pin-label{display:none}}
 
 /* ---------- Hintergrund-Karten (Ambient Watermarks mit weißen Straßen) ---------- */
-.sec-bg-map{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;opacity:0.16;-webkit-mask:radial-gradient(circle at 76% 45%,#000 15%,transparent 72%);mask:radial-gradient(circle at 76% 45%,#000 15%,transparent 72%)}
-.sec-bg-map svg{position:absolute;right:-10%;top:-20%;width:min(1250px,95vw);height:auto;transform:rotate(-3deg);--map-lop:0}
+.sec-bg-map{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;opacity:0.12;-webkit-mask:radial-gradient(circle at 80% 50%,#000 20%,transparent 75%);mask:radial-gradient(circle at 80% 50%,#000 20%,transparent 75%)}
+.sec-bg-map svg{position:absolute;right:-5%;top:-15%;width:min(1300px,95vw);height:auto;transform:rotate(-3deg);--map-lop:0}
+.sec-bg-map .m-hs{stroke:var(--accent);opacity:.5;stroke-width:3.5}
 .sec .wrap{position:relative;z-index:1}
 
 .feat{position:relative;overflow:hidden}

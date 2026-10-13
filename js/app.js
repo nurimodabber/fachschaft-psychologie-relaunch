@@ -63,53 +63,45 @@ function home(){
  <p class="credit">Foto: Samuel Scherer, <a class="noext" href="${CCBYSA}">CC BY-SA 4.0</a></p>
 </section>
 
-<section class="sec" aria-labelledby="intro-h">
+<section class="sec sec-intro" aria-labelledby="intro-h">
+ <h2 class="sr" id="intro-h">Über die Fachschaft</h2>
  <div class="sec-bg-map" aria-hidden="true">${mapSvg('mapbg-ambient')}</div>
  <div class="wrap intro">
   <div class="rv">
    <p class="statement">Wir vertreten die Psychologiestudierenden in Heidelberg, organisieren Veranstaltungen und helfen bei Fragen zum Studium.</p>
-   <p class="more"><a class="tlink" href="#/fachschaft">Mehr über die Fachschaft${ic('chevr')}</a></p>
+   <p class="more"><a class="tlink" href="#/fachschaft"><span>Mehr über die Fachschaft</span>${ic('chevr')}</a></p>
   </div>
  </div>
 </section>
 
 <section class="sec sec-entries" aria-labelledby="ex-h">
  <div class="wrap">
-  <div class="shead rv"><div><h2 class="sh2" id="ex-h">Themen &amp; Einstiege</h2></div></div>
-  <div class="entries4">
-   <article class="tile rv" style="--i:0">
-    <figure><img src="assets/images/fachschaft/institutsgrillen-2024.jpg" alt="Institutsgrillen im Innenhof" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
+  <div class="shead rv"><div><h2 class="sh2" id="ex-h">Was interessiert dich gerade?</h2></div></div>
+  <div class="bento3">
+   <article class="tile t-study rv">
+    <figure><img src="assets/images/fachschaft/psychologisches-institut.webp" alt="Psychologisches Institut in der Hauptstraße 47" loading="lazy"></figure><span class="cap">Psychologisches Institut</span>
     <div class="tb">
      <h3><a href="#/studium">Infos zum Studium</a></h3>
-     <p>Bewerbung, Prüfungsordnung, Auslandssemester und Praktika.</p>
-     <div class="subl"><a href="#/studium/bachelor">Bachelor${ic('chevr')}</a><a href="#/studium/master">Master${ic('chevr')}</a><a href="#/studium/approbation">Approbation${ic('chevr')}</a></div>
+     <p>Bewerbung, Studienaufbau, Praktika und Auslandssemester. Dazu Antworten auf die Fragen, die Erstis am häufigsten stellen.</p>
+     <div class="subl"><a href="#/studium/bachelor">Bachelor${ic('chevr')}</a><a href="#/studium/master">Master${ic('chevr')}</a><a href="#/studium/approbation">Approbation${ic('chevr')}</a><a href="#/studium/faq">FAQ${ic('chevr')}</a></div>
     </div>
    </article>
 
-   <article class="tile rv" style="--i:1">
-    <figure><img src="assets/images/fachschaft/silent-disco-2024.jpg" alt="Veranstaltungen am Institut" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
+   <article class="tile t-events rv" style="--i:1">
+    <figure><img src="assets/images/fachschaft/silent-disco-2024.jpg" alt="Silent Disco im Institutsinnenhof" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
     <div class="tb">
      <h3><a href="#/leben">Veranstaltungen</a></h3>
-     <p>Psychoparty, PsychoKino, Ersti-Wochenende und Institutsgrillen.</p>
-     <div class="subl"><a href="#/leben/psychoparty">Psychoparty${ic('chevr')}</a><a href="#/leben/ersti-we">Ersti-WE${ic('chevr')}</a><a href="#/leben/blackbox">BlackBox${ic('chevr')}</a></div>
+     <p>Psychoparty, Ersti-Wochenende, PsychoKino und Institutsgrillen.</p>
+     <div class="subl"><a href="#/leben/psychoparty">Psychoparty${ic('chevr')}</a><a href="#/leben/ersti-we">Ersti-Wochenende${ic('chevr')}</a></div>
     </div>
    </article>
 
-   <article class="tile rv" style="--i:2">
-    <figure><img src="assets/images/fachschaft/fs-team.jpg" alt="Die Fachschaft" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
+   <article class="tile t-fs rv" style="--i:2">
+    <figure><img src="assets/images/fachschaft/fs-team.jpg" alt="Gruppe der Fachschaft Psychologie beim Klausurwochenende" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
     <div class="tb">
      <h3><a href="#/fachschaft">Die Fachschaft</a></h3>
      <p>Wer wir sind, wie du mitmachst und wo wir dich vertreten.</p>
-     <div class="subl"><a href="#/fachschaft/aktive">Aktive${ic('chevr')}</a><a href="#/fachschaft/kontakt">Kontakt${ic('chevr')}</a><a href="#/fachschaft/downloads">Downloads${ic('chevr')}</a></div>
-    </div>
-   </article>
-
-   <article class="tile rv" style="--i:3">
-    <figure><img src="assets/images/fachschaft/fs-wochenende.jpg" alt="Hochschulpolitik am Institut" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
-    <div class="tb">
-     <h3><a href="#/hopo">Hochschulpolitik</a></h3>
-     <p>Mitbestimmung in Fakultätsrat, Institutsrat und StuRa.</p>
-     <div class="subl"><a href="#/hopo/fachrat">FachRat${ic('chevr')}</a><a href="#/hopo/stura">StuRa${ic('chevr')}</a><a href="#/studium/faq">FAQ${ic('chevr')}</a></div>
+     <div class="subl"><a href="#/fachschaft/aktive">Aktive Fachschaft${ic('chevr')}</a><a href="#/hopo">Hochschulpolitik${ic('chevr')}</a></div>
     </div>
    </article>
   </div>

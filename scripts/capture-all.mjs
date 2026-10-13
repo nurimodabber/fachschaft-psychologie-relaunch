@@ -85,6 +85,36 @@ async function main(){
     await new Promise(r => setTimeout(r, 500));
     await capture('preview_hero_desktop.png', { x: 0, y: 0, width: 1366, height: 820, scale: 2 });
 
+    // 1a. Intro Section Desktop (Dark)
+    console.log('Capturing Intro Section Desktop...');
+    await send('Runtime.evaluate', {
+      expression: `
+        const introEl = document.querySelector('.sec-intro');
+        if(introEl) introEl.scrollIntoView({ behavior: 'instant', block: 'center' });
+      `
+    });
+    await new Promise(r => setTimeout(r, 500));
+    await capture('preview_intro_section.png');
+
+    // 1b. Bento Section Desktop (Dark)
+    console.log('Capturing Bento Section Desktop (Dark)...');
+    await send('Runtime.evaluate', {
+      expression: `
+        const bentoEl = document.querySelector('.sec-entries') || document.querySelector('.bento3');
+        bentoEl.scrollIntoView({ behavior: 'instant', block: 'start' });
+      `
+    });
+    await new Promise(r => setTimeout(r, 600));
+    await capture('preview_bento_desktop_dark.png');
+
+    // 1c. Bento Section Desktop (Light)
+    console.log('Capturing Bento Section Desktop (Light)...');
+    await send('Runtime.evaluate', { expression: "document.documentElement.dataset.theme = 'light';" });
+    await new Promise(r => setTimeout(r, 400));
+    await capture('preview_bento_desktop_light.png');
+    await send('Runtime.evaluate', { expression: "document.documentElement.dataset.theme = 'dark';" });
+    await new Promise(r => setTimeout(r, 300));
+
     // 2. Menu Desktop
     console.log('Capturing Menu Desktop...');
     await send('Runtime.evaluate', { expression: "$('#openMenu').click();" });

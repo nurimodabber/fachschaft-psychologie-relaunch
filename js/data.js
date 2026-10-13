@@ -684,6 +684,7 @@ ${rows([
  [SRC_ZAPF,'image','Altstadt vom Schloss bei Sonnenuntergang','Foto: Samuel Scherer, aus dem ZaPF-Tagungsheft der Fachschaft MathPhysInfo'],
  [SRC_ZAPF,'image','Heidelberger Schlossbeleuchtung','Fachschaft MathPhysInfo, ZaPF-Tagungsheft 2018'],
  [SRC_ERSTI,'image','Stadtpanorama und Neckartal im Abendlicht','Fachschaft MathPhysInfo, Titelbilder des Ersti-Info 2023'],
+ ['https://commons.wikimedia.org/wiki/File:Heidelberg_Alte_Anatomie_20110910.jpg','image','Psychologisches Institut (Alte Anatomie, Hauptstraße 47)','Foto: Rudolf Stricker, Lizenz CC BY-SA 3.0'],
  [OSM,'map','Karte der Altstadt','Kartendaten © OpenStreetMap-Mitwirkende, Lizenz ODbL']
 ])}`;
 
