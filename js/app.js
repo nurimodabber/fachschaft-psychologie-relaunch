@@ -39,77 +39,80 @@ function nextSession(){
 /* ============ Startseite ============ */
 function home(){
   const s=nextSession(), p0=POSTS[0], d0=new Date(p0.d+'T12:00:00');
-  const quick=[
-    ['studium/bachelor','Bachelor'],
-    ['studium/master','Master'],
-    ['studium/bachelor/eks','EKS'],
-    ['studium/approbation','Approbation'],
-    ['studium/ausland','Ausland'],
-    ['studium/praktika','Praktika'],
-    ['studium/faq','FAQ'],
-    ['fachschaft/downloads','Protokolle']
-  ];
+  const liveDot = s.live ? '<span class="pulse-dot"></span>' : '';
+  const heroSession = `
+    <div class="hero-session">
+      ${liveDot}
+      <span class="hero-sess-txt">Nächste Sitzung: <b>${s.dateStr}</b></span>
+      <a class="hero-sess-link" href="#/fachschaft/kontakt">Details${ic('chevr')}</a>
+    </div>`;
+
   return `
 <section class="hero" aria-labelledby="hero-h">
  ${pic('hero','',true)}
  <div class="in">
-  <p class="eb">Universität Heidelberg</p>
-  <h1 id="hero-h" tabindex="-1">Fachschaft Psychologie</h1>
-  <p class="lead">Die studentische Vertretung am Psychologischen Institut der Universität Heidelberg.</p>
-  <div class="btns"><a class="btn btn-primary" href="#/fachschaft">Über uns</a><a class="tlink" href="#/studium">Infos zum Studium${ic('chevr')}</a></div>
+  <div class="rv">
+   <p class="eb">Universität Heidelberg</p>
+   <h1 id="hero-h">Fachschaft<br>Psychologie</h1>
+   <p class="lead">Die studentische Vertretung am Psychologischen Institut der Universität Heidelberg.</p>
+   <div class="btns">
+    <a class="btn btn-primary" href="#/fachschaft"><span>Über uns</span></a>
+    <a class="btn btn-ghost" href="#/studium"><span>Infos zum Studium</span>${ic('chevr')}</a>
+   </div>
+   ${heroSession}
+  </div>
  </div>
- <p class="credit">${credit('hero')}</p>
+ <div class="credit">Foto: Samuel Scherer, <a class="noext" href="${CCBYSA}">CC BY-SA 4.0</a></div>
 </section>
 
-<nav class="quick" aria-label="Schnellzugriff">
- <div class="wrap">
-  <ul class="quick-nav">
-   ${quick.map(([h,t])=>`<li><a href="#/${h}">${t}</a></li>`).join('')}
-  </ul>
- </div>
-</nav>
-
-<section class="sec sec-intro">
+<section class="sec" aria-labelledby="intro-h">
  <div class="sec-bg-map" aria-hidden="true">${mapSvg('mapbg-ambient')}</div>
  <div class="wrap intro">
   <div class="rv">
    <p class="statement">Wir vertreten die Psychologiestudierenden in Heidelberg, organisieren Veranstaltungen und helfen bei Fragen zum Studium.</p>
    <p class="more"><a class="tlink" href="#/fachschaft">Mehr über die Fachschaft${ic('chevr')}</a></p>
   </div>
-  <aside class="session rv" aria-labelledby="sess-h">
-   <h2 id="sess-h">Nächste Sitzung${s.live?'<span class="live">läuft gerade</span>':''}</h2>
-   <div class="date"><time class="day" datetime="${s.iso}">${s.day}</time><span class="wd">${s.wd}</span><time class="mo" datetime="${s.iso}">${s.dateStr}</time></div>
-   <dl>
-    <div><dt>${ic('pin')}<span class="sr">Ort</span></dt><dd>Fachschaftskeller, Hauptstraße 47–51. Durch das Tor in den Innenhof, direkt rechts.</dd></div>
-    <div><dt>${ic('video')}<span class="sr">Online</span></dt><dd>Oder nach Absprache online.</dd></div>
-    <div><dt>${ic('cal')}<span class="sr">Hinweis</span></dt><dd>${s.note}</dd></div>
-   </dl>
-   <div class="btns"><a class="btn btn-primary btn-small noext" href="${BBB}">Online teilnehmen</a><a class="tlink noext" href="${CAL}">Alle Termine${ic('chevr')}</a></div>
-  </aside>
  </div>
 </section>
 
 <section class="sec tight" aria-labelledby="ex-h">
  <div class="wrap">
   <div class="shead rv"><div><h2 class="sh2" id="ex-h">Themen &amp; Einstiege</h2></div></div>
-  <div class="bento3">
-   <article class="tile t-study rv">
-    <figure><img src="assets/images/fachschaft/institutsgrillen-2024.jpg" alt="Institutsgrillen im Innenhof des Psychologischen Instituts" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
-    <div class="tb"><h3><a href="#/studium">Infos zum Studium</a></h3>
-     <p>Bewerbung, Studienaufbau, Praktika und Auslandssemester. Dazu Antworten auf die Fragen, die Erstis am häufigsten stellen.</p>
-     <div class="subl"><a href="#/studium/bachelor">Bachelor${ic('chevr')}</a><a href="#/studium/master">Master${ic('chevr')}</a><a href="#/studium/approbation">Approbation${ic('chevr')}</a><a href="#/studium/faq">FAQ${ic('chevr')}</a></div></div>
+  <div class="entries4">
+   <article class="tile rv" style="--i:0">
+    <figure><img src="assets/images/fachschaft/institutsgrillen-2024.jpg" alt="Institutsgrillen im Innenhof" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
+    <div class="tb">
+     <h3><a href="#/studium">Infos zum Studium</a></h3>
+     <p>Bewerbung, Prüfungsordnung, Auslandssemester und Praktika.</p>
+     <div class="subl"><a href="#/studium/bachelor">Bachelor${ic('chevr')}</a><a href="#/studium/master">Master${ic('chevr')}</a><a href="#/studium/approbation">Approbation${ic('chevr')}</a></div>
+    </div>
    </article>
-   <article class="tile t-events rv" style="--i:1">
-    <figure><img src="assets/images/fachschaft/silent-disco-2024.jpg" alt="Silent Disco im Institutsinnenhof" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
-    <div class="tb"><h3><a href="#/leben">Veranstaltungen</a></h3>
-     <p>Psychoparty, Ersti-Wochenende, PsychoKino und Institutsgrillen.</p>
-     <div class="subl"><a href="#/leben/psychoparty">Psychoparty${ic('chevr')}</a><a href="#/leben/ersti-we">Ersti-Wochenende${ic('chevr')}</a></div></div>
+
+   <article class="tile rv" style="--i:1">
+    <figure><img src="assets/images/fachschaft/silent-disco-2024.jpg" alt="Veranstaltungen am Institut" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
+    <div class="tb">
+     <h3><a href="#/leben">Veranstaltungen</a></h3>
+     <p>Psychoparty, PsychoKino, Ersti-Wochenende und Institutsgrillen.</p>
+     <div class="subl"><a href="#/leben/psychoparty">Psychoparty${ic('chevr')}</a><a href="#/leben/ersti-we">Ersti-WE${ic('chevr')}</a><a href="#/leben/blackbox">BlackBox${ic('chevr')}</a></div>
+    </div>
    </article>
-   <article class="tile t-fs rv" style="--i:2">
-    <figure><img src="assets/images/fachschaft/fs-team.jpg" alt="Gruppe der Fachschaft Psychologie beim Klausurwochenende" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
-    <div class="tb"><h3><a href="#/fachschaft">Die Fachschaft</a></h3>
+
+   <article class="tile rv" style="--i:2">
+    <figure><img src="assets/images/fachschaft/fs-team.jpg" alt="Die Fachschaft" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
+    <div class="tb">
+     <h3><a href="#/fachschaft">Die Fachschaft</a></h3>
      <p>Wer wir sind, wie du mitmachst und wo wir dich vertreten.</p>
-     <div class="subl"><a href="#/fachschaft/aktive">Aktive Fachschaft${ic('chevr')}</a><a href="#/hopo">Hochschulpolitik${ic('chevr')}</a></div></div>
+     <div class="subl"><a href="#/fachschaft/aktive">Aktive${ic('chevr')}</a><a href="#/fachschaft/kontakt">Kontakt${ic('chevr')}</a><a href="#/fachschaft/downloads">Downloads${ic('chevr')}</a></div>
+    </div>
+   </article>
+
+   <article class="tile rv" style="--i:3">
+    <figure><img src="assets/images/fachschaft/fs-wochenende.jpg" alt="Hochschulpolitik am Institut" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
+    <div class="tb">
+     <h3><a href="#/hopo">Hochschulpolitik</a></h3>
+     <p>Mitbestimmung in Fakultätsrat, Institutsrat und StuRa.</p>
+     <div class="subl"><a href="#/hopo/fachrat">FachRat${ic('chevr')}</a><a href="#/hopo/stura">StuRa${ic('chevr')}</a><a href="#/studium/faq">FAQ${ic('chevr')}</a></div>
+    </div>
    </article>
   </div>
  </div>
@@ -123,17 +126,14 @@ function home(){
     <p class="sub">Worum es bei uns geht – von Hochschulpolitik und Studienberatung bis zum Institutsleben.</p>
    </div>
   </div>
-  <div class="why-grid">
+  <div class="why-grid-3">
    <article class="why-card why-card-photo rv" style="--i:0">
-    <figure class="why-fig">
-     <img src="assets/images/fachschaft/fs-wochenende.jpg" alt="Fachschaftswochenende und Planung" loading="lazy">
-    </figure>
+    <figure class="why-fig"><img src="assets/images/fachschaft/fs-wochenende.jpg" alt="Fachschaftswochenende und Planung" loading="lazy"></figure>
     <div class="why-body">
      <h3>Mitgestalten</h3>
      <p>Von der Psychoparty bis zum PsychoKino: Du bringst deine Ideen ein und setzt sie mit uns um.</p>
      <div class="why-chips">
       <a class="why-chip" href="#/leben/psychoparty"><span>Psychoparty</span>${ic('chevr')}</a>
-      <a class="why-chip" href="#/leben/psychokino"><span>PsychoKino</span>${ic('chevr')}</a>
       <a class="why-chip" href="#/leben/ersti-we"><span>Ersti-WE</span>${ic('chevr')}</a>
      </div>
     </div>
@@ -142,51 +142,20 @@ function home(){
    <article class="why-card why-card-quote rv" style="--i:1">
     <blockquote>Studierende vertreten deine Stimme im Fakultätsrat, in Berufungskommissionen und im StuRa.</blockquote>
     <cite>Studentische Mitbestimmung am Institut</cite>
-    <h3>Hochschulpolitik</h3>
+    <h3>Mitbestimmen</h3>
     <p>Du erlebst, wie Entscheidungen über Studium und Lehre entstehen, und bestimmst mit.</p>
     <div class="why-chips">
      <a class="why-chip" href="#/hopo/fachrat"><span>FachRat</span>${ic('chevr')}</a>
      <a class="why-chip" href="#/hopo/fakrat"><span>Fakultät</span>${ic('chevr')}</a>
-     <a class="why-chip" href="#/hopo/stura"><span>StuRa</span>${ic('chevr')}</a>
     </div>
    </article>
 
    <article class="why-card rv" style="--i:2">
-    <h3>Semesterübergreifend</h3>
-    <p>Du lernst engagierte Studierende kennen, die du sonst im Studienalltag nie getroffen hättest.</p>
+    <h3>Zusammenhalt</h3>
+    <p>Fachschaftsarbeit verbindet: Du lernst engagierte Leute aus allen Semestern kennen und findest neue Freundschaften.</p>
     <div class="why-chips">
-     <a class="why-chip" href="#/leben/ersti-we"><span>Ersti-WE</span>${ic('chevr')}</a>
      <a class="why-chip" href="#/leben/wechslertreffen"><span>Wechslertreffen</span>${ic('chevr')}</a>
      <a class="why-chip" href="#/fachschaft/aktive"><span>Aktive</span>${ic('chevr')}</a>
-    </div>
-   </article>
-
-   <article class="why-card rv" style="--i:3">
-    <h3>Verantwortung</h3>
-    <p>Erfahrungen sammeln mit eigenen Projekten, Institutsfinanzen und den Themen der Studierenden.</p>
-    <div class="why-chips">
-     <a class="why-chip" href="#/fachschaft/kontakt"><span>Sitzung</span>${ic('chevr')}</a>
-     <a class="why-chip" href="#/hopo/qsm"><span>QSM-Mittel</span>${ic('chevr')}</a>
-     <a class="why-chip" href="#/studium/lehrgestaltung"><span>Lehre</span>${ic('chevr')}</a>
-    </div>
-   </article>
-
-   <article class="why-card why-card-hero rv" style="--i:4">
-    <div>
-     <h3>Gemeinschaft</h3>
-     <p>Fachschaft bedeutet für uns Gemeinschaft: zusammen grillen, Feste planen und Leute aus allen Semestern kennenlernen.</p>
-    </div>
-    <div>
-     <div class="why-hero-session">
-      <span class="pulse-dot"></span>
-      <div>
-       <b>Jede Woche montags</b>
-       <span>18–20 Uhr im Fachschaftskeller</span>
-      </div>
-     </div>
-     <a class="btn btn-primary why-hero-cta" href="#/fachschaft/kontakt">
-      <span>Komm vorbei</span>${ic('chevr')}
-     </a>
     </div>
    </article>
   </div>
@@ -197,13 +166,17 @@ function home(){
  <div class="wrap">
   <div class="shead rv"><h2 class="sh2" id="news-h">Was gibt’s Neues?</h2><a class="tlink" href="#/aktuelles">Alle Beiträge${ic('chevr')}</a></div>
   ${newsFreshnessHint()}
-  <div class="news-grid">
-   <article class="feat rv">
-    <time datetime="${p0.d}">${d0.toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'})}</time>
-    <h3><a class="noext" href="${P+p0.u}" aria-describedby="ext-tab-msg">${p0.t}<span class="ext-ico" aria-hidden="true">↗</span></a></h3><p>${p0.x}</p>
-    <div class="tags">${['Aktuelles',...p0.c].map(c=>`<span class="tag">${c}</span>`).join('')}</div>
-   </article>
-   <div class="side-news rv" style="--i:1">${newsList(POSTS.slice(1,4))}</div>
+  <div class="news-grid-3">
+   ${POSTS.slice(0,3).map((p,idx)=>{
+     const d = new Date(p.d+'T12:00:00');
+     return `
+     <article class="news-card-3 rv" style="--i:${idx}">
+      <time datetime="${p.d}">${d.toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'})}</time>
+      <h3><a class="noext" href="${P+p.u}">${p.t}<span class="ext-ico" aria-hidden="true">↗</span><span class="sr"> (öffnet in neuem Tab)</span></a></h3>
+      <p>${p.x}</p>
+      <div class="tags">${['Aktuelles',...p.c].map(c=>`<span class="tag">${c}</span>`).join('')}</div>
+     </article>`;
+   }).join('')}
   </div>
  </div>
 </section>
@@ -219,7 +192,7 @@ function home(){
     <div class="btns"><a class="btn btn-primary noext" href="${U+ISSUES[0][2]}">${ic('download')}Neue Ausgabe lesen</a><a class="tlink" href="#/leben/blackbox">Zum Archiv${ic('chevr')}</a></div>
    </div>
    <div class="orb" data-face="a">
-    <svg viewBox="0 0 240 220" role="img" aria-label="Optische Täuschung: Necker-Würfel mit bistabiler Wahrnehmung" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
+    <svg viewBox="0 0 240 220" role="img" aria-label="Optische Täuschung: Necker-Würfel mit bistabiler Wahrnehmung" aria-labelledby="necker-title" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
      <title id="necker-title">Optische Täuschung: Necker-Würfel mit bistabiler Wahrnehmung</title>
      <path class="fa" d="M30 80H150V200H30Z"/><path class="fb" d="M90 20H210V140H90Z"/>
      <path d="M30 80H150V200H30ZM90 20H210V140H90ZM30 80 90 20M150 80 210 20M150 200 210 140M30 200 90 140"/>
@@ -255,24 +228,16 @@ function home(){
      </div>
      <p class="mapcard-addr"><b>Hauptstraße 47–51, 69117 Heidelberg</b><span>Durch das Tor in den Innenhof, der Keller liegt direkt rechts.</span></p>
     </div>
-    <div class="mapcard-time">
-     ${ic('clock')}<span>Sitzungen montags 18–20 Uhr (Vorlesungszeit)</span>
-    </div>
     <div class="mapcard-actions">
-     <a class="btn btn-primary btn-small mapcard-cta" href="#/fachschaft/kontakt">${ic('mail')}Kontakt</a>
-     <div class="mapcard-maps">
-      <a class="btn-route noext" href="${GMAPS_LINK}" target="_blank" rel="noopener" title="In Google Maps öffnen">${ic('map')}<span>Google Maps</span></a>
-      <a class="btn-route noext" href="${APPLE_MAPS_LINK}" target="_blank" rel="noopener" title="In Apple Maps öffnen">${ic('compass')}<span>Apple Maps</span></a>
-     </div>
+     <a class="btn btn-primary noext" href="${MAP_DEFAULT_LINK}" target="_blank" rel="noopener"><span>Route planen</span><span class="ext-ico" aria-hidden="true">↗</span></a>
+     <a class="btn btn-ghost noext" href="${OSM}" target="_blank" rel="noopener"><span>OpenStreetMap</span><span class="ext-ico" aria-hidden="true">↗</span></a>
     </div>
    </div>
-   <p class="mapcredit">Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a></p>
   </div>
  </div>
-</section>`;
+</section>
+`
 }
-
-/* ============ Unterseite ============ */
 function crumbs(route){
   const parts=route?route.split('/'):[]; const out=[`<li><a href="#/">Startseite</a></li>`];
   for(let i=1;i<=parts.length;i++){const r=parts.slice(0,i).join('/'); if(!PAGES[r]) continue;
@@ -372,23 +337,16 @@ const NAV_TAGS = {
 
 const DRAWER_GROUPS = {
   fachschaft: [
-    { label: 'Über uns', items: ['fachschaft/aktive'] },
-    // TODO(content): Direkter Satzungs-Link falls gewünscht: https://heibox.uni-heidelberg.de/f/05936ab93edc4a9abdec/?dl=1
-    { label: 'Kontakt & Dokumente', items: ['fachschaft/kontakt', 'fachschaft/downloads'] }
+    { label: '', items: ['fachschaft/aktive', 'fachschaft/kontakt', 'fachschaft/downloads'] }
   ],
   studium: [
-    { label: 'Studiengänge & Start', items: ['studium/bachelor', 'studium/bachelor/eks', 'studium/master', 'studium/approbation'] },
-    { label: 'Praxis & Ausland', items: ['studium/praktika', 'studium/ausland'] },
-    { label: 'Orientierung & Hilfe', items: ['studium/faq', 'studium/lehrgestaltung', 'studium/links'] }
+    { label: '', items: ['studium/bachelor', 'studium/master', 'studium/approbation', 'studium/bachelor/eks', 'studium/faq'] }
   ],
   leben: [
-    { label: 'Kultur & Medien', items: ['leben/psychoparty', 'leben/blackbox', 'leben/psychokino'] },
-    { label: 'Events & Treffen', items: ['leben/ersti-we', 'leben/grillen', 'leben/pumpkinparty', 'leben/wechslertreffen'] }
+    { label: '', items: ['leben/psychoparty', 'leben/blackbox', 'leben/psychokino', 'leben/ersti-we', 'leben/grillen'] }
   ],
   hopo: [
-    { label: 'Am Institut', items: ['hopo/fachrat', 'hopo/fachschaftsrat', 'hopo/pruefungsausschuss'] },
-    { label: 'Fakultät & Universität', items: ['hopo/fakrat', 'hopo/stura', 'hopo/qsm'] },
-    { label: 'Überregional', items: ['hopo/psyfako'] }
+    { label: '', items: ['hopo/fachrat', 'hopo/fachschaftsrat', 'hopo/fakrat', 'hopo/stura', 'hopo/psyfako'] }
   ]
 };
 
@@ -401,12 +359,10 @@ function drawerSessionBox(){
       ${liveBadge}
     </div>
     <div class="sheet-sess-body">
-      <time class="sheet-sess-time" datetime="${s.iso}">${s.dateStr}</time>
-      <div class="sheet-sess-loc">Fachschaftskeller · Hauptstraße 47–51</div>
+      <time class="sheet-sess-time" datetime="${s.iso}">${s.dateStr} · 18–20 Uhr</time>
     </div>
     <div class="sheet-sess-links">
-      <a class="sheet-sess-link noext" href="${BBB}"><span>Online teilnehmen</span><span class="ext-ico" aria-hidden="true">↗</span></a>
-      <a class="sheet-sess-link" href="#/fachschaft/kontakt"><span>Alle Termine</span></a>
+      <a class="sheet-sess-link" href="#/fachschaft/kontakt"><span>Alle Termine &amp; Details</span>${ic('chevr')}</a>
     </div>
   </aside>`;
 }
@@ -441,6 +397,7 @@ function buildNav(){
                 const tag=NAV_TAGS[k]?`<span class="m-tag">${NAV_TAGS[k]}</span>`:'';
                 return `<li><a href="#/${k}" class="sheet-link"><span>${title}</span>${tag}</a></li>`;
               }).join('')}
+              ${kidsOf(r).length > 5 ? `<li><a href="#/${r}" class="sheet-link sheet-more"><span>Alle ${navTitle(r)} anzeigen</span>${ic('chevr')}</a></li>` : ''}
             </ul>
           </div>`;
         }).join('')}
@@ -490,18 +447,43 @@ function themeSeg(){
   return `<div class="seg" role="group" aria-label="Darstellung">${[['system','monitor','System'],['light','sun','Hell'],['dark','moon','Dunkel']].map(([v,i,t])=>`<button type="button" data-theme-set="${v}" aria-pressed="false">${ic(i)}${t}</button>`).join('')}</div>`;
 }
 function footer(){
-  const col=(r,extra)=>`<div><h2><a href="#/${r}">${navTitle(r)}</a></h2><ul>${kidsOf(r).map(k=>`<li><a href="#/${k}">${PAGES[k].t}</a></li>`).join('')}${extra||''}</ul></div>`;
   $('#footer').innerHTML=`<div class="f-in">
-   <p class="f-note" aria-label="Fotos von Heidelberg: Samuel Scherer und Fachschaft MathPhysInfo, Lizenz CC BY-SA 4.0. Kartendaten © OpenStreetMap-Mitwirkende. Einzelheiten unter Bildnachweise.">Fotos von Heidelberg: Samuel Scherer und Fachschaft MathPhysInfo, <a class="noext" href="${CCBYSA}" aria-label="Lizenz CC BY-SA 4.0">CC BY-SA 4.0</a>. Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a>. Einzelheiten unter <a href="#/impressum">Bildnachweise</a>.</p>
-   <nav class="f-dir" aria-label="Alle Seiten">
-    ${col('fachschaft',`<li><a href="#/aktuelles">Aktuelles</a></li>`)}${col('studium')}${col('leben')}${col('hopo')}
-    <div><h2>Kontakt</h2><ul><li><a href="mailto:${MAIL}">E-Mail schreiben</a></li><li><a class="noext" href="${BBB}">Online-Sitzung</a></li><li><a class="noext" href="${PSYTREFF}">Psychotreff-Verteiler</a></li><li><a class="noext" href="${IG}">Instagram</a></li><li><a class="noext" href="${FB}">Facebook</a></li><li><a class="noext" href="https://www.psychologie.uni-heidelberg.de/">Psychologisches Institut</a></li><li><a class="noext" href="https://www.stura.uni-heidelberg.de/">StuRa</a></li></ul></div>
+   <nav class="f-dir" aria-label="Footer-Navigation">
+    <div>
+     <h2>Kontakt</h2>
+     <ul>
+      <li><a href="mailto:${MAIL}">${MAIL}</a></li>
+      <li><a href="tel:+496221542456">+49&nbsp;6221&nbsp;54-2456</a></li>
+      <li><a href="#/fachschaft/kontakt">Hauptstraße 47–51, 69117 Heidelberg</a></li>
+      <li><a href="#/fachschaft/kontakt">Sitzung: montags 18–20 Uhr</a></li>
+     </ul>
+    </div>
+    <div>
+     <h2>Wichtigste Links</h2>
+     <ul>
+      <li><a href="#/studium">Infos zum Studium</a></li>
+      <li><a href="#/aktuelles">Aktuelles</a></li>
+      <li><a href="#/studium/faq">FAQ</a></li>
+      <li><a href="#/fachschaft/aktive">Aktive Fachschaft</a></li>
+      <li><a href="#/fachschaft/downloads">Downloads &amp; Satzung</a></li>
+     </ul>
+    </div>
+    <div>
+     <h2>Social &amp; Rechtliches</h2>
+     <ul>
+      <li><a class="noext" href="${IG}">Instagram (@psyheidelberg)</a></li>
+      <li><a class="noext" href="${BBB}">Online-Sitzung (BBB)</a></li>
+      <li><a href="#/impressum">Impressum</a></li>
+      <li><a class="noext" href="${DSGVO}">Datenschutz</a></li>
+      <li><a href="#/impressum">Bildnachweise</a></li>
+     </ul>
+    </div>
    </nav>
-   <div class="f-addr"><span>Fachschaft Psychologie, Hauptstraße 47–51, 69117 Heidelberg</span><span>Tel. <a href="tel:+496221542456">+49&nbsp;6221&nbsp;54-2456</a></span><span><a href="mailto:${MAIL}">${MAIL}</a></span></div>
-   <div class="f-bot"><span>© ${new Date().getFullYear()} Fachschaft Psychologie Heidelberg. Teil der Verfassten Studierendenschaft.</span>
-    <ul><li><a href="#/impressum">Impressum</a></li><li><a class="noext" href="${DSGVO}">Datenschutz</a></li></ul>
+   <div class="f-bot">
+    <span>© ${new Date().getFullYear()} Fachschaft Psychologie Heidelberg</span>
     ${themeSeg()}
-    <a class="uni-mark noext" href="https://www.uni-heidelberg.de/"><span>Universität</span><span>Heidelberg</span></a></div>
+    <a class="uni-mark noext" href="https://www.uni-heidelberg.de/"><span>Universität</span><span>Heidelberg</span></a>
+   </div>
   </div>`;
 }
 

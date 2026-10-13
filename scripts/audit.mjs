@@ -17,7 +17,7 @@ async function main(){
   const profileDir = `/tmp/chrome-test-profile-${Date.now()}`;
   const chrome = spawn(CHROME_PATH, [
     '--headless=new',
-    '--remote-debugging-port=9222',
+    '--remote-debugging-port=9228',
     `--user-data-dir=${profileDir}`,
     '--no-first-run',
     '--no-default-browser-check',
@@ -30,7 +30,7 @@ async function main(){
   for(let i=0; i<20; i++){
     await new Promise(r => setTimeout(r, 300));
     try {
-      listRes = await fetch('http://127.0.0.1:9222/json/list');
+      listRes = await fetch('http://127.0.0.1:9228/json/list');
       if(listRes.ok) break;
     } catch(e){}
   }
