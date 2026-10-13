@@ -2,9 +2,9 @@
 /* ============ Konstanten ============ */
 // Basis-URL für Beiträge auf dem WordPress-Server des StuRa
 // Hinweis: Die WordPress-Installation des StuRa liegt unter /path/to/wordpress/
-const WP_BASE='https://fs-psychologie.stura.uni-heidelberg.de/path/to/wordpress/';
+const WP_BASE='https://fs-psychologie.stura.uni-heidelberg.de/';
 const P=WP_BASE;
-const OLD='https://fs-psychologie.stura.uni-heidelberg.de/path/to/wordpress/';
+const OLD=WP_BASE;
 const U='https://fs-psychologie.stura.uni-heidelberg.de/wp-content/uploads/';
 const PI='https://www.psychologie.uni-heidelberg.de/';
 const UNI='https://www.uni-heidelberg.de/';
@@ -17,7 +17,7 @@ const IG='https://www.instagram.com/psyheidelberg/';
 // TODO(content): Facebook-Präsenz prüfen, ob aktiv gepflegt oder stillgelegt
 const FB='https://www.facebook.com/FachschaftPsychologieHD';
 const PSYTREFF='mailto:listserv@listserv.uni-heidelberg.de?subject=Psychotreff&body=SUBSCRIBE%20PSYCHOTREFF';
-const DSGVO=OLD+'datenschutzerklaerung/';
+const DSGVO=WP_BASE+'datenschutzerklaerung/';
 
 /* ============ Semester- & Vorlesungszeiten ============ */
 const SEMESTER_CONFIG=[
@@ -60,7 +60,7 @@ function newsFreshnessHint(){
   const latest=new Date(POSTS[0].d+'T12:00:00');
   const diffDays=(Date.now()-latest.getTime())/(1000*60*60*24);
   if(diffDays>180){
-    return `<div class="news-freshness" role="note"><span class="nf-ico" aria-hidden="true">${ic('insta')}</span><span>Aktuelles und kurzfristige Neuigkeiten findest du auch auf <a class="noext" href="${IG}" target="_blank" rel="noopener">Instagram (@psyheidelberg)</a>.</span></div>`;
+    return `<div class="news-freshness" role="note"><span class="nf-ico" aria-hidden="true">${ic('insta')}</span><span>Aktuelle Ankündigungen und kurzfristige Updates teilen wir auf <a class="noext" href="${IG}" target="_blank" rel="noopener">unserem Instagram-Kanal @psyheidelberg</a>.</span></div>`;
   }
   return '';
 }
@@ -153,8 +153,8 @@ const POSTS=[
 function newsList(list){
   return `<ul class="news">${list.map(p=>{const d=new Date(p.d+'T12:00:00');
    const fullDate=d.toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'});
-   return `<li data-cats="${['Aktuelles',...p.c].join('|')}"><time datetime="${p.d}" aria-label="${fullDate}"><span class="d-day" aria-hidden="true"><b>${d.getDate()}.</b></span> <span class="d-mo" aria-hidden="true">${d.toLocaleDateString('de-DE',{month:'long',year:'numeric'})}</span><span class="sr">${fullDate}</span></time>
-   <div><h3><a class="noext" href="${P+p.u}" aria-describedby="ext-tab-msg">${p.t}<span class="ext-ico" aria-hidden="true">↗</span></a></h3><p>${p.x}</p><div class="tags">${['Aktuelles',...p.c].map(c=>`<span class="tag">${c}</span>`).join('')}</div></div></li>`}).join('')}</ul>`;
+   return `<li data-cats="${['Aktuelles',...p.c].join('|')}"><time datetime="${p.d}"><span class="sr">${fullDate}</span><span aria-hidden="true"><b>${d.getDate()}.</b> ${d.toLocaleDateString('de-DE',{month:'long',year:'numeric'})}</span></time>
+   <div><h3><a class="noext" href="${P+p.u}">${p.t}<span class="ext-ico" aria-hidden="true">↗</span><span class="sr"> (öffnet in neuem Tab)</span></a></h3><p>${p.x}</p><div class="tags">${['Aktuelles',...p.c].map(c=>`<span class="tag">${c}</span>`).join('')}</div></div></li>`}).join('')}</ul>`;
 }
 
 /* ============ BlackBox ============ */
