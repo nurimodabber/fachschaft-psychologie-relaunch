@@ -1,7 +1,10 @@
 "use strict";
 /* ============ Konstanten ============ */
-const P='https://www.fs-psychologie.stura.uni-heidelberg.de/';
-const OLD='https://www.fs-psychologie.stura.uni-heidelberg.de/';
+// Basis-URL für Beiträge auf dem WordPress-Server des StuRa
+// Hinweis: Die WordPress-Installation des StuRa liegt unter /path/to/wordpress/
+const WP_BASE='https://fs-psychologie.stura.uni-heidelberg.de/path/to/wordpress/';
+const P=WP_BASE;
+const OLD='https://fs-psychologie.stura.uni-heidelberg.de/path/to/wordpress/';
 const U='https://fs-psychologie.stura.uni-heidelberg.de/wp-content/uploads/';
 const PI='https://www.psychologie.uni-heidelberg.de/';
 const UNI='https://www.uni-heidelberg.de/';
@@ -523,7 +526,7 @@ ${facts([['Für wen','Quereinsteiger:innen','und Nachrücker:innen'],['Wo','Fach
 ${facts([['Wann','jährlich im Juni','bei hoffentlich gutem Wetter'],['Wo','Innenhof','des Psychologischen Instituts'],['Für wen','alle','Studierende, Dozierende und Mitarbeitende']])}
 <p>Beim Institutsgrillen grillen wir gemeinsam und sitzen gemütlich zusammen. Meist bringen alle etwas für das Salat- und Nachtischbuffet mit, Getränke gibt es bei der Fachschaft zu kaufen.</p>
 <p>In der Vergangenheit gab es sogar Live-Auftritte, Pub-Quizze und die Verleihung eines studentischen Lehrpreises.</p>
-<div class="photos">${photo('Institutsgrillen','https://www.fs-psychologie.stura.uni-heidelberg.de/wp-content/uploads/2015/03/Institutsgrillen.jpg')}${photo('Institutsgrillen, Juni 2024',U+'2024/07/IMG-20240622-WA0022-1.jpg')}</div>`},
+<div class="photos">${photo('Institutsgrillen',U+'2015/03/Institutsgrillen.jpg')}${photo('Institutsgrillen, Juni 2024',U+'2024/07/IMG-20240622-WA0022-1.jpg')}</div>`},
 
 'leben/ersti-we':{t:'Ersti-Wochenende',d:'Im Nibelungenturm in Worms',lead:'Nicht verpassen solltet ihr das Ersti-Wochenende, traditionell im Nibelungenturm in Worms.',body:`
 ${facts([['Wann','Ende November','meist an einem der letzten Wochenenden'],['Wo','Nibelungenturm','in Worms']])}
@@ -686,7 +689,7 @@ ${rows([
 // Globally expose variables for all script loaders & environments
 if (typeof window !== "undefined") {
   Object.assign(window, {
-    P, OLD, U, PI, UNI, MAIL, MAIL_FIN, BBB, CAL, ICS, IG, FB, PSYTREFF, DSGVO,
+    WP_BASE, P, OLD, U, PI, UNI, MAIL, MAIL_FIN, BBB, CAL, ICS, IG, FB, PSYTREFF, DSGVO,
     SEMESTER_CONFIG, HOLIDAYS_BW, isLecturePeriod, isHoliday, formatDateLong, newsFreshnessHint,
     PHOTOS, HERO_KEY, HD_IMG, MAP_META, IMG, SECTION_IMG, TREE, POSTS, ISSUES,
     OLDMAG, ROOMS, PAGES, ic, L, X, M, copyBtn, facts, callout, initials, people,
