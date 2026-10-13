@@ -39,13 +39,15 @@ function nextSession(){
 /* ============ Startseite ============ */
 function home(){
   const s=nextSession(), p0=POSTS[0], d0=new Date(p0.d+'T12:00:00');
-  const quick=[['studium/bachelor','book','Bachelor'],['studium/master','cap','Master'],['studium/bachelor/eks','users','EKS'],['studium/approbation','heart','Approbation'],['studium/ausland','compass','Ausland'],['studium/praktika','briefcase','Praktika'],['studium/faq','question','FAQ'],['fachschaft/downloads','download','Protokolle']];
-  const why=[
-    ['spark','Mitgestalten','Von der Psychoparty bis zum PsychoKino: Du bringst deine Ideen ein und setzt sie mit uns um.',[['leben/psychoparty','Psychoparty'],['leben/psychokino','PsychoKino'],['leben/ersti-we','Ersti-WE']]],
-    ['bank','Hochschulpolitik','Du erlebst, wie Entscheidungen über Studium und Lehre entstehen, und bestimmst mit.',[['hopo/fachrat','FachRat'],['hopo/fakrat','Fakultät'],['hopo/stura','StuRa']]],
-    // TODO(content): Chips unter 'Semesterübergreifend' prüfen (Bachelor/Master/Aktive passen inhaltlich kaum)
-    ['users','Semesterübergreifend','Du lernst engagierte Studierende kennen, die du sonst im Studienalltag nie getroffen hättest.',[['studium/bachelor','Bachelor'],['studium/master','Master'],['fachschaft/aktive','Aktive']]],
-    ['handshake','Verantwortung','Erfahrungen sammeln mit eigenen Projekten, Institutsfinanzen und den Themen der Studierenden.',[['fachschaft/kontakt','Sitzung'],['hopo/qsm','QSM-Mittel'],['studium/lehrgestaltung','Lehre']]]
+  const quick=[
+    ['studium/bachelor','Bachelor'],
+    ['studium/master','Master'],
+    ['studium/bachelor/eks','EKS'],
+    ['studium/approbation','Approbation'],
+    ['studium/ausland','Ausland'],
+    ['studium/praktika','Praktika'],
+    ['studium/faq','FAQ'],
+    ['fachschaft/downloads','Protokolle']
   ];
   return `
 <section class="hero" aria-labelledby="hero-h">
@@ -59,7 +61,13 @@ function home(){
  <p class="credit">${credit('hero')}</p>
 </section>
 
-<nav class="quick" aria-label="Schnellzugriff"><ul>${quick.map(([h,i,t])=>`<li><a href="#/${h}"><span class="qi">${ic(i)}</span>${t}</a></li>`).join('')}</ul></nav>
+<nav class="quick" aria-label="Schnellzugriff">
+ <div class="wrap">
+  <ul class="quick-nav">
+   ${quick.map(([h,t])=>`<li><a href="#/${h}">${t}</a></li>`).join('')}
+  </ul>
+ </div>
+</nav>
 
 <section class="sec sec-intro">
  <div class="sec-bg-map" aria-hidden="true">${mapSvg('mapbg-ambient')}</div>
@@ -86,22 +94,22 @@ function home(){
   <div class="shead rv"><div><h2 class="sh2" id="ex-h">Was interessiert dich gerade?</h2></div></div>
   <div class="bento3">
    <article class="tile t-study rv">
-    <figure>${pic('city')}</figure><span class="cap">${credit('city')}</span>
+    <figure><img src="assets/images/fachschaft/institutsgrillen-2024.jpg" alt="Institutsgrillen im Innenhof des Psychologischen Instituts" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
     <div class="tb"><h3><a href="#/studium">Infos zum Studium</a></h3>
      <p>Bewerbung, Studienaufbau, Praktika und Auslandssemester. Dazu Antworten auf die Fragen, die Erstis am häufigsten stellen.</p>
-     <div class="subl"><a href="#/studium/bachelor">Bachelor${ic('chevr')}</a><a href="#/studium/master">Master${ic('chevr')}</a><a href="#/studium/approbation">Approbation${ic('chevr')}</a><a href="#/studium/faq">FAQ${ic('chevr')}</a></div></div>
+     <div class="subl"><a href="#/studium/bachelor">Bachelor</a><a href="#/studium/master">Master</a><a href="#/studium/approbation">Approbation</a><a href="#/studium/faq">FAQ</a></div></div>
    </article>
    <article class="tile t-events rv" style="--i:1">
-    <figure>${pic('night')}</figure><span class="cap">${credit('night')}</span>
+    <figure><img src="assets/images/fachschaft/silent-disco-2024.jpg" alt="Silent Disco im Institutsinnenhof" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
     <div class="tb"><h3><a href="#/leben">Veranstaltungen</a></h3>
      <p>Psychoparty, Ersti-Wochenende, PsychoKino und Institutsgrillen.</p>
-     <div class="subl"><a href="#/leben/psychoparty">Psychoparty${ic('chevr')}</a><a href="#/leben/ersti-we">Ersti-Wochenende${ic('chevr')}</a></div></div>
+     <div class="subl"><a href="#/leben/psychoparty">Psychoparty</a><a href="#/leben/ersti-we">Ersti-Wochenende</a></div></div>
    </article>
    <article class="tile t-fs rv" style="--i:2">
-    <figure>${pic('valley')}</figure><span class="cap">${credit('valley')}</span>
+    <figure><img src="assets/images/fachschaft/fs-team.jpg" alt="Gruppe der Fachschaft Psychologie beim Klausurwochenende" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
     <div class="tb"><h3><a href="#/fachschaft">Die Fachschaft</a></h3>
      <p>Wer wir sind, wie du mitmachst und wo wir dich vertreten.</p>
-     <div class="subl"><a href="#/fachschaft/aktive">Aktive Fachschaft${ic('chevr')}</a><a href="#/hopo">Hochschulpolitik${ic('chevr')}</a></div></div>
+     <div class="subl"><a href="#/fachschaft/aktive">Aktive Fachschaft</a><a href="#/hopo">Hochschulpolitik</a></div></div>
    </article>
   </div>
  </div>
@@ -116,35 +124,68 @@ function home(){
    </div>
   </div>
   <div class="why-grid">
-   ${why.map(([icon,t,desc,chips],idx)=>`
-    <article class="why-card rv" style="--i:${idx}">
-     <div class="why-card-top">
-      <span class="why-ico" aria-hidden="true">${ic(icon)}</span>
-      <span class="why-idx">0${idx+1}</span>
-     </div>
-     <h3>${t}</h3>
-     <p>${desc}</p>
+   <article class="why-card why-card-photo rv" style="--i:0">
+    <figure class="why-fig">
+     <img src="assets/images/fachschaft/fs-wochenende.jpg" alt="Fachschaftswochenende und Planung" loading="lazy">
+    </figure>
+    <div class="why-body">
+     <h3>Mitgestalten</h3>
+     <p>Von der Psychoparty bis zum PsychoKino: Du bringst deine Ideen ein und setzt sie mit uns um.</p>
      <div class="why-chips">
-      ${chips.map(([href,label])=>`<a class="why-chip" href="#/${href}"><span>${label}</span>${ic('chevr')}</a>`).join('')}
+      <a class="why-chip" href="#/leben/psychoparty"><span>Psychoparty</span></a>
+      <a class="why-chip" href="#/leben/psychokino"><span>PsychoKino</span></a>
+      <a class="why-chip" href="#/leben/ersti-we"><span>Ersti-WE</span></a>
      </div>
-    </article>
-   `).join('')}
+    </div>
+   </article>
+
+   <article class="why-card why-card-quote rv" style="--i:1">
+    <blockquote>„Ich dachte erst, Hochschulpolitik ist trocken – bis wir gemeinsam über Studienbedingungen und Lehre entschieden haben.“</blockquote>
+    <cite>Fachschaftsmitglied, 4. Semester <!-- TODO(content): Echtes Zitat und Name eines Fachschaftsmitglieds einsetzen --></cite>
+    <h3>Hochschulpolitik</h3>
+    <p>Du erlebst, wie Entscheidungen über Studium und Lehre entstehen, und bestimmst mit.</p>
+    <div class="why-chips">
+     <a class="why-chip" href="#/hopo/fachrat"><span>FachRat</span></a>
+     <a class="why-chip" href="#/hopo/fakrat"><span>Fakultät</span></a>
+     <a class="why-chip" href="#/hopo/stura"><span>StuRa</span></a>
+    </div>
+   </article>
+
+   <article class="why-card rv" style="--i:2">
+    <h3>Semesterübergreifend</h3>
+    <p>Du lernst engagierte Studierende kennen, die du sonst im Studienalltag nie getroffen hättest.</p>
+    <!-- TODO(content): Chips unter 'Semesterübergreifend' prüfen (Bachelor/Master/Aktive passen inhaltlich kaum) -->
+    <div class="why-chips">
+     <a class="why-chip" href="#/leben/ersti-we"><span>Ersti-WE</span></a>
+     <a class="why-chip" href="#/leben/wechslertreffen"><span>Wechslerin</span></a>
+     <a class="why-chip" href="#/fachschaft/aktive"><span>Aktive</span></a>
+    </div>
+   </article>
+
+   <article class="why-card rv" style="--i:3">
+    <h3>Verantwortung</h3>
+    <p>Erfahrungen sammeln mit eigenen Projekten, Institutsfinanzen und den Themen der Studierenden.</p>
+    <div class="why-chips">
+     <a class="why-chip" href="#/fachschaft/kontakt"><span>Sitzung</span></a>
+     <a class="why-chip" href="#/hopo/qsm"><span>QSM-Mittel</span></a>
+     <a class="why-chip" href="#/studium/lehrgestaltung"><span>Lehre</span></a>
+    </div>
+   </article>
+
    <article class="why-card why-card-hero rv" style="--i:4">
     <div>
-     <div class="why-hero-badge">${ic('smiley')} <span>05 · Der wichtigste Punkt</span></div>
      <h3>Gemeinschaft</h3>
      <p>Fachschaft bedeutet für uns Gemeinschaft: zusammen grillen, Feste planen und Leute aus allen Semestern kennenlernen.</p>
     </div>
     <div>
      <div class="why-hero-session">
-      <span class="pulse-dot"></span>
       <div>
        <b>Jede Woche montags</b>
        <span>18–20 Uhr im Fachschaftskeller</span>
       </div>
      </div>
      <a class="btn btn-primary why-hero-cta" href="#/fachschaft/kontakt">
-      <span>So erreichst du uns</span>${ic('chevr')}
+      <span>Komm vorbei</span>
      </a>
     </div>
    </article>
