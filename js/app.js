@@ -372,56 +372,77 @@ const NAV_TAGS = {
 
 const DRAWER_GROUPS = {
   fachschaft: [
-    { label: 'Über uns', items: ['fachschaft', 'fachschaft/aktive'] },
+    { label: 'Über uns', items: ['fachschaft/aktive'] },
     // TODO(content): Direkter Satzungs-Link falls gewünscht: https://heibox.uni-heidelberg.de/f/05936ab93edc4a9abdec/?dl=1
-    { label: 'Kontakt & Downloads', items: ['fachschaft/kontakt', 'fachschaft/downloads'] }
+    { label: 'Kontakt & Dokumente', items: ['fachschaft/kontakt', 'fachschaft/downloads'] }
   ],
   studium: [
-    { label: 'Studiengänge & Start', items: ['studium', 'studium/bachelor', 'studium/bachelor/eks', 'studium/master', 'studium/approbation'] },
+    { label: 'Studiengänge & Start', items: ['studium/bachelor', 'studium/bachelor/eks', 'studium/master', 'studium/approbation'] },
     { label: 'Praxis & Ausland', items: ['studium/praktika', 'studium/ausland'] },
     { label: 'Orientierung & Hilfe', items: ['studium/faq', 'studium/lehrgestaltung', 'studium/links'] }
   ],
   leben: [
-    { label: 'Kultur & Medien', items: ['leben', 'leben/psychoparty', 'leben/blackbox', 'leben/psychokino'] },
+    { label: 'Kultur & Medien', items: ['leben/psychoparty', 'leben/blackbox', 'leben/psychokino'] },
     { label: 'Events & Treffen', items: ['leben/ersti-we', 'leben/grillen', 'leben/pumpkinparty', 'leben/wechslertreffen'] }
   ],
   hopo: [
-    { label: 'Am Institut', items: ['hopo', 'hopo/fachrat', 'hopo/fachschaftsrat', 'hopo/pruefungsausschuss'] },
+    { label: 'Am Institut', items: ['hopo/fachrat', 'hopo/fachschaftsrat', 'hopo/pruefungsausschuss'] },
     { label: 'Fakultät & Universität', items: ['hopo/fakrat', 'hopo/stura', 'hopo/qsm'] },
     { label: 'Überregional', items: ['hopo/psyfako'] }
   ]
 };
 
+function drawerSessionBox(){
+  const s = nextSession();
+  const liveBadge = s.live ? '<span class="sheet-sess-tag is-live">● Jetzt live</span>' : `<span class="sheet-sess-tag">${s.wd}</span>`;
+  return `<aside class="sheet-sess" aria-label="Nächste Fachschaftssitzung">
+    <div class="sheet-sess-head">
+      <div class="sheet-sess-label">Nächste Sitzung</div>
+      ${liveBadge}
+    </div>
+    <div class="sheet-sess-body">
+      <time class="sheet-sess-time" datetime="${s.iso}">${s.dateStr}</time>
+      <div class="sheet-sess-loc">Fachschaftskeller · Hauptstraße 47–51</div>
+    </div>
+    <div class="sheet-sess-links">
+      <a class="sheet-sess-link noext" href="${BBB}"><span>Online teilnehmen</span><span class="ext-ico" aria-hidden="true">↗</span></a>
+      <a class="sheet-sess-link" href="#/fachschaft/kontakt"><span>Alle Termine</span></a>
+    </div>
+  </aside>`;
+}
+
 function buildNav(){
   const mains=TREE.filter(([r])=>r!=='impressum');
   $('#mainnav').innerHTML=mains.map(([r])=>`<li><a href="#/${r}" data-sec="${r}">${navTitle(r)}</a></li>`).join('');
   $('#drawerBody').innerHTML=mains.filter(([,k])=>k.length).map(([r])=>{
-    const groups=DRAWER_GROUPS[r]||[{label:'',items:[r,...kidsOf(r)]}];
-    const icon=SEC_ICONS[r]||'folder';
-    return `<section class="sheet-col" aria-labelledby="col-title-${r}">
+    const groups=DRAWER_GROUPS[r]||[{label:'',items:kidsOf(r)}];
+    const isFachschaft = r === 'fachschaft';
+    return `<section class="sheet-col" data-sec="${r}" aria-labelledby="col-title-${r}">
       <div class="sheet-col-head">
         <h2 class="sheet-col-title-wrap" id="col-title-${r}">
           <a class="sheet-col-title" href="#/${r}">
-            <span class="sheet-col-ico" aria-hidden="true">${ic(icon)}</span>
             <span class="sheet-col-name">${navTitle(r)}</span>
           </a>
         </h2>
+        <button class="sheet-acc-toggle" type="button" aria-expanded="false" aria-controls="sheet-col-body-${r}" aria-label="${navTitle(r)} Unterseiten ein- oder ausklappen">
+          <svg class="acc-chevron" aria-hidden="true"><use href="#i-chevr"/></svg>
+        </button>
       </div>
-      <div class="sheet-col-body">
+      <div class="sheet-col-body" id="sheet-col-body-${r}">
         ${groups.map((g,gi)=>{
           const gid=`group-${r}-${gi}`;
           return `<div class="sheet-group">
             ${g.label?`<h3 id="${gid}" class="sheet-group-label">${g.label}</h3>`:''}
             <ul class="sheet-group-list"${g.label?` aria-labelledby="${gid}"`:''}>
-              ${g.items.map(k=>{
-                const isOverview=k===r;
-                const title=isOverview?'Übersicht':PAGES[k].t;
+              ${g.items.filter(k=>k!==r).map(k=>{
+                const title=PAGES[k].t;
                 const tag=NAV_TAGS[k]?`<span class="m-tag">${NAV_TAGS[k]}</span>`:'';
-                return `<li><a href="#/${k}" class="sheet-link${isOverview?' is-overview':''}"><span>${title}</span>${tag}</a></li>`;
+                return `<li><a href="#/${k}" class="sheet-link"><span>${title}</span>${tag}</a></li>`;
               }).join('')}
             </ul>
           </div>`;
         }).join('')}
+        ${isFachschaft ? drawerSessionBox() : ''}
       </div>
     </section>`;
   }).join('');
@@ -430,7 +451,14 @@ function buildNav(){
 function markNav(route){
   const s=route?sec(route):'';
   $$('#mainnav a').forEach(a=>{if(a.dataset.sec===s)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});
-  $$('#drawer a').forEach(a=>{if(a.getAttribute('href')==='#/'+route)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  $$('#drawer a').forEach(a=>{
+    const href = a.getAttribute('href');
+    if(href === '#/' + route || (route === '' && href === '#/')){
+      a.setAttribute('aria-current','page');
+    } else {
+      a.removeAttribute('aria-current');
+    }
+  });
 }
 function markLnav(route){
   $$('.lnav ul a').forEach(a=>{
