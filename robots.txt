@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nurimodabber.github.io/fachschaft-psychologie-relaunch/sitemap.xml

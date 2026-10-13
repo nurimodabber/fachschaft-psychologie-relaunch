@@ -18,8 +18,73 @@
   <meta name="twitter:description" content="Studierendenvertretung am Psychologischen Institut der Universität Heidelberg.">
   <meta name="twitter:image" content="assets/images/hero.webp">
 
-  <!-- Favicon -->
+  <!-- Favicon & PWA Manifest -->
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="canonical" href="https://nurimodabber.github.io/fachschaft-psychologie-relaunch/">
+
+  <!-- Strukturierte Daten (Schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "EducationalOrganization",
+        "@id": "https://nurimodabber.github.io/fachschaft-psychologie-relaunch/#organization",
+        "name": "Fachschaft Psychologie Heidelberg",
+        "alternateName": "Fachschaft Psychologie der Universität Heidelberg",
+        "url": "https://nurimodabber.github.io/fachschaft-psychologie-relaunch/",
+        "logo": "https://nurimodabber.github.io/fachschaft-psychologie-relaunch/assets/apple-touch-icon.png",
+        "parentOrganization": {
+          "@type": "CollegeOrUniversity",
+          "name": "Universität Heidelberg",
+          "url": "https://www.uni-heidelberg.de/"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Hauptstraße 47–51",
+          "addressLocality": "Heidelberg",
+          "postalCode": "69117",
+          "addressCountry": "DE"
+        },
+        "telephone": "+49-6221-54-2456",
+        "email": "fs-psy@stura.uni-heidelberg.de",
+        "sameAs": [
+          "https://www.instagram.com/psyheidelberg/",
+          "https://fs-psychologie.stura.uni-heidelberg.de/path/to/wordpress/"
+        ]
+      },
+      {
+        "@type": "Event",
+        "@id": "https://nurimodabber.github.io/fachschaft-psychologie-relaunch/#session",
+        "name": "Wöchentliche Fachschaftssitzung Psychologie",
+        "description": "Öffentliche Sitzung der Fachschaft Psychologie Heidelberg montags 18–20 Uhr während der Vorlesungszeit.",
+        "eventSchedule": {
+          "@type": "Schedule",
+          "byDay": "https://schema.org/Monday",
+          "startTime": "18:00",
+          "endTime": "20:00",
+          "scheduleTimezone": "Europe/Berlin"
+        },
+        "location": {
+          "@type": "Place",
+          "name": "Fachschaftskeller, Psychologisches Institut",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Hauptstraße 47–51",
+            "addressLocality": "Heidelberg",
+            "postalCode": "69117",
+            "addressCountry": "DE"
+          }
+        },
+        "organizer": {
+          "@id": "https://nurimodabber.github.io/fachschaft-psychologie-relaunch/#organization"
+        }
+      }
+    ]
+  }
+  </script>
 
   <!-- Preload Assets -->
   <link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>

@@ -766,9 +766,21 @@ function initTopicScrollSpy(s){
   sections.forEach(secEl=>topicObserver.observe(secEl));
 }
 
-function announcePage(title){
-  const el=$('#routeAnnouncer');
-  if(el) el.textContent=title;
+function updateMeta(title, desc){
+  document.title = title;
+  const d = desc || 'Die Fachschaft Psychologie an der Universität Heidelberg: Infos zum Studium, Veranstaltungen am Institut und Hochschulpolitik.';
+  const metaDesc = $('meta[name="description"]');
+  if(metaDesc) metaDesc.setAttribute('content', d);
+  const ogTitle = $('meta[property="og:title"]');
+  if(ogTitle) ogTitle.setAttribute('content', title);
+  const ogDesc = $('meta[property="og:description"]');
+  if(ogDesc) ogDesc.setAttribute('content', d);
+  const twTitle = $('meta[name="twitter:title"]');
+  if(twTitle) twTitle.setAttribute('content', title);
+  const twDesc = $('meta[name="twitter:description"]');
+  if(twDesc) twDesc.setAttribute('content', d);
+  const el = $('#routeAnnouncer');
+  if(el) el.textContent = title;
 }
 
 function router(){
@@ -784,8 +796,7 @@ function router(){
     currentSec=null;
     if(topicObserver){topicObserver.disconnect(); topicObserver=null;}
     app.innerHTML=home();
-    document.title='Fachschaft Psychologie Heidelberg';
-    announcePage(document.title);
+    updateMeta('Fachschaft Psychologie Heidelberg');
     markNav(r); hydrate(app);
     window.scrollTo({top:0,behavior:'auto'});
     if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}
@@ -797,8 +808,7 @@ function router(){
     currentSec=null;
     if(topicObserver){topicObserver.disconnect(); topicObserver=null;}
     app.innerHTML=notFound();
-    document.title='Seite nicht gefunden | Fachschaft Psychologie Heidelberg';
-    announcePage(document.title);
+    updateMeta('Seite nicht gefunden | Fachschaft Psychologie Heidelberg', 'Diese Seite existiert leider nicht. Bitte starte auf der Startseite oder nutze die Suche.');
     markNav(r); hydrate(app);
     window.scrollTo({top:0,behavior:'auto'});
     if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}
@@ -812,8 +822,7 @@ function router(){
   if(isMulti){
     if(currentSec===s){
       markNav(r); markLnav(r);
-      document.title=PAGES[r].t+' | Fachschaft Psychologie Heidelberg';
-      announcePage(document.title);
+      updateMeta(PAGES[r].t+' | Fachschaft Psychologie Heidelberg', PAGES[r].d || PAGES[r].lead);
       const target=document.getElementById(secId(r));
       if(target){
         isScrollSpyNavigating=true;
@@ -828,8 +837,7 @@ function router(){
 
     currentSec=s;
     app.innerHTML=page(r);
-    document.title=PAGES[r].t+' | Fachschaft Psychologie Heidelberg';
-    announcePage(document.title);
+    updateMeta(PAGES[r].t+' | Fachschaft Psychologie Heidelberg', PAGES[r].d || PAGES[r].lead);
     markNav(r); markLnav(r); hydrate(app);
     initTopicScrollSpy(s);
 
@@ -852,8 +860,7 @@ function router(){
   currentSec=s;
   if(topicObserver){topicObserver.disconnect(); topicObserver=null;}
   app.innerHTML=page(r);
-  document.title=PAGES[r].t+' | Fachschaft Psychologie Heidelberg';
-  announcePage(document.title);
+  updateMeta(PAGES[r].t+' | Fachschaft Psychologie Heidelberg', PAGES[r].d || PAGES[r].lead);
   markNav(r); hydrate(app);
   if(anchor){requestAnimationFrame(()=>openQA(anchor));}
   else{window.scrollTo({top:0,behavior:'auto'}); if(!first){const h1=$('h1',app); if(h1)h1.focus({preventScroll:true});}}
@@ -937,7 +944,7 @@ document.addEventListener('click',e=>{
         markNav(targetRoute);
         markLnav(targetRoute);
         if(PAGES[targetRoute]){
-          document.title=PAGES[targetRoute].t+' | Fachschaft Psychologie Heidelberg';
+          updateMeta(PAGES[targetRoute].t+' | Fachschaft Psychologie Heidelberg', PAGES[targetRoute].d || PAGES[targetRoute].lead);
         }
         setTimeout(()=>{isScrollSpyNavigating=false;},800);
       }
