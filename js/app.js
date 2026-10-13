@@ -12,29 +12,8 @@ const secId=r=>'sec-'+r.replace(/\//g,'-');
 const kidsOf=s=>{const n=TREE.find(x=>x[0]===s);return n?n[1]:[];};
 const navTitle=r=>({'studium':'Infos zum Studium','leben':'Leben am Institut'}[r]||PAGES[r].t);
 const depth=r=>r.split('/').length-1;
-
-
-/* ============ Nächste Sitzung ============ */
-function nextSession(){
-  const now=new Date(), d=new Date(now);
-  let add=(1-now.getDay()+7)%7;
-  const end=new Date(now); end.setHours(20,0,0,0);
-  if(add===0&&now>=end) add=7;
-  d.setDate(now.getDate()+add); d.setHours(18,0,0,0);
-  const live=add===0&&now>=d&&now<end;
-  const wd=add===0?'Heute':add===1?'Morgen':'Nächster Termin';
-  const iso=d.toISOString();
-  const dateStr=formatDateLong(d)+' · 18–20 Uhr';
-  const inLecture=isLecturePeriod(d);
-  const holiday=isHoliday(d);
-  let note='Montags in der Vorlesungszeit. Offen für alle Studierenden.';
-  if(holiday){
-    note='Gesetzlicher Feiertag in BW · Sitzung entfällt oder findet nach Absprache statt.';
-  } else if(!inLecture){
-    note='Vorlesungsfreie Zeit · Sitzungen finden unregelmäßig oder nach Absprache statt.';
-  }
-  return {live,wd,day:d.getDate(),iso,dateStr,note,inLecture,holiday};
-}
+const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ß/g,'ss');
 
 /* ============ Startseite ============ */
 function home(){
@@ -313,12 +292,15 @@ function notFound(){
 /* ============ Navigation ============ */
 const SEC_ICONS = {
   fachschaft: 'users',
+  aktuelles: 'newspaper',
   studium: 'cap',
   leben: 'spark',
   hopo: 'bank'
 };
 
 const NAV_TAGS = {
+  'aktuelles/meldungen': 'News',
+  'aktuelles/termine': 'Kalender',
   'studium/bachelor/eks': 'Ersti-Woche',
   'leben/blackbox': 'Zeitschrift',
   'leben/ersti-we': 'Ende Nov.',
@@ -328,6 +310,9 @@ const NAV_TAGS = {
 const DRAWER_GROUPS = {
   fachschaft: [
     { label: '', items: ['fachschaft/aktive', 'fachschaft/kontakt', 'fachschaft/downloads'] }
+  ],
+  aktuelles: [
+    { label: '', items: ['aktuelles/meldungen', 'aktuelles/termine', 'aktuelles/kanaele'] }
   ],
   studium: [
     { label: '', items: ['studium/bachelor', 'studium/master', 'studium/approbation', 'studium/bachelor/eks', 'studium/faq'] }
@@ -386,7 +371,7 @@ function buildNav(){
       </div>
     </section>`;
   }).join('');
-  $('#menuQuick').innerHTML=[['','Startseite'],['aktuelles','Aktuelles'],['fachschaft/kontakt','Kontakt'],['impressum','Impressum']].map(([r,t])=>`<a href="#/${r}">${t}</a>`).join('');
+  $('#menuQuick').innerHTML=[['','Startseite'],['fachschaft/kontakt','Kontakt'],['fachschaft/downloads','Downloads'],['impressum','Impressum']].map(([r,t])=>`<a href="#/${r}">${t}</a>`).join('');
   syncDrawerAccordion();
 }
 function syncDrawerAccordion(){
@@ -837,12 +822,46 @@ function hydrate(root){
       out.innerHTML=hits.length?`„${raw.replace(/[<>&]/g,'')}“ findest du hier: <b>${hits.map(i=>ROOMS[i].b).join(', ')}</b>`:'Dazu haben wir nichts gefunden. Versuch es mit einer Raumnummer wie F104 oder A015.';
     });
   }
-  const chips=$$('[data-filter]',root);
-  chips.forEach(c=>c.addEventListener('click',()=>{
-    chips.forEach(x=>x.setAttribute('aria-pressed',x===c));
-    const f=c.dataset.filter;
-    $$('.news li',root).forEach(li=>li.hidden=!(f==='Alle'||li.dataset.cats.split('|').includes(f)));
-  }));
+  const newsQuery = $('#newsQuery', root);
+  const chips = $$('[data-filter]', root);
+  const newsCount = $('#newsCount', root);
+  const newsNone = $('.news-none', root);
+  const newsItems = $$('.news li', root);
+  if (chips.length || newsQuery) {
+    let activeFilter = 'Alle';
+    let queryVal = '';
+    const updateNewsFilter = () => {
+      let hitCount = 0;
+      newsItems.forEach(li => {
+        const cats = (li.dataset.cats || '').split('|');
+        const matchCat = activeFilter === 'Alle' || cats.includes(activeFilter);
+        const text = norm(li.textContent || '');
+        const matchQuery = !queryVal || text.includes(queryVal);
+        const visible = matchCat && matchQuery;
+        li.hidden = !visible;
+        if (visible) hitCount++;
+      });
+      if (newsCount) {
+        newsCount.textContent = `${hitCount} ${hitCount === 1 ? 'Beitrag' : 'Beiträge'}`;
+      }
+      if (newsNone) {
+        newsNone.hidden = hitCount > 0;
+      }
+    };
+    chips.forEach(c => {
+      c.addEventListener('click', () => {
+        chips.forEach(x => x.setAttribute('aria-pressed', x === c ? 'true' : 'false'));
+        activeFilter = c.dataset.filter;
+        updateNewsFilter();
+      });
+    });
+    if (newsQuery) {
+      newsQuery.addEventListener('input', e => {
+        queryVal = norm(e.target.value.trim());
+        updateNewsFilter();
+      });
+    }
+  }
   const nb=$('[data-necker]',root);
   if(nb) nb.addEventListener('click',()=>{const o=$('.orb',root);const b=o.dataset.face==='a';o.dataset.face=b?'b':'a';nb.setAttribute('aria-pressed',b);});
   $$('[data-opensearch]',root).forEach(b=>b.addEventListener('click',openSearch));
@@ -1016,8 +1035,6 @@ function buildIndex(){
   POSTS.forEach(p=>IDX.push({r:P+p.u,t:p.t,p:'Aktuelles › '+new Date(p.d).toLocaleDateString('de-DE'),x:p.x,ext:true}));
   ROOMS.forEach(r=>IDX.push({r:'#/studium/faq?raum',t:'Raum: '+r.b,p:'FAQ › Raumfinder',x:r.w+' '+r.k}));
 }
-const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ß/g,'ss');
 let sel=0, results=[];
 function doSearch(q){
   const box=$('#sres'); const words=norm(q).split(/\s+/).filter(w=>w.length>0);

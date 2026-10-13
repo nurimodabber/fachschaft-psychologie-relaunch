@@ -55,6 +55,27 @@ function isHoliday(date){
 
 const formatDateLong=d=>new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(d);
 
+function nextSession(){
+  const now=new Date(), d=new Date(now);
+  let add=(1-now.getDay()+7)%7;
+  const end=new Date(now); end.setHours(20,0,0,0);
+  if(add===0&&now>=end) add=7;
+  d.setDate(now.getDate()+add); d.setHours(18,0,0,0);
+  const live=add===0&&now>=d&&now<end;
+  const wd=add===0?'Heute':add===1?'Morgen':'Nächster Termin';
+  const iso=d.toISOString();
+  const dateStr=formatDateLong(d)+' · 18–20 Uhr';
+  const inLecture=isLecturePeriod(d);
+  const holiday=isHoliday(d);
+  let note='Montags in der Vorlesungszeit. Offen für alle Studierenden.';
+  if(holiday){
+    note='Gesetzlicher Feiertag in BW · Sitzung entfällt oder findet nach Absprache statt.';
+  } else if(!inLecture){
+    note='Vorlesungsfreie Zeit · Sitzungen finden unregelmäßig oder nach Absprache statt.';
+  }
+  return {live,wd,day:d.getDate(),iso,dateStr,note,inLecture,holiday};
+}
+
 function newsFreshnessHint(){
   if(!POSTS.length) return '';
   const latest=new Date(POSTS[0].d+'T12:00:00');
@@ -130,7 +151,7 @@ function sessionBox(){
 /* ============ Navigation (Architektur der bisherigen Seite) ============ */
 const TREE=[
  ['fachschaft',['fachschaft/aktive','fachschaft/kontakt','fachschaft/downloads']],
- ['aktuelles',[]],
+ ['aktuelles',['aktuelles/meldungen','aktuelles/termine','aktuelles/kanaele']],
  ['studium',['studium/bachelor','studium/bachelor/eks','studium/master','studium/approbation','studium/ausland','studium/praktika','studium/lehrgestaltung','studium/faq','studium/links']],
  ['leben',['leben/psychoparty','leben/blackbox','leben/pumpkinparty','leben/wechslertreffen','leben/grillen','leben/ersti-we','leben/psychokino']],
  ['hopo',['hopo/fachrat','hopo/fakrat','hopo/fachschaftsrat','hopo/stura','hopo/qsm','hopo/pruefungsausschuss','hopo/psyfako']],
@@ -139,16 +160,16 @@ const TREE=[
 
 /* ============ Beiträge ============ */
 const POSTS=[
- {d:'2024-08-17',t:'Website-Updates',u:'2024/08/website-updates/',c:['Allgemein','Leben am Institut'],x:'Mitglieder kommen und gehen, doch das Netzwerk aus Alumni, Mentor:innen und Freund:innen bleibt bestehen. Rückblick auf die Öffentlichkeitsarbeit nach der Corona-Pandemie und Ausblick auf neue Formate.'},
- {d:'2024-07-23',t:'BlackBox: neue Ausgabe',u:'2024/07/blackbox-neue-ausgabe/',c:['BlackBox'],x:'Den Necker-Würfel kennen viele aus der Vorlesung: Man sieht ihn von oben oder von unten, aber nie beides gleichzeitig. Mit diesem Kipp-Phänomen beginnt der Beitrag zur neuen BlackBox-Ausgabe.'},
- {d:'2023-05-01',t:'Die Rückkehr des FS-Wochenendes im April 2023',u:'2023/05/die-rueckkehr-des-fs-wochenendes-im-april-2023/',c:[],x:'Nach mehreren Jahren Pause gab es im April 2023 endlich wieder ein FS-Wochenende. Ein Rückblick, der zeigt, wie abwechslungsreich das Leben in der Fachschaft sein kann.'},
- {d:'2023-01-17',t:'Neu: Praktikumsdatenbank von Studis für Studis',u:'2023/01/neu-praktikumsdatenbank-von-studis-fuer-studis/',c:[],x:'Eine deutschlandweite Übersicht über Praktikumsplätze samt Erfahrungsberichten. Zum Suchen und zum Weiterempfehlen eigener Praktika.'},
- {d:'2022-05-07',t:'Neuer Vortrag zur Psychotherapie am PI',u:'2022/05/neuer-vortrag-zur-psychotherapie-am-pi/',c:['Leben am Institut'],x:'Gemeinsam mit dem IPP Heidelberg: ein Einblick in die tiefenpsychologische bzw. psychoanalytische Psychotherapie anhand eines Patientenfalls. Montag, 9. Mai 2022, 20:15 Uhr, Hörsaal 2 im Hintergebäude.'},
- {d:'2021-02-05',t:'Psychotherapeutengesetz',u:'2021/02/psychotherapeutengesetz/',c:[],x:'Seit dem 1. September 2020 führt der Weg in die Psychotherapie über ein Approbationsstudium aus polyvalentem Psychologie-Bachelor und anschließendem Master Psychotherapie. Was das für dich bedeutet.'},
- {d:'2020-10-30',t:'Protokoll der Infoveranstaltung zur Psychologiestudiengangsreform',u:'2020/10/protokoll-der-infoveranstaltung-zur-psychologiestudiengangsreform/',c:[],x:'Am 22. Oktober 2020 fand mit Prof. Dr. Spinath, Prof. Dr. Barnow und Dr. Timm eine Infoveranstaltung zur Studiengangsreform statt. Das Protokoll steht für alle bereit.'},
- {d:'2020-08-05',t:'Infoveranstaltung zum Psychotherapeutengesetz',u:'2020/08/update-psychotherapeutinnengesetz-diesen-freitag-online/',c:[],x:'Es gibt ein neues Psychotherapeutengesetz, aber was ändert sich konkret? Eine Online-Infoveranstaltung bringt dich auf den Stand.'},
- {d:'2020-08-05',t:'Update-Post für das WiSe 2020',u:'2020/08/update-post-fuer-das-wise-2020/',c:[],x:'Antworten auf deine häufigsten Fragen zum Wintersemester 2020 und zum Verhältnis von Online- und Präsenzlehre nach dem ersten „Corona-Semester“.'},
- {d:'2020-06-02',t:'Update zum Psychotherapiegesetz',u:'2020/06/update-zum-psychotherapiegesetz/',c:[],x:'Die Folien der digitalen Infoveranstaltung der PsyFaKo e. V. zur Reform des Psychotherapiegesetzes zum Nachlesen, inklusive Stand der Umsetzung.'}
+ {d:'2024-08-17',t:'Website-Updates',u:'2024/08/website-updates/',c:['Allgemein','Fachschaft'],x:'Mitglieder kommen und gehen, doch das Netzwerk aus Alumni, Mentor:innen und Freund:innen bleibt bestehen. Rückblick auf die Öffentlichkeitsarbeit nach der Corona-Pandemie und Ausblick auf neue Formate.'},
+ {d:'2024-07-23',t:'BlackBox: neue Ausgabe',u:'2024/07/blackbox-neue-ausgabe/',c:['BlackBox','Leben am Institut'],x:'Den Necker-Würfel kennen viele aus der Vorlesung: Man sieht ihn von oben oder von unten, aber nie beides gleichzeitig. Mit diesem Kipp-Phänomen beginnt der Beitrag zur neuen BlackBox-Ausgabe.'},
+ {d:'2023-05-01',t:'Die Rückkehr des FS-Wochenendes im April 2023',u:'2023/05/die-rueckkehr-des-fs-wochenendes-im-april-2023/',c:['Fachschaft','Leben am Institut'],x:'Nach mehreren Jahren Pause gab es im April 2023 endlich wieder ein FS-Wochenende. Ein Rückblick, der zeigt, wie abwechslungsreich das Leben in der Fachschaft sein kann.'},
+ {d:'2023-01-17',t:'Neu: Praktikumsdatenbank von Studis für Studis',u:'2023/01/neu-praktikumsdatenbank-von-studis-fuer-studis/',c:['Studium & Reformen'],x:'Eine deutschlandweite Übersicht über Praktikumsplätze samt Erfahrungsberichten. Zum Suchen und zum Weiterempfehlen eigener Praktika.'},
+ {d:'2022-05-07',t:'Neuer Vortrag zur Psychotherapie am PI',u:'2022/05/neuer-vortrag-zur-psychotherapie-am-pi/',c:['Leben am Institut','Studium & Reformen'],x:'Gemeinsam mit dem IPP Heidelberg: ein Einblick in die tiefenpsychologische bzw. psychoanalytische Psychotherapie anhand eines Patientenfalls. Montag, 9. Mai 2022, 20:15 Uhr, Hörsaal 2 im Hintergebäude.'},
+ {d:'2021-02-05',t:'Psychotherapeutengesetz',u:'2021/02/psychotherapeutengesetz/',c:['Studium & Reformen'],x:'Seit dem 1. September 2020 führt der Weg in die Psychotherapie über ein Approbationsstudium aus polyvalentem Psychologie-Bachelor und anschließendem Master Psychotherapie. Was das für dich bedeutet.'},
+ {d:'2020-10-30',t:'Protokoll der Infoveranstaltung zur Psychologiestudiengangsreform',u:'2020/10/protokoll-der-infoveranstaltung-zur-psychologiestudiengangsreform/',c:['Studium & Reformen','Fachschaft'],x:'Am 22. Oktober 2020 fand mit Prof. Dr. Spinath, Prof. Dr. Barnow und Dr. Timm eine Infoveranstaltung zur Studiengangsreform statt. Das Protokoll steht für alle bereit.'},
+ {d:'2020-08-05',t:'Infoveranstaltung zum Psychotherapeutengesetz',u:'2020/08/update-psychotherapeutinnengesetz-diesen-freitag-online/',c:['Studium & Reformen'],x:'Es gibt ein neues Psychotherapeutengesetz, aber was ändert sich konkret? Eine Online-Infoveranstaltung bringt dich auf den Stand.'},
+ {d:'2020-08-05',t:'Update-Post für das WiSe 2020',u:'2020/08/update-post-fuer-das-wise-2020/',c:['Allgemein','Studium & Reformen'],x:'Antworten auf deine häufigsten Fragen zum Wintersemester 2020 und zum Verhältnis von Online- und Präsenzlehre nach dem ersten „Corona-Semester“.'},
+ {d:'2020-06-02',t:'Update zum Psychotherapiegesetz',u:'2020/06/update-zum-psychotherapiegesetz/',c:['Studium & Reformen'],x:'Die Folien der digitalen Infoveranstaltung der PsyFaKo e. V. zur Reform des Psychotherapiegesetzes zum Nachlesen, inklusive Stand der Umsetzung.'}
 ];
 function newsList(list){
   return `<ul class="news">${list.map(p=>{const d=new Date(p.d+'T12:00:00');
@@ -250,11 +271,188 @@ ${rows([
  ['https://heibox.uni-heidelberg.de/f/05936ab93edc4a9abdec/?dl=1','download','Studienfachschaftssatzung Psychologie','Direkter Download']
 ])}`},
 
-'aktuelles':{t:'Aktuelles',d:'Neuigkeiten aus der Fachschaft',lead:'Neuigkeiten aus der Fachschaft und vom Institut.',body:`
+'aktuelles':{t:'Aktuelles',d:'Neuigkeiten, Termine und offizielle Kanäle',lead:'Neuigkeiten aus der Fachschaft und vom Institut, Sitzungstermine und offizielle Kanäle.',body:`
+<div class="cards" style="margin-bottom:32px">
+ <a class="card" href="#/aktuelles/meldungen">
+  <span class="k">Aktuelle News</span>
+  <h3>${ic('newspaper')} Beiträge &amp; News</h3>
+  <p>Berichte zu Studiengangsreformen, Veranstaltungen, Praktika und Institut.</p>
+  <div class="foot"><span class="badge">10 Beiträge</span></div>
+ </a>
+ <a class="card" href="#/aktuelles/termine">
+  <span class="k">Wöchentlich &amp; Semester</span>
+  <h3>${ic('cal')} Termine &amp; Kalender</h3>
+  <p>Sitzungen montags 18–20 Uhr, Vorlesungszeiten und Kalender-Abo (.ics).</p>
+  <div class="foot"><span class="badge">Live &amp; ICS</span></div>
+ </a>
+ <a class="card" href="#/aktuelles/kanaele">
+  <span class="k">Instagram &amp; Verteiler</span>
+  <h3>${ic('chat')} Kanäle &amp; Social Media</h3>
+  <p>Instagram @psyheidelberg, Psychotreff-Mailingliste und direkter Kontakt.</p>
+  <div class="foot"><span class="badge">Offizielle Kanäle</span></div>
+ </a>
+</div>
+
+<h2>Immer auf dem Laufenden</h2>
+<p>Hier bündeln wir alles, was sich rund um dein Psychologiestudium und die Fachschaftsarbeit bewegt: Von gesetzlichen Reformen der Psychotherapie über Termine unserer wöchentlichen Sitzungen bis hin zu den offiziellen Kommunikationskanälen.</p>
+${newsFreshnessHint()}`},
+
+'aktuelles/meldungen':{t:'Beiträge & News',d:'Berichte, Reform-Updates und Ankündigungen',lead:'Berichte, Infoveranstaltungen und Ankündigungen aus der Fachschaft und vom Institut.',body:`
 ${newsFreshnessHint()}
-<div class="filters" role="group" aria-label="Beiträge filtern">${['Alle','Leben am Institut','BlackBox','Allgemein'].map((c,i)=>`<button class="chip" type="button" data-filter="${c}" aria-pressed="${i===0}">${c}</button>`).join('')}</div>
-${newsList(POSTS)}
-<p style="margin-top:28px"><a class="btn btn-ghost noext" href="${P}category/aktuelles/page/2/">Ältere Beiträge im Archiv ${ic('ext')}</a></p>`},
+<div class="news-toolbar" role="region" aria-label="Beiträge filtern und durchsuchen">
+ <div class="news-search-box">
+  <span class="ico" aria-hidden="true">${ic('search')}</span>
+  <input id="newsQuery" type="search" placeholder="Beiträge durchsuchen, z. B. Reform, Praktikum, BlackBox…" autocomplete="off" aria-label="Beiträge durchsuchen">
+ </div>
+ <div class="filters" role="group" aria-label="Kategorie auswählen">
+  ${['Alle','Studium & Reformen','Leben am Institut','BlackBox','Fachschaft','Allgemein'].map((c,i)=>`<button class="chip" type="button" data-filter="${c}" aria-pressed="${i===0?'true':'false'}">${c}</button>`).join('')}
+ </div>
+ <div class="news-meta-bar">
+  <span id="newsCount" aria-live="polite">${POSTS.length} Beiträge</span>
+  <span class="news-meta-hint">Suchergebnisse filtern sich bei der Eingabe</span>
+ </div>
+</div>
+
+<div id="newsFeed" class="news-feed">
+ ${newsList(POSTS)}
+</div>
+<p class="news-none" hidden>Keine Beiträge gefunden, die deiner Suche oder Filterung entsprechen. Setze die Filter zurück oder versuche einen allgemeineren Begriff.</p>
+
+<p style="margin-top:32px"><a class="btn btn-ghost noext" href="${P}category/aktuelles/page/2/">Ältere Beiträge im WordPress-Archiv der Fachschaft ${ic('ext')}</a></p>`},
+
+'aktuelles/termine':{t:'Termine & Kalender',d:'Sitzungen, Vorlesungszeiten und Kalender-Abo',lead:'Alle Termine auf einen Blick: Wöchentliche Fachschaftssitzungen, Semesterzeiten und der abonnierbare Kalender.',body:`
+${(() => {
+  const s = nextSession();
+  const liveDot = s.live ? '<span class="pulse-dot"></span> Live jetzt' : s.wd;
+  const termBadge = s.inLecture ? 'Vorlesungszeit' : 'Vorlesungsfreie Zeit';
+  return `<div class="session-spotlight">
+ <div class="session-spotlight-badge">
+  <span class="session-badge-status">${liveDot}</span>
+  <span class="session-badge-term">${termBadge}</span>
+ </div>
+ <h3 class="session-spotlight-title">Nächste Fachschaftssitzung</h3>
+ <p class="session-spotlight-date">${s.dateStr}</p>
+ <p class="session-spotlight-note">${s.note}</p>
+ <div class="btns" style="margin-top:16px">
+  <a class="btn btn-primary noext" href="${BBB}">${ic('video')}Online teilnehmen (BBB)</a>
+  <a class="btn btn-ghost" href="#/fachschaft/kontakt">${ic('pin')}Fachschaftskeller finden</a>
+ </div>
+</div>`;
+})()}
+
+<h2>Fachschaftskalender abonnieren</h2>
+<p>Verpasse keine Fachschaftssitzung, Party oder Vollversammlung mehr. Unser Kalender lässt sich direkt in deinen persönlichen Kalender einbinden:</p>
+<div class="btns" style="margin-bottom:24px">
+ <a class="btn btn-ghost noext" href="${CAL}" target="_blank" rel="noopener">${ic('cal')}Im Web-Kalender öffnen<span class="ext-ico" aria-hidden="true">↗</span></a>
+ <a class="btn btn-ghost noext" href="${ICS}">${ic('download')}ICS-Kalenderfeed herunterladen</a>
+ ${copyBtn(ICS)}
+</div>
+
+${callout('So bindest du den Kalender ein',`
+<ul class="clean-list" style="margin:8px 0 0">
+ <li><b>Apple Kalender (iOS / macOS):</b> Datei → Neues Kalenderabonnement → ICS-URL einfügen.</li>
+ <li><b>Google Kalender:</b> Weitere Kalender (+) → Per URL hinzufügen → ICS-URL einfügen.</li>
+ <li><b>Outlook / Thunderbird:</b> Kalender hinzufügen → Aus dem Web abonnieren → URL eintragen.</li>
+</ul>`)}
+
+<h2>Vorlesungszeiten an der Universität Heidelberg</h2>
+<p>Die offiziellen Semester- und Vorlesungszeiten der Universität Heidelberg:</p>
+<div class="tablewrap">
+ <table class="data-table">
+  <thead>
+   <tr>
+    <th scope="col">Semester</th>
+    <th scope="col">Vorlesungsbeginn</th>
+    <th scope="col">Vorlesungsende</th>
+    <th scope="col">Unterbrechungen / Feiertage</th>
+    <th scope="col">Status</th>
+   </tr>
+  </thead>
+  <tbody>
+   ${SEMESTER_CONFIG.map(sem => {
+     const now = new Date().toISOString().slice(0,10);
+     let status = 'Kommend';
+     if(now >= sem.start && now <= sem.end) status = '<span class="badge">Aktuell</span>';
+     else if(now > sem.end) status = '<span class="badge old">Vorbei</span>';
+     const breaks = sem.breaks.map(([s,e])=>`${new Date(s).toLocaleDateString('de-DE',{day:'numeric',month:'numeric'})}–${new Date(e).toLocaleDateString('de-DE',{day:'numeric',month:'numeric',year:'numeric'})}`).join(', ') || 'Keine';
+     return `<tr>
+      <td><b>${sem.name}</b></td>
+      <td>${new Date(sem.start).toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'})}</td>
+      <td>${new Date(sem.end).toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'})}</td>
+      <td><small>${breaks}</small></td>
+      <td>${status}</td>
+     </tr>`;
+   }).join('')}
+  </tbody>
+ </table>
+</div>
+
+<h2>Regelmäßige Fixpunkte im Studienjahr</h2>
+<div class="trio">
+ <div>
+  <h3>Wöchentliche Sitzung</h3>
+  <p>Jeden Montag von 18 bis 20 Uhr während der Vorlesungszeit. Offen für alle Psychologiestudierenden.</p>
+ </div>
+ <div>
+  <h3>Vollversammlung (VV)</h3>
+  <p>Einmal pro Semester kommen alle Studierenden zusammen, um Berichte zu hören und Anträge zu diskutieren.</p>
+ </div>
+ <div>
+  <h3>Einführung &amp; Feste</h3>
+  <p>Ersti-Woche (EKS) Anfang Oktober, Ersti-Wochenende im Spätherbst und Institutsgrillen zum Sommersemesterende.</p>
+ </div>
+</div>`},
+
+'aktuelles/kanaele':{t:'Kanäle & Social Media',d:'Instagram, Psychotreff-Mailingliste und direkter Draht',lead:'Alle offiziellen Informations- und Kommunikationswege der Fachschaft Psychologie im Überblick.',body:`
+<div class="contact-grid">
+ <div class="card">
+  <span class="ic">${ic('insta')}</span>
+  <h3>Instagram @psyheidelberg</h3>
+  <p>Unser aktivster Kanal: Story-Updates zu aktuellen Sitzungen, kurzfristige Raumänderungen, Party-Vorverkäufe und Eindrücke vom Campus.</p>
+  <div class="foot">
+   <a class="btn btn-primary btn-small noext" href="${IG}" target="_blank" rel="noopener">Auf Instagram ansehen<span class="ext-ico" aria-hidden="true">↗</span></a>
+  </div>
+ </div>
+
+ <div class="card">
+  <span class="ic">${ic('mail')}</span>
+  <h3>Psychotreff-Mailingliste</h3>
+  <p>Die offizielle Mail-Verteilerliste der Psychologiestudierenden in Heidelberg. Hier erhältst du Sitzungsprotokolle, HiWi-Jobs, Umfragen und wichtige Bekanntmachungen.</p>
+  <div class="foot">
+   <a class="btn btn-primary btn-small noext" href="${PSYTREFF}">${ic('mail')}Mit 1 Klick abonnieren</a>
+  </div>
+ </div>
+
+ <div class="card">
+  <span class="ic">${ic('newspaper')}</span>
+  <h3>BlackBox Zeitschrift</h3>
+  <p>Die studentische Fachschaftszeitschrift mit eigener Redaktion. Veröffentlicht jedes Semester Artikel, Glossen und Memes rund ums Psychologiestudium.</p>
+  <div class="foot">
+   <a class="btn btn-ghost btn-small" href="#/leben/blackbox">Zu den Ausgaben &amp; Archiv</a>
+  </div>
+ </div>
+
+ <div class="card">
+  <span class="ic">${ic('chat')}</span>
+  <h3>Direkter Kontakt per E-Mail</h3>
+  <p>Fragen, Sorgen oder Anliegen zum Studium? Schreib uns einfach eine E-Mail an das Fachschaftspostfach:</p>
+  <p><b>${M(MAIL)}</b><br>${copyBtn(MAIL)}</p>
+  <div class="foot">
+   <a class="btn btn-ghost btn-small" href="#/fachschaft/kontakt">Alle Kontaktdaten</a>
+  </div>
+ </div>
+</div>
+
+<h2>Hinweise zur Psychotreff-Mailingliste</h2>
+<div class="callout">
+ <b class="h">${ic('info')}So funktioniert die Mailingliste</b>
+ <p>Die Psychotreff-Mailingliste wird vom Universitätsrechenzentrum (URZ) betrieben.</p>
+ <ul class="clean-list" style="margin:8px 0">
+  <li><b>Abonnieren:</b> Sende eine E-Mail von deiner Uni-Mailadresse an <code>listserv@listserv.uni-heidelberg.de</code> mit der Betreffzeile <code>Psychotreff</code> und dem Text <code>SUBSCRIBE PSYCHOTREFF</code> im Textfeld. Oder nutze einfach den Button oben.</li>
+  <li><b>Abmelden:</b> Sende eine E-Mail mit <code>SIGNOFF PSYCHOTREFF</code> an dieselbe Adresse.</li>
+  <li><b>Eigene Beiträge:</b> Wenn du eine Probandenstudie suchst oder eine HiWi-Stelle ausschreibst, kannst du nach Bestätigung an die Liste schreiben.</li>
+ </ul>
+</div>`},
 
 'studium':{t:'Infos zum Studium',d:'Bewerbung, Aufbau, Praktika, Ausland',lead:'Ob du dich gerade bewirbst, frisch zugelassen bist oder schon mit uns studierst: Hier findest du nützliche Informationen.',body:`
 <p>Für Studieninteressierte geht es vor allem um die Bewerbung und den Studienbeginn. Wenn du noch unentschlossen bist und wissen möchtest, wie sich das Studium in Heidelberg anfühlt, schau auf der ${X(PI+'studium/rainbow/','HeiMo-Seite')} vorbei. Dort gibt es Erfahrungsberichte und Beschreibungen typischer Situationen im Studium.</p>
@@ -692,7 +890,7 @@ ${rows([
 if (typeof window !== "undefined") {
   Object.assign(window, {
     WP_BASE, P, OLD, U, PI, UNI, MAIL, MAIL_FIN, BBB, CAL, ICS, IG, FB, PSYTREFF, DSGVO,
-    SEMESTER_CONFIG, HOLIDAYS_BW, isLecturePeriod, isHoliday, formatDateLong, newsFreshnessHint,
+    SEMESTER_CONFIG, HOLIDAYS_BW, isLecturePeriod, isHoliday, formatDateLong, nextSession, newsFreshnessHint,
     PHOTOS, HERO_KEY, HD_IMG, MAP_META, IMG, SECTION_IMG, TREE, POSTS, ISSUES,
     OLDMAG, ROOMS, PAGES, ic, L, X, M, copyBtn, facts, callout, initials, people,
     rows, photo, fmtD, terms, sessionBox, pic, credit, mapSvg,
