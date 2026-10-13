@@ -1,7 +1,7 @@
 "use strict";
 /* ============ Konstanten ============ */
-const P='https://fs-psychologie.stura.uni-heidelberg.de/path/to/wordpress/';
-const OLD='http://www.fs-psychologie.stura.uni-heidelberg.de/';
+const P='https://www.fs-psychologie.stura.uni-heidelberg.de/';
+const OLD='https://www.fs-psychologie.stura.uni-heidelberg.de/';
 const U='https://fs-psychologie.stura.uni-heidelberg.de/wp-content/uploads/';
 const PI='https://www.psychologie.uni-heidelberg.de/';
 const UNI='https://www.uni-heidelberg.de/';
@@ -11,9 +11,56 @@ const BBB='https://bbb.stura.uni-heidelberg.de/rooms/fac-ynp-v3m-fkg/join';
 const CAL='https://open-web-calendar.hosted.quelltext.eu/calendar.html?language=de&skin=flat&start_of_week=work&tabs=month&tabs=week&title=Fachschaft-HD&url=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fb5c2563593ad7c96c55e275867ab7911432f41ff6e9ebb4529bd3bef0d2f0223%2540group.calendar.google.com%2Fpublic%2Fbasic.ics';
 const ICS='https://calendar.google.com/calendar/ical/b5c2563593ad7c96c55e275867ab7911432f41ff6e9ebb4529bd3bef0d2f0223%40group.calendar.google.com/public/basic.ics';
 const IG='https://www.instagram.com/psyheidelberg/';
+// TODO(content): Facebook-Präsenz prüfen, ob aktiv gepflegt oder stillgelegt
 const FB='https://www.facebook.com/FachschaftPsychologieHD';
 const PSYTREFF='mailto:listserv@listserv.uni-heidelberg.de?subject=Psychotreff&body=SUBSCRIBE%20PSYCHOTREFF';
 const DSGVO=OLD+'datenschutzerklaerung/';
+
+/* ============ Semester- & Vorlesungszeiten ============ */
+const SEMESTER_CONFIG=[
+  {name:'WiSe 2024/25',start:'2024-10-14',end:'2025-02-08',breaks:[['2024-12-23','2025-01-06']]},
+  {name:'SoSe 2025',start:'2025-04-14',end:'2025-07-26',breaks:[['2025-06-10','2025-06-14']]},
+  {name:'WiSe 2025/26',start:'2025-10-13',end:'2026-02-07',breaks:[['2025-12-22','2026-01-06']]},
+  {name:'SoSe 2026',start:'2026-04-13',end:'2026-07-25',breaks:[['2026-05-26','2026-05-30']]},
+  {name:'WiSe 2026/27',start:'2026-10-12',end:'2027-02-06',breaks:[['2026-12-23','2027-01-06']]}
+];
+
+const HOLIDAYS_BW=[
+  '2024-10-03','2024-11-01','2024-12-25','2024-12-26','2025-01-01','2025-01-06',
+  '2025-04-18','2025-04-21','2025-05-01','2025-05-29','2025-06-09','2025-06-19','2025-10-03','2025-11-01',
+  '2026-01-01','2026-01-06','2026-04-03','2026-04-06','2026-05-01','2026-05-14','2026-05-25','2026-06-04',
+  '2026-10-03','2026-11-01','2026-12-25','2026-12-26','2027-01-01','2027-01-06'
+];
+
+function isLecturePeriod(date){
+  const iso=typeof date==='string'?date:date.toISOString().slice(0,10);
+  for(const sem of SEMESTER_CONFIG){
+    if(iso>=sem.start&&iso<=sem.end){
+      for(const [bStart,bEnd] of sem.breaks){
+        if(iso>=bStart&&iso<=bEnd) return false;
+      }
+      return true;
+    }
+  }
+  return false;
+}
+
+function isHoliday(date){
+  const iso=typeof date==='string'?date:date.toISOString().slice(0,10);
+  return HOLIDAYS_BW.includes(iso);
+}
+
+const formatDateLong=d=>new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(d);
+
+function newsFreshnessHint(){
+  if(!POSTS.length) return '';
+  const latest=new Date(POSTS[0].d+'T12:00:00');
+  const diffDays=(Date.now()-latest.getTime())/(1000*60*60*24);
+  if(diffDays>180){
+    return `<div class="news-freshness" role="note"><span class="nf-ico" aria-hidden="true">${ic('insta')}</span><span>Aktuelles und kurzfristige Neuigkeiten findest du auch auf <a class="noext" href="${IG}" target="_blank" rel="noopener">Instagram (@psyheidelberg)</a>.</span></div>`;
+  }
+  return '';
+}
 
 /* ============ Fotos ============
    Echte Fotos der Fachschaft. Schlüssel = Dateiname auf der bisherigen Website.
@@ -72,7 +119,7 @@ function terms(list,opt){
   return `<div class="tabs" data-tabs><div class="tablist" role="tablist" aria-label="Amtszeiten">${tabs}</div>${panels}</div>`;
 }
 function sessionBox(){
-  return `<div class="panel stone"><h3 style="margin-top:0">Sitzungen: montags, 18-20 Uhr</h3>
+  return `<div class="panel stone"><h3 style="margin-top:0">Sitzungen: montags, 18–20 Uhr</h3>
   <p>In der Vorlesungszeit treffen wir uns im Fachschaftskeller oder nach Absprache online. Wir freuen uns über jedes neue Gesicht, komm einfach vorbei!</p>
   <div class="btns"><a class="btn btn-primary btn-small noext" href="${BBB}">${ic('video')}Online teilnehmen</a><a class="btn btn-ghost btn-small" href="#/fachschaft/kontakt">${ic('pin')}So findest du uns</a></div></div>`;
 }
@@ -102,13 +149,14 @@ const POSTS=[
 ];
 function newsList(list){
   return `<ul class="news">${list.map(p=>{const d=new Date(p.d+'T12:00:00');
-   return `<li data-cats="${['Aktuelles',...p.c].join('|')}"><time datetime="${p.d}"><b>${d.getDate()}.</b> ${d.toLocaleDateString('de-DE',{month:'long',year:'numeric'})}</time>
+   const fullDate=d.toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'});
+   return `<li data-cats="${['Aktuelles',...p.c].join('|')}"><time datetime="${p.d}" aria-label="${fullDate}"><span class="d-day" aria-hidden="true"><b>${d.getDate()}.</b></span> <span class="d-mo" aria-hidden="true">${d.toLocaleDateString('de-DE',{month:'long',year:'numeric'})}</span><span class="sr">${fullDate}</span></time>
    <div><h3><a class="noext" href="${P+p.u}">${p.t}</a></h3><p>${p.x}</p><div class="tags">${['Aktuelles',...p.c].map(c=>`<span class="tag">${c}</span>`).join('')}</div></div></li>`}).join('')}</ul>`;
 }
 
 /* ============ BlackBox ============ */
 const ISSUES=[
- [10,'WiSe 2024','2025/04/10_BLACKBOX_Wise2024.pdf'],
+ [10,'WiSe 2024/25','2025/04/10_BLACKBOX_Wise2024.pdf'],
  [9,'SoSe 2024','2024/07/9_BLACKBOX_SoSe2024.pdf'],
  [8,'WiSe 2023/24','2024/02/8_BLACKBOX_WS2023-24.pdf'],
  [7,'SoSe 2023','2023/07/7_BLACKBOX_SoSe2023.pdf'],
@@ -174,10 +222,10 @@ ${photo('Institutsgrillen Tradition','institutsgrillen-archiv.jpg','Gemütlicher
 
 'fachschaft/kontakt':{t:'Kontakt',d:'Sitzungen, E-Mail und Verteiler',lead:'Du hast Fragen an uns? Dann komm vorbei oder schreib uns eine Mail.',body:`
 <div class="contact-grid">
- <div class="card"><span class="ic">${ic('clock')}</span><h3>Sitzungen</h3><p>Montags 18-20 Uhr in der Vorlesungszeit im Fachschaftskeller. Ihr seid immer herzlich eingeladen.</p><div class="foot"><a class="btn btn-ghost btn-small noext" href="${BBB}">${ic('video')}Online dabei sein</a></div></div>
- <div class="card"><span class="ic">${ic('pin')}</span><h3>Fachschaftskeller</h3><p>Hauptstraße 47-51, 69117 Heidelberg. Durch das Tor in den Innenhof, der Keller liegt direkt auf der rechten Seite.</p><div class="foot">${L('studium/faq?raum','Zum Raumfinder')}</div></div>
+ <div class="card"><span class="ic">${ic('clock')}</span><h3>Sitzungen</h3><p>Montags 18–20 Uhr in der Vorlesungszeit im Fachschaftskeller. Du bist immer herzlich eingeladen.</p><div class="foot"><a class="btn btn-ghost btn-small noext" href="${BBB}">${ic('video')}Online dabei sein</a></div></div>
+ <div class="card"><span class="ic">${ic('pin')}</span><h3>Fachschaftskeller</h3><p>Hauptstraße 47–51, 69117 Heidelberg. Durch das Tor in den Innenhof, der Keller liegt direkt auf der rechten Seite.</p><div class="foot">${L('studium/faq?raum','Zum Raumfinder')}</div></div>
  <div class="card"><span class="ic">${ic('mail')}</span><h3>E-Mail</h3><p>${M(MAIL)}<br>${copyBtn(MAIL)}</p><p><b>Finanzangelegenheiten</b><br>${M(MAIL_FIN)}<br>${copyBtn(MAIL_FIN)}</p></div>
- <div class="card"><span class="ic">${ic('phone')}</span><h3>Telefon und Fax</h3><p>Tel. <a href="tel:+496221542456">+49 6221 54-2456</a><br>Fax +49 6221 54-2457</p></div>
+ <div class="card"><span class="ic">${ic('phone')}</span><h3>Telefon und Fax</h3><p>Tel. <a href="tel:+496221542456">+49&nbsp;6221&nbsp;54-2456</a><br>Fax +49&nbsp;6221&nbsp;54-2457</p></div>
 </div>
 <h2>Nichts mehr verpassen</h2>
 ${rows([
@@ -199,6 +247,7 @@ ${rows([
 ])}`},
 
 'aktuelles':{t:'Aktuelles',d:'Neuigkeiten aus der Fachschaft',lead:'Neuigkeiten aus der Fachschaft und vom Institut.',body:`
+${newsFreshnessHint()}
 <div class="filters" role="group" aria-label="Beiträge filtern">${['Alle','Leben am Institut','BlackBox','Allgemein'].map((c,i)=>`<button class="chip" type="button" data-filter="${c}" aria-pressed="${i===0}">${c}</button>`).join('')}</div>
 ${newsList(POSTS)}
 <p style="margin-top:28px"><a class="btn btn-ghost noext" href="${P}category/aktuelles/page/2/">Ältere Beiträge im Archiv ${ic('ext')}</a></p>`},
@@ -588,7 +637,7 @@ ${callout('PsyFaKo in Heidelberg','<p>Im Sommersemester 2022 war die PsyFaKo nac
 
 'impressum':{t:'Impressum',d:'Angaben zum Anbieter',lead:'',body:`
 <div class="cards">
- <div class="card"><h3>Fachschaft Psychologie</h3><p>Hauptstraße 47-51<br>69117 Heidelberg</p><p>Tel. <a href="tel:+496221542456">+49 6221 54-2456</a><br>Fax +49 6221 54-2457<br>${M(MAIL)}</p></div>
+ <div class="card"><h3>Fachschaft Psychologie</h3><p>Hauptstraße 47–51<br>69117 Heidelberg</p><p>Tel. <a href="tel:+496221542456">+49&nbsp;6221&nbsp;54-2456</a><br>Fax +49&nbsp;6221&nbsp;54-2457<br>${M(MAIL)}</p></div>
 </div>
 <p>Die Fachschaft Psychologie gehört zur Verfassten Studierendenschaft der Universität Heidelberg, einer Körperschaft des öffentlichen Rechts. Gesetzlich vertreten wird sie durch den Vorsitz der Verfassten Studierendenschaft.</p>
 <h2>Datenschutz</h2>
@@ -638,6 +687,7 @@ ${rows([
 if (typeof window !== "undefined") {
   Object.assign(window, {
     P, OLD, U, PI, UNI, MAIL, MAIL_FIN, BBB, CAL, ICS, IG, FB, PSYTREFF, DSGVO,
+    SEMESTER_CONFIG, HOLIDAYS_BW, isLecturePeriod, isHoliday, formatDateLong, newsFreshnessHint,
     PHOTOS, HERO_KEY, HD_IMG, MAP_META, IMG, SECTION_IMG, TREE, POSTS, ISSUES,
     OLDMAG, ROOMS, PAGES, ic, L, X, M, copyBtn, facts, callout, initials, people,
     rows, photo, fmtD, terms, sessionBox, pic, credit, mapSvg,

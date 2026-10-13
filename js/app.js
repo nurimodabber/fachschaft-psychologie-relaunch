@@ -22,8 +22,18 @@ function nextSession(){
   if(add===0&&now>=end) add=7;
   d.setDate(now.getDate()+add); d.setHours(18,0,0,0);
   const live=add===0&&now>=d&&now<end;
-  const wd=add===0?'Heute, Montag':add===1?'Morgen, Montag':'Montag';
-  return {live,wd,day:d.getDate(),mo:d.toLocaleDateString('de-DE',{month:'long',year:'numeric'}),iso:d.toISOString()};
+  const wd=add===0?'Heute':add===1?'Morgen':'Nächster Termin';
+  const iso=d.toISOString();
+  const dateStr=formatDateLong(d)+' · 18–20 Uhr';
+  const inLecture=isLecturePeriod(d);
+  const holiday=isHoliday(d);
+  let note='In der Vorlesungszeit, jede Woche. Neue Gesichter sind immer willkommen.';
+  if(holiday){
+    note='Gesetzlicher Feiertag in BW · Sitzung entfällt oder findet nach Absprache statt.';
+  } else if(!inLecture){
+    note='Vorlesungsfreie Zeit · Sitzungen finden unregelmäßig oder nach Absprache statt.';
+  }
+  return {live,wd,day:d.getDate(),iso,dateStr,note,inLecture,holiday};
 }
 
 /* ============ Startseite ============ */
@@ -33,7 +43,8 @@ function home(){
   const why=[
     ['spark','Mitgestalten','Von der Psychoparty bis zum PsychoKino: Du bringst deine Ideen ein und setzt sie mit uns um.',[['leben/psychoparty','Psychoparty'],['leben/psychokino','PsychoKino'],['leben/ersti-we','Ersti-WE']]],
     ['bank','Hochschulpolitik','Du erlebst, wie Entscheidungen über Studium und Lehre entstehen, und bestimmst mit.',[['hopo/fachrat','FachRat'],['hopo/fakrat','Fakultät'],['hopo/stura','StuRa']]],
-    ['users','Alle Semester','Du lernst engagierte Studierende kennen, die du sonst im Studienalltag nie getroffen hättest.',[['studium/bachelor','Bachelor'],['studium/master','Master'],['fachschaft/aktive','Aktive']]],
+    // TODO(content): Chips unter 'Semesterübergreifend' prüfen (Bachelor/Master/Aktive passen inhaltlich kaum)
+    ['users','Semesterübergreifend','Du lernst engagierte Studierende kennen, die du sonst im Studienalltag nie getroffen hättest.',[['studium/bachelor','Bachelor'],['studium/master','Master'],['fachschaft/aktive','Aktive']]],
     ['handshake','Verantwortung','Erfahrung sammeln: Für Projekte, Finanzen und die echten Anliegen aller Studierenden.',[['fachschaft/kontakt','Sitzung'],['hopo/qsm','QSM-Mittel'],['studium/lehrgestaltung','Lehre']]]
   ];
   return `
@@ -59,11 +70,11 @@ function home(){
   </div>
   <aside class="session rv" aria-labelledby="sess-h">
    <h2 id="sess-h">Nächste Sitzung${s.live?'<span class="live">läuft gerade</span>':''}</h2>
-   <div class="date"><time class="day" datetime="${s.iso}">${s.day}</time><span class="wd">${s.wd}</span><span class="mo">${s.mo}, 18-20 Uhr</span></div>
+   <div class="date"><time class="day" datetime="${s.iso}">${s.day}</time><span class="wd">${s.wd}</span><time class="mo" datetime="${s.iso}">${s.dateStr}</time></div>
    <dl>
-    <div><dt>${ic('pin')}<span class="sr">Ort</span></dt><dd>Fachschaftskeller, Hauptstraße 47-51. Durch das Tor in den Innenhof, direkt rechts.</dd></div>
+    <div><dt>${ic('pin')}<span class="sr">Ort</span></dt><dd>Fachschaftskeller, Hauptstraße 47–51. Durch das Tor in den Innenhof, direkt rechts.</dd></div>
     <div><dt>${ic('video')}<span class="sr">Online</span></dt><dd>Oder nach Absprache online.</dd></div>
-    <div><dt>${ic('cal')}<span class="sr">Hinweis</span></dt><dd>In der Vorlesungszeit, jede Woche. Neue Gesichter sind immer willkommen.</dd></div>
+    <div><dt>${ic('cal')}<span class="sr">Hinweis</span></dt><dd>${s.note}</dd></div>
    </dl>
    <div class="btns"><a class="btn btn-primary btn-small noext" href="${BBB}">Online teilnehmen</a><a class="tlink noext" href="${CAL}">Alle Termine${ic('chevr')}</a></div>
   </aside>
@@ -72,7 +83,7 @@ function home(){
 
 <section class="sec tight" aria-labelledby="ex-h">
  <div class="wrap">
-  <div class="shead rv"><div><h2 class="sh2" id="ex-h">Was interessiert euch gerade?</h2></div></div>
+  <div class="shead rv"><div><h2 class="sh2" id="ex-h">Was interessiert dich gerade?</h2></div></div>
   <div class="bento3">
    <article class="tile t-study rv">
     <figure>${pic('city')}</figure><span class="cap">${credit('city')}</span>
@@ -144,6 +155,7 @@ function home(){
 <section class="sec sec-news" aria-labelledby="news-h">
  <div class="wrap">
   <div class="shead rv"><h2 class="sh2" id="news-h">Was gibt’s Neues?</h2><a class="tlink" href="#/aktuelles">Alle Beiträge${ic('chevr')}</a></div>
+  ${newsFreshnessHint()}
   <div class="news-grid">
    <article class="feat rv">
     <time datetime="${p0.d}">${d0.toLocaleDateString('de-DE',{day:'numeric',month:'long',year:'numeric'})}</time>
@@ -162,7 +174,7 @@ function home(){
     <p class="kick">Die Zeitschrift am Institut</p>
     <h2 class="sh2" id="bb-h">BlackBox</h2>
     <p>Jedes Semester eine neue Ausgabe mit Artikeln von Studierenden und Dozierenden, Umfragen und Memes. Das Archiv reicht bis 1983 zurück.</p>
-    <ul class="issues-mini">${ISSUES.slice(0,4).map(([n,s,f])=>`<li><a class="noext" href="${U+f}"><b>Nr. ${n}</b>${s}</a></li>`).join('')}</ul>
+    <ul class="issues-mini">${ISSUES.slice(0,4).map(([n,s,f])=>`<li><a class="noext" href="${U+f}"><b>Nr.&nbsp;${n}</b>${s}</a></li>`).join('')}</ul>
     <div class="btns"><a class="btn btn-primary noext" href="${U+ISSUES[0][2]}">${ic('download')}Neue Ausgabe lesen</a><a class="tlink" href="#/leben/blackbox">Zum Archiv${ic('chevr')}</a></div>
    </div>
    <div class="orb" data-face="a">
@@ -298,14 +310,15 @@ const SEC_ICONS = {
 const NAV_TAGS = {
   'studium/bachelor/eks': 'Ersti-Woche',
   'leben/blackbox': 'Zeitschrift',
-  'leben/ersti-we': 'Wochenende',
+  'leben/ersti-we': 'Ende Nov.',
   'hopo/psyfako': 'Bundesweit'
 };
 
 const DRAWER_GROUPS = {
   fachschaft: [
     { label: 'Über uns', items: ['fachschaft', 'fachschaft/aktive'] },
-    { label: 'Kontakt & Satzung', items: ['fachschaft/kontakt', 'fachschaft/downloads'] }
+    // TODO(content): Direkter Satzungs-Link falls gewünscht: https://heibox.uni-heidelberg.de/f/05936ab93edc4a9abdec/?dl=1
+    { label: 'Kontakt & Downloads', items: ['fachschaft/kontakt', 'fachschaft/downloads'] }
   ],
   studium: [
     { label: 'Studiengänge & Start', items: ['studium', 'studium/bachelor', 'studium/bachelor/eks', 'studium/master', 'studium/approbation'] },
@@ -379,7 +392,7 @@ function footer(){
     ${col('fachschaft',`<li><a href="#/aktuelles">Aktuelles</a></li>`)}${col('studium')}${col('leben')}${col('hopo')}
     <div><h2>Kontakt</h2><ul><li><a href="mailto:${MAIL}">E-Mail schreiben</a></li><li><a class="noext" href="${BBB}">Online-Sitzung</a></li><li><a class="noext" href="${PSYTREFF}">Psychotreff-Verteiler</a></li><li><a class="noext" href="${IG}">Instagram</a></li><li><a class="noext" href="${FB}">Facebook</a></li><li><a class="noext" href="https://www.psychologie.uni-heidelberg.de/">Psychologisches Institut</a></li><li><a class="noext" href="https://www.stura.uni-heidelberg.de/">StuRa</a></li></ul></div>
    </nav>
-   <div class="f-addr"><span>Fachschaft Psychologie, Hauptstraße 47-51, 69117 Heidelberg</span><span>Tel. <a href="tel:+496221542456">+49 6221 54-2456</a></span><span><a href="mailto:${MAIL}">${MAIL}</a></span></div>
+   <div class="f-addr"><span>Fachschaft Psychologie, Hauptstraße 47–51, 69117 Heidelberg</span><span>Tel. <a href="tel:+496221542456">+49&nbsp;6221&nbsp;54-2456</a></span><span><a href="mailto:${MAIL}">${MAIL}</a></span></div>
    <div class="f-bot"><span>© ${new Date().getFullYear()} Fachschaft Psychologie Heidelberg. Teil der Verfassten Studierendenschaft.</span>
     <ul><li><a href="#/impressum">Impressum</a></li><li><a class="noext" href="${DSGVO}">Datenschutz</a></li></ul>
     ${themeSeg()}

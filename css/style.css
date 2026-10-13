@@ -319,6 +319,11 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 @media (max-width:860px){.news-grid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:560px){.news li{grid-template-columns:minmax(0,1fr);gap:6px}.news time b{display:inline;font-size:inherit;color:inherit;font-weight:600;letter-spacing:0}}
 
+.news-freshness{display:flex;align-items:center;gap:12px;padding:12px 18px;margin:0 0 24px;background:var(--bg2);border:1px solid var(--hair2);border-radius:14px;font-size:14.5px;color:var(--text2);line-height:1.4}
+.news-freshness .nf-ico{display:inline-flex;align-items:center;justify-content:center;color:var(--accent-text);width:20px;height:20px;flex:none}
+.news-freshness a{color:var(--text);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.news-freshness a:hover{color:var(--accent-text)}
+
 /* ---------- BlackBox ---------- */
 .bbox{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(32px,6vw,90px);align-items:center;background:var(--bg2);border-radius:28px;padding:clamp(30px,5vw,72px)}
 .bbox .kick{font-size:17px;font-weight:600;color:var(--accent-text);margin:0 0 6px}
