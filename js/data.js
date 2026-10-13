@@ -194,28 +194,28 @@ const ROOMS=[
 const PAGES={
 'fachschaft':{t:'Fachschaft',d:'Wer wir sind und was wir machen',lead:'Zur Fachschaft gehören alle, die Psychologie studieren, also auch du. Die aktive Fachschaft ist die Gruppe, die sich regelmäßig trifft und mitgestaltet.',body:`
 <h2>Wer ist die Fachschaft Psychologie?</h2>
-<p>Die Fachschaft umfasst alle Studierenden eines Fachs. Bei uns sind das sämtliche Psychologiestudierenden. Jede und jeder von euch gehört also dazu und kann mitmachen.</p>
+<p>Die Fachschaft sind alle Psychologiestudierenden in Heidelberg. Jede und jeder gehört dazu und kann mitmachen – auch du.</p>
 <h2>Und wer sind dann wir?</h2>
-<p>Innerhalb der Fachschaft trifft sich regelmäßig eine kleinere Gruppe von Studierenden, organisiert Veranstaltungen und vertritt die Studierenden am Institut. Diese Gruppe heißt aktive Fachschaft, und das sind wir.</p>
+<p>Innerhalb der Fachschaft trifft sich regelmäßig eine Gruppe von Studierenden, organisiert Veranstaltungen und vertritt die Studierenden am Institut. Diese Gruppe heißt aktive Fachschaft, und das sind wir.</p>
 <div class="photos">
-  ${photo('Fachschaftswochenende, April 2024','fs-wochenende.jpg','Gemeinsame Klausurtagung & Semesterplanung')}
-  ${photo('Institutsgrillen im Innenhof, Juni 2024','institutsgrillen-2024.jpg','Gemütlicher Austausch von Studierenden und Dozierenden')}
+  ${photo('Fachschaftswochenende, April 2024','fs-wochenende.jpg','Klausurwochenende: Semesterplanung und Arbeitsgruppen im Odenwald.')}
+  ${photo('Institutsgrillen im Innenhof, Juni 2024','institutsgrillen-2024.jpg','Sommergrillen im Institutsinnenhof mit Studierenden und Lehrenden.')}
   ${photo('Silent Disco am Institut, Juni 2024','silent-disco-2024.jpg','Kopfhörer-Party im Innenhof des Psychologischen Instituts')}
 </div>
 <h2>Was machen wir?</h2>
 <div class="trio">
- <div><h3>Gute Studienbedingungen</h3><p>Wir setzen uns dafür ein, dass euer Studium möglichst viele Freiräume bietet und flexibel bleibt, etwa wenn sich Prüfungsordnung, Modulhandbuch oder Studienzulassung ändern.</p></div>
- <div><h3>Ein gutes Miteinander</h3><p>Mit großen und kleinen Veranstaltungen sorgen wir für eine lockere Atmosphäre am Institut.</p></div>
- <div><h3>Euer Geld für euch</h3><p>Wir kümmern uns darum, dass Mittel wie der Semesterbeitrag, den ihr jedes Semester zahlt, wieder euch zugutekommen.</p></div>
+ <div><h3>Gute Studienbedingungen</h3><p>Wir setzen uns dafür ein, dass dein Studium Freiräume bietet und flexibel bleibt – bei Prüfungsordnungen, Modulhandbüchern und Zulassung.</p></div>
+ <div><h3>Ein gutes Miteinander</h3><p>Mit großen und kleinen Veranstaltungen schaffen wir einen lockeren Ausgleich zum Studienalltag am Institut.</p></div>
+ <div><h3>Geld für Studierende</h3><p>Wir achten darauf, dass die Semesterbeiträge wieder direkt in Projekte und Veranstaltungen für Studierende fließen.</p></div>
 </div>
 ${sessionBox()}`},
 
 'fachschaft/aktive':{t:'Aktive Fachschaft',d:'Gesichter, Momente und Alumni',lead:'Ein Ausschnitt aus unserer Fachschaft und alle, die uns über die Jahre begleitet haben.',body:`
 <h2>Momente</h2>
 <div class="photos">
-${photo('Fachschafts-Team, April 2024','fs-team.jpg','Gemeinsam unterwegs auf dem Klausur-Wochenende')}
-${photo('Ersti-Wochenende, Dezember 2023','ersti-wochenende-2023.jpg','Gemeinsames Kennenlernen im Odenwald')}
-${photo('Institutsgrillen Tradition','institutsgrillen-archiv.jpg','Gemütlicher Austausch im Innenhof')}
+${photo('Fachschafts-Team, April 2024','fs-team.jpg','Klausurwochenende: Semesterplanung und Arbeitsgruppen im Odenwald.')}
+${photo('Ersti-Wochenende, Dezember 2023','ersti-wochenende-2023.jpg','Gemeinsames Kennenlernen auf der Hütte im Odenwald.')}
+${photo('Institutsgrillen Tradition','institutsgrillen-archiv.jpg','Sommergrillen im Institutsinnenhof mit Studierenden und Lehrenden.')}
 </div>
 <h2>Alumni, Mentor:innen und Freund:innen</h2>
 <p>Sie haben die Fachschaft mitgeprägt und sind jederzeit herzlich eingeladen, wieder vorbeizuschauen.</p>
@@ -358,18 +358,18 @@ ${callout('Schon im Ausland gewesen?','<p>Schick deinen Erfahrungsbericht gern a
 </tbody></table></div>
 <h2>Europa</h2>
 <h3>ERASMUS über das Institut</h3>
-<p>Ihr könnt euch um einen ERASMUS-Platz bewerben, den das Institut vermittelt. Die Partneruniversitäten findet ihr auf der Seite der ERASMUS-Koordinatorin (siehe Kontakte unten). Der große Vorteil: Je nach Land gibt es ein unterschiedlich hohes Stipendium, das den Aufenthalt erleichtert.</p>
+<p>Du kannst dich um einen ERASMUS-Platz bewerben, den das Institut vermittelt. Die Partneruniversitäten findest du auf der Seite der ERASMUS-Koordinatorin (siehe Kontakte unten). Der Vorteil: Je nach Land gibt es ein Teilstipendium, das den Aufenthalt erleichtert.</p>
 <h3>Restplätze an anderen Instituten</h3>
-<p>Findet ihr keine passende Uni, könnt ihr euch auf Restplätze anderer Institute bewerben. Dafür nehmt ihr Kontakt mit der Fachkoordination des fachfremden Bereichs auf und wickelt die Bewerbung über sie ab. In der Regel müssen mindestens 50 % der im Ausland belegten Kurse im Fachgebiet des <em>nominierenden</em> Instituts liegen. Ob fachfremde Studierende schon im ersten Verfahren mitlaufen oder nur Restplätze bekommen, entscheidet jedes Institut selbst.</p>
+<p>Findest du keine passende Partneruni, kannst du dich auf Restplätze anderer Institute bewerben. Dafür nimmst du Kontakt mit der Fachkoordination des fachfremden Bereichs auf und wickelst die Bewerbung über sie ab. In der Regel müssen mindestens 50 % der im Ausland belegten Kurse im Fachgebiet des <em>nominierenden</em> Instituts liegen. Ob fachfremde Studierende schon im ersten Verfahren mitlaufen oder nur Restplätze bekommen, entscheidet jedes Institut selbst.</p>
 <h3>Coimbra-Group und Einzelpartnerschaften</h3>
 <p>Über die ${X(UNI+'studium/international/ausland/europa/coimbra.html','Coimbra-Group')} bestehen Partnerschaften mit 19 Universitäten in 12 Ländern. Dazu kommen Einzelpartnerschaften mit der University of ${X(UNI+'studium/international/ausland/europa/cambridge/','Cambridge')}, der ${X(UNI+'studium/international/ausland/europa/uj.html','Jagiellonen-Universität Krakau')}, der ${X(UNI+'studium/international/ausland/europa/spbu.html','Staatlichen Universität St. Petersburg')}, der ${X(UNI+'studium/international/ausland/europa/cuni.html','Karls-Universität Prag')} sowie der ${X(UNI+'studium/international/ausland/europa/elte.html','Eötvös-Loránd-Universität (ELTE)')} und der ${X(UNI+'studium/international/ausland/europa/semmelweis.html','Semmelweis-Universität')} in Budapest.</p>
 <p>${X(OLD+'ausland/ausland-europa/','Erfahrungsberichte aus Europa lesen')}</p>
 <h2>Overseas</h2>
-<p>Alle Austauschprogramme außerhalb Europas laufen zentral über die Universität, Anlaufstelle ist vor allem das Dezernat Internationale Beziehungen. Möglich sind ${X(UNI+'studium/international/ausland/asien/','Asien')}, ${X(UNI+'studium/international/ausland/australien/','Australien und Ozeanien')} sowie Nord- und Südamerika (${X(UNI+'studium/international/ausland/amerika/','Amerika')}). Bei Interesse geht ihr am besten zuerst in die allgemeine offene Sprechstunde und danach zu den Verantwortlichen für die Länder, die euch interessieren. Ein automatisches Stipendium wie bei ERASMUS gibt es hier nicht, die Studiengebühren werden aber in der Regel erlassen.</p>
-<p>Auch unizentral gibt es ein Erasmus-Programm: Über ${X(UNI+'international/erasmus/partnerlaender/','ERASMUS+')} könnt ihr mit Stipendium auch außerhalb Europas studieren.</p>
+<p>Alle Austauschprogramme außerhalb Europas laufen zentral über die Universität, Anlaufstelle ist vor allem das Dezernat Internationale Beziehungen. Möglich sind ${X(UNI+'studium/international/ausland/asien/','Asien')}, ${X(UNI+'studium/international/ausland/australien/','Australien und Ozeanien')} sowie Nord- und Südamerika (${X(UNI+'studium/international/ausland/amerika/','Amerika')}). Bei Interesse gehst du am besten zuerst in die allgemeine offene Sprechstunde und danach zu den Verantwortlichen für die Länder, die dich interessieren. Ein automatisches Stipendium wie bei ERASMUS gibt es hier nicht, die Studiengebühren werden aber in der Regel erlassen.</p>
+<p>Auch unizentral gibt es ein Erasmus-Programm: Über ${X(UNI+'international/erasmus/partnerlaender/','ERASMUS+')} kannst du mit Stipendium auch außerhalb Europas studieren.</p>
 <p>${X(OLD+'ausland-overseas/','Erfahrungsberichte von außerhalb Europas lesen')}</p>
 <h2>Free Mover</h2>
-<p>Ist bei all dem nicht das Richtige dabei, könnt ihr auch als Free Mover gehen. Dann organisiert ihr den Austausch selbst und zahlt auch die Studiengebühren selbst.</p>
+<p>Ist bei all dem nicht das Richtige dabei, kannst du auch als Free Mover ins Ausland gehen. Dann organisierst du den Austausch und die Finanzierung selbst.</p>
 <h2>Kontakte</h2>
 ${rows([
  [PI+'ae/crisp/staff/lorenz.html','users','Ute Lorenz','ERASMUS-Koordinatorin des Instituts'],
@@ -403,13 +403,13 @@ ${rows([
  [UNI+'de/studium/service-beratung/karriereentwicklung/careermatch-karriereportal-der-universitaet-heidelberg','globe','careerMATCH','Das Karriereportal der Universität Heidelberg']
 ])}`},
 
-'studium/lehrgestaltung':{t:'Arbeitskreis Lehrgestaltung',d:'Eure Anliegen rund um die Lehre',lead:'Wir sind eine Untergruppe der Fachschaft und wollen den Austausch über die Lehre am Psychologischen Institut fördern.',body:`
-<p>Der Arbeitskreis ist eure Anlaufstelle für alle Fragen und Anliegen rund um eure Lehrveranstaltungen, zum Beispiel:</p>
+'studium/lehrgestaltung':{t:'Arbeitskreis Lehrgestaltung',d:'Deine Anliegen rund um die Lehre',lead:'Wir sind eine Untergruppe der Fachschaft und wollen den Austausch über die Lehre am Psychologischen Institut fördern.',body:`
+<p>Der Arbeitskreis Lehre ist deine Anlaufstelle bei Fragen oder Problemen in Lehrveranstaltungen, zum Beispiel:</p>
 <ul><li>Probleme in Seminaren oder Vorlesungen</li><li>fehlendes Feedback zu Referaten, Hausarbeiten oder der Abschlussarbeit</li><li>eigene Ideen, wie die Lehre am Institut besser werden kann</li></ul>
-<h2>So erreicht ihr uns</h2>
+<h2>So erreichst du uns</h2>
 <div class="cards">
  <div class="card"><span class="k">Mit Antwort</span><h3>Per E-Mail</h3><p>${M('arbeitskreis-lehrgestaltung@psychologie.uni-heidelberg.de','arbeitskreis-lehrgestaltung@<wbr>psychologie.uni-heidelberg.de')}</p><div class="foot">${copyBtn('arbeitskreis-lehrgestaltung@psychologie.uni-heidelberg.de')}</div></div>
- <div class="card"><span class="k">Anonym</span><h3>Über Moodle</h3><p>Über das Feedback-Formular im Moodle-Kurs der Fachschaft. Bei anonymen Nachrichten können wir euch nicht persönlich antworten.</p><div class="foot"><a class="btn btn-ghost btn-small noext" href="https://moodle.uni-heidelberg.de/mod/feedback/view.php?id=265491">Anonym schreiben ${ic('ext')}</a></div></div>
+ <div class="card"><span class="k">Anonym</span><h3>Über Moodle</h3><p>Über das Feedback-Formular im Moodle-Kurs der Fachschaft. Bei anonymen Nachrichten können wir dir nicht persönlich antworten.</p><div class="foot"><a class="btn btn-ghost btn-small noext" href="https://moodle.uni-heidelberg.de/mod/feedback/view.php?id=265491">Anonym schreiben ${ic('ext')}</a></div></div>
 </div>`},
 
 'studium/faq':{t:'FAQ',d:'Häufige Fragen vor dem Studienstart',lead:'Antworten auf die häufigsten Fragen, vor allem für Bewerber:innen und Erstis, die im kommenden Wintersemester in Heidelberg starten.',body:`
@@ -472,8 +472,8 @@ ${rows([
 ])}`},
 
 'leben':{t:'Leben am Institut',d:'Partys, Kino, Grillen und mehr',lead:'Studium ist nicht alles. Mit unseren Veranstaltungen schaffen wir Gelegenheiten, sich über alle Semester hinweg kennenzulernen.',body:`
-<p>Unser Herzstück ist die ${L('leben/psychoparty','Psychoparty')}, bei der Psychos aus allen Semestern den Start ins neue Semester feiern. Auch im kleineren Rahmen, etwa bei der ${L('leben/pumpkinparty','Pumpkinparty')} oder dem ${L('leben/wechslertreffen','Wechslertreffen')}, kommen Leute aus verschiedenen Semestern zusammen und verbringen einen netten Abend.</p>
-<p>Außerdem organisieren wir das ${L('leben/grillen','Institutsgrillen')}, das ${L('leben/psychokino','PsychoKino')} mit psychologischem Vortrag und das ${L('leben/ersti-we','Ersti-Wochenende')} für alle Neuen. Unser Ziel: eine lockere, positive Atmosphäre am Institut, im eigenen Semester und darüber hinaus.</p>
+<p>Zum Semesterstart veranstalten wir die ${L('leben/psychoparty','Psychoparty')} im Institut, bei der Studierende aller Semester zusammenkommen. Auch im kleineren Rahmen, etwa bei der ${L('leben/pumpkinparty','Pumpkinparty')} oder dem ${L('leben/wechslertreffen','Wechslertreffen')}, treffen sich Leute aus verschiedenen Semestern auf einen gemeinsamen Abend.</p>
+<p>Außerdem organisieren wir das ${L('leben/grillen','Institutsgrillen')}, das ${L('leben/psychokino','PsychoKino')} mit Vortrag und das ${L('leben/ersti-we','Ersti-Wochenende')}. Damit schaffen wir einen Ausgleich zum Studienalltag und bringen die verschiedenen Semester zusammen.</p>
 <h2>Durchs Jahr</h2>
 <div class="year">
  <div><h3>Wintersemester</h3><ol>
@@ -493,7 +493,7 @@ ${rows([
 </div>
 <p>Die genauen Termine kündigen wir über den Verteiler an. ${X(CAL,'Zum Kalender')}</p>`},
 
-'leben/psychoparty':{t:'Psychoparty',d:'Das Herzstück zum Semesterstart',lead:'Zu Beginn jedes Wintersemesters steigt am Institut die Psychoparty, liebevoll auch „Psychopathie“ genannt.',body:`
+'leben/psychoparty':{t:'Psychoparty',d:'Die Semesterstartparty im Institut',lead:'Zu Beginn jedes Wintersemesters steigt am Institut die Psychoparty, liebevoll auch „Psychopathie“ genannt.',body:`
 ${facts([['Wintersemester','Psychoparty','im Hintergebäude des Instituts'],['Sommersemester','Bipolare Psychoparty','mit der SRH Heidelberg']])}
 <p>Organisiert wird die Party von Fachschaftler:innen, umgesetzt mit Hilfe vieler Studierender und Professor:innen. Sie findet im Hintergebäude unseres Instituts statt und bietet alles, was es zum Feiern braucht: eine Bar, eine coole Location, viele gut gelaunte Studierende und jede Menge gute Musik.</p>
 <p>Meist gibt es ein oder zwei Stargäste, denn einige unserer Professor:innen heizen der feiernden Meute inzwischen routiniert mit ihrer Musik ein. Ob DJ Funk, DJ Carneval, DJ BiSpi oder DJ Dirk: Es lohnt sich auf jeden Fall! Und wer eine Pause von der Tanzfläche braucht, verschnauft im Innenhof.</p>
@@ -520,7 +520,7 @@ ${facts([['Wann','um Halloween','meist ab 19 Uhr, siehe Ankündigung'],['Wo','Fa
 
 'leben/wechslertreffen':{t:'Wechslertreffen',d:'Für Quereinsteiger:innen und Nachrücker:innen',lead:'Neu am Institut, aber nicht im ersten Semester? Dann ist das Wechslertreffen für dich.',body:`
 ${facts([['Für wen','Quereinsteiger:innen','und Nachrücker:innen'],['Wo','Fachschaftskeller','nach Ankündigung']])}
-<p>Beim Wechslertreffen lernt ihr andere Studierende kennen und könnt offene Fragen klären. Für eine gemütliche Atmosphäre sorgt die Fachschaft mit Spaghetti Bolognese (auch vegetarisch) und Getränken. Nach der Begrüßung durch Fachschaftler:innen gibt es eine kurze Vorstellungsrunde, damit das Eis schnell gebrochen ist.</p>`},
+<p>Beim Wechslertreffen lernst du andere Studierende kennen und kannst offene Fragen klären. Für eine gemütliche Atmosphäre sorgt die Fachschaft mit Spaghetti Bolognese (auch vegetarisch) und Getränken. Nach der Begrüßung durch Fachschaftler:innen gibt es eine kurze Vorstellungsrunde, damit das Eis schnell gebrochen ist.</p>`},
 
 'leben/grillen':{t:'Institutsgrillen',d:'Jedes Jahr im Juni im Innenhof',lead:'Einmal im Jahr wird der Innenhof zum Treffpunkt für das ganze Institut.',body:`
 ${facts([['Wann','jährlich im Juni','bei hoffentlich gutem Wetter'],['Wo','Innenhof','des Psychologischen Instituts'],['Für wen','alle','Studierende, Dozierende und Mitarbeitende']])}
@@ -528,9 +528,9 @@ ${facts([['Wann','jährlich im Juni','bei hoffentlich gutem Wetter'],['Wo','Inne
 <p>In der Vergangenheit gab es sogar Live-Auftritte, Pub-Quizze und die Verleihung eines studentischen Lehrpreises.</p>
 <div class="photos">${photo('Institutsgrillen',U+'2015/03/Institutsgrillen.jpg')}${photo('Institutsgrillen, Juni 2024',U+'2024/07/IMG-20240622-WA0022-1.jpg')}</div>`},
 
-'leben/ersti-we':{t:'Ersti-Wochenende',d:'Im Nibelungenturm in Worms',lead:'Nicht verpassen solltet ihr das Ersti-Wochenende, traditionell im Nibelungenturm in Worms.',body:`
+'leben/ersti-we':{t:'Ersti-Wochenende',d:'Im Nibelungenturm in Worms',lead:'Traditionell Ende November im Nibelungenturm in Worms: unser Wochenende für Erstsemester.',body:`
 ${facts([['Wann','Ende November','meist an einem der letzten Wochenenden'],['Wo','Nibelungenturm','in Worms']])}
-<p>Hier lernt ihr nicht nur euer Semester besser kennen, sondern auch die mitfahrenden Tutor:innen und natürlich den einmaligen Turm. Tagsüber versüßen euch Workshops die Zeit, etwa das alljährliche Plätzchenbacken, abends wird zusammen gefeiert.</p>
+<p>Auf der Hütte lernst du dein Semester und die Tutor:innen kennen. Tagsüber gibt es Workshops wie das alljährliche Plätzchenbacken, abends sitzen wir zusammen und feiern.</p>
 <p>Um den Hexer und das Cowgirl ranken sich übrigens Legenden.</p>
 <div class="photos">${photo('Ersti-Wochenende, Dezember 2023',U+'2024/07/PXL_20231202_154432955-scaled.jpg')}</div>`},
 

@@ -45,7 +45,7 @@ function home(){
     ['bank','Hochschulpolitik','Du erlebst, wie Entscheidungen über Studium und Lehre entstehen, und bestimmst mit.',[['hopo/fachrat','FachRat'],['hopo/fakrat','Fakultät'],['hopo/stura','StuRa']]],
     // TODO(content): Chips unter 'Semesterübergreifend' prüfen (Bachelor/Master/Aktive passen inhaltlich kaum)
     ['users','Semesterübergreifend','Du lernst engagierte Studierende kennen, die du sonst im Studienalltag nie getroffen hättest.',[['studium/bachelor','Bachelor'],['studium/master','Master'],['fachschaft/aktive','Aktive']]],
-    ['handshake','Verantwortung','Erfahrung sammeln: Für Projekte, Finanzen und die echten Anliegen aller Studierenden.',[['fachschaft/kontakt','Sitzung'],['hopo/qsm','QSM-Mittel'],['studium/lehrgestaltung','Lehre']]]
+    ['handshake','Verantwortung','Erfahrungen sammeln mit eigenen Projekten, Institutsfinanzen und den Themen der Studierenden.',[['fachschaft/kontakt','Sitzung'],['hopo/qsm','QSM-Mittel'],['studium/lehrgestaltung','Lehre']]]
   ];
   return `
 <section class="hero" aria-labelledby="hero-h">
@@ -65,7 +65,7 @@ function home(){
  <div class="sec-bg-map" aria-hidden="true">${mapSvg('mapbg-ambient')}</div>
  <div class="wrap intro">
   <div class="rv">
-   <p class="statement">Du hast dich schon immer gefragt, was wir als Fachschaft machen? Du möchtest wissen, was am Institut passiert? Du suchst Informationen zum Studium? <b>Dann bist du hier genau richtig.</b></p>
+   <p class="statement">Wir vertreten die Psychologiestudierenden in Heidelberg, organisieren Veranstaltungen und helfen dir bei allen Fragen rund ums Studium.</p>
    <p class="more"><a class="tlink" href="#/fachschaft">Mehr über die Fachschaft${ic('chevr')}</a></p>
   </div>
   <aside class="session rv" aria-labelledby="sess-h">
@@ -112,7 +112,7 @@ function home(){
   <div class="shead why-head rv">
    <div>
     <h2 class="sh2" id="why-h">Warum mitmachen?</h2>
-    <p class="sub">Was die Arbeit in der Fachschaft ausmacht, in vier Punkten. Und ein fünfter, der eigentlich der wichtigste ist.</p>
+    <p class="sub">Worum es bei uns geht – von Hochschulpolitik und Studienberatung bis zum Institutsleben.</p>
    </div>
   </div>
   <div class="why-grid">
@@ -132,8 +132,8 @@ function home(){
    <article class="why-card why-card-hero rv" style="--i:4">
     <div>
      <div class="why-hero-badge">${ic('smiley')} <span>05 · Der wichtigste Punkt</span></div>
-     <h3>Spaß und Partys</h3>
-     <p>Fachschaftsarbeit ist vor allem eine richtig gute Zeit. Neue Freundschaften, legendäre Abende und echter Zusammenhalt am Institut.</p>
+     <h3>Gemeinschaft</h3>
+     <p>Fachschaft bedeutet für uns Gemeinschaft: zusammen grillen, Feste planen und Leute aus allen Semestern kennenlernen.</p>
     </div>
     <div>
      <div class="why-hero-session">
