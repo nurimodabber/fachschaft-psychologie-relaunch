@@ -51,18 +51,16 @@ function home(){
 <section class="hero" aria-labelledby="hero-h">
  ${pic('hero','',true)}
  <div class="in">
-  <div class="rv">
-   <p class="eb">Universität Heidelberg</p>
-   <h1 id="hero-h">Fachschaft<br>Psychologie</h1>
-   <p class="lead">Die studentische Vertretung am Psychologischen Institut der Universität Heidelberg.</p>
-   <div class="btns">
-    <a class="btn btn-primary" href="#/fachschaft"><span>Über uns</span></a>
-    <a class="btn btn-ghost" href="#/studium"><span>Infos zum Studium</span>${ic('chevr')}</a>
-   </div>
-   ${heroSession}
+  <p class="eb">Universität Heidelberg</p>
+  <h1 id="hero-h" tabindex="-1">Fachschaft Psychologie</h1>
+  <p class="lead">Die studentische Vertretung am Psychologischen Institut der Universität Heidelberg.</p>
+  <div class="btns">
+   <a class="btn btn-primary" href="#/fachschaft"><span>Über uns</span></a>
+   <a class="hero-btn-secondary" href="#/studium"><span>Infos zum Studium</span>${ic('chevr')}</a>
   </div>
+  ${heroSession}
  </div>
- <div class="credit">Foto: Samuel Scherer, <a class="noext" href="${CCBYSA}">CC BY-SA 4.0</a></div>
+ <p class="credit">Foto: Samuel Scherer, <a class="noext" href="${CCBYSA}">CC BY-SA 4.0</a></p>
 </section>
 
 <section class="sec" aria-labelledby="intro-h">
@@ -75,7 +73,7 @@ function home(){
  </div>
 </section>
 
-<section class="sec tight" aria-labelledby="ex-h">
+<section class="sec sec-entries" aria-labelledby="ex-h">
  <div class="wrap">
   <div class="shead rv"><div><h2 class="sh2" id="ex-h">Themen &amp; Einstiege</h2></div></div>
   <div class="entries4">
@@ -223,10 +221,10 @@ function home(){
    <div class="mapcard">
     <div class="mapcard-head">
      <div class="mapcard-title-row">
-      <h3>Fachschaftskeller</h3>
-      <span class="spot-pill">${ic('pin')}Innenhof</span>
+      <h3>Psychologisches Institut</h3>
+      <span class="spot-pill">${ic('pin')}Altstadt</span>
      </div>
-     <p class="mapcard-addr"><b>Hauptstraße 47–51, 69117 Heidelberg</b><span>Durch das Tor in den Innenhof, der Keller liegt direkt rechts.</span></p>
+     <p class="mapcard-addr"><b>Hauptstraße 47–51, 69117 Heidelberg</b><span>Fachschaftskeller im Innenhof (durch das Tor, direkt rechts).</span></p>
     </div>
     <div class="mapcard-actions">
      <a class="btn btn-primary noext" href="${MAP_DEFAULT_LINK}" target="_blank" rel="noopener"><span>Route planen</span><span class="ext-ico" aria-hidden="true">↗</span></a>
@@ -352,18 +350,9 @@ const DRAWER_GROUPS = {
 
 function drawerSessionBox(){
   const s = nextSession();
-  const liveBadge = s.live ? '<span class="sheet-sess-tag is-live">● Jetzt live</span>' : `<span class="sheet-sess-tag">${s.wd}</span>`;
   return `<aside class="sheet-sess" aria-label="Nächste Fachschaftssitzung">
-    <div class="sheet-sess-head">
-      <div class="sheet-sess-label">Nächste Sitzung</div>
-      ${liveBadge}
-    </div>
-    <div class="sheet-sess-body">
-      <time class="sheet-sess-time" datetime="${s.iso}">${s.dateStr} · 18–20 Uhr</time>
-    </div>
-    <div class="sheet-sess-links">
-      <a class="sheet-sess-link" href="#/fachschaft/kontakt"><span>Alle Termine &amp; Details</span>${ic('chevr')}</a>
-    </div>
+    <span class="sheet-sess-txt">Nächste Sitzung: <time datetime="${s.iso}"><b>${s.dateStr}</b></time></span>
+    <a class="sheet-sess-link" href="#/fachschaft/kontakt"><span>Sitzungen &amp; Mitmachen</span>${ic('chevr')}</a>
   </aside>`;
 }
 
@@ -397,7 +386,7 @@ function buildNav(){
                 const tag=NAV_TAGS[k]?`<span class="m-tag">${NAV_TAGS[k]}</span>`:'';
                 return `<li><a href="#/${k}" class="sheet-link"><span>${title}</span>${tag}</a></li>`;
               }).join('')}
-              ${kidsOf(r).length > 5 ? `<li><a href="#/${r}" class="sheet-link sheet-more"><span>Alle ${navTitle(r)} anzeigen</span>${ic('chevr')}</a></li>` : ''}
+              ${kidsOf(r).length > 5 ? `<li><a href="#/${r}" class="sheet-link sheet-more"><span>Alle anzeigen</span>${ic('chevr')}</a></li>` : ''}
             </ul>
           </div>`;
         }).join('')}
@@ -526,6 +515,76 @@ function initZoomableMaps(root){
       toast.classList.add('visible');
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => toast.classList.remove('visible'), 1400);
+    }
+
+    const Leaflet = window.Leaflet || window.L;
+    if(Leaflet && typeof Leaflet.map === 'function'){
+      vp.innerHTML = '';
+      const centerCoords = [49.41169, 8.69788];
+      const kellerCoords = [49.41148, 8.69795];
+
+      const tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+      const tileOpts = {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende'
+      };
+
+      const map = Leaflet.map(vp, {
+        center: centerCoords,
+        zoom: 17,
+        minZoom: 14,
+        maxZoom: 19,
+        scrollWheelZoom: false,
+        touchZoom: true,
+        zoomControl: false,
+        attributionControl: true
+      });
+
+      Leaflet.tileLayer(tileUrl, tileOpts).addTo(map);
+
+      const instIcon = Leaflet.divIcon({
+        className: 'leaflet-pin-wrapper marker-inst',
+        html: `<div class="leaf-pin"><span class="leaf-dot"></span></div><span class="leaf-label">Psychologisches Institut</span>`,
+        iconSize: [210, 36],
+        iconAnchor: [13, 18]
+      });
+      Leaflet.marker(centerCoords, { icon: instIcon, title: 'Psychologisches Institut, Hauptstraße 47–51' }).addTo(map);
+
+      const kellerIcon = Leaflet.divIcon({
+        className: 'leaflet-pin-wrapper marker-keller',
+        html: `<div class="leaf-subpin"></div><span class="leaf-label leaf-label-sub">Fachschaftskeller (Tor zum Innenhof)</span>`,
+        iconSize: [260, 30],
+        iconAnchor: [10, 15]
+      });
+      Leaflet.marker(kellerCoords, { icon: kellerIcon, title: 'Fachschaftskeller (Tor zum Innenhof)' }).addTo(map);
+
+      vp.addEventListener('wheel', e => {
+        const modifier = e.ctrlKey || e.metaKey;
+        if(!modifier){
+          showToast(zoomHint);
+          return;
+        }
+        e.preventDefault();
+        if(e.deltaY < 0){
+          map.zoomIn(1);
+        } else {
+          map.zoomOut(1);
+        }
+      }, { passive: false });
+
+      $$('[data-mzoom]', container).forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          const action = btn.dataset.mzoom;
+          if(action === 'in') map.zoomIn(1);
+          else if(action === 'out') map.zoomOut(1);
+          else if(action === 'reset') map.setView(centerCoords, 17);
+        });
+      });
+
+      setTimeout(() => map.invalidateSize(), 200);
+      return;
     }
 
     let scale = 1;
@@ -732,19 +791,7 @@ function initZoomableMaps(root){
   };
 
   $$('[data-zoomable]', root).forEach(container => {
-    if('IntersectionObserver' in window && !container._zoomInited){
-      const obs = new IntersectionObserver((entries, observer)=>{
-        entries.forEach(entry => {
-          if(entry.isIntersecting){
-            observer.unobserve(container);
-            setupMap(container);
-          }
-        });
-      }, {rootMargin:'250px 0px'});
-      obs.observe(container);
-    } else {
-      setupMap(container);
-    }
+    setupMap(container);
   });
 }
 

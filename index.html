@@ -90,6 +90,9 @@
   <link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/images/hero.webp" as="image" type="image/webp">
 
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
+
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -171,6 +174,8 @@
  <div class="s-hint"><span><kbd>↑</kbd> <kbd>↓</kbd> auswählen</span><span><kbd>Enter</kbd> öffnen</span><span><kbd>Esc</kbd> schließen</span></div>
 </dialog>
   <!-- Scripts -->
+  <script src="assets/vendor/leaflet/leaflet.js"></script>
+  <script>window.Leaflet = window.L;</script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
 </body>
