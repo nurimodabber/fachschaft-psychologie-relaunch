@@ -410,17 +410,54 @@ function decorateLinks(root){
 }
 /* ============ Interaktive Karten (Zoom & Pan) ============ */
 function initZoomableMaps(root){
+  const isMac = typeof navigator !== 'undefined' && /Macintosh|Mac OS X|iPhone|iPad|iPod/.test(navigator.userAgent);
+  const zoomHint = isMac ? '⌘ + Scrollen zum Zoomen' : 'Strg + Scrollen zum Zoomen';
+
   $$('[data-zoomable]', root).forEach(container => {
     const vp = $('.map-viewport', container);
     const layer = $('.map-layer', container);
     if(!vp || !layer || container._zoomInited) return;
     container._zoomInited = true;
 
+    // A11y & Fokus
+    if(!vp.hasAttribute('tabindex')) vp.setAttribute('tabindex', '0');
+    if(!vp.hasAttribute('role')) vp.setAttribute('role', 'region');
+    if(!vp.hasAttribute('aria-label')) vp.setAttribute('aria-label', 'Interaktive Umgebungskarte. Pfeiltasten zum Bewegen, Plus und Minus zum Zoomen.');
+
+    let toast = $('.map-toast', container);
+    if(!toast){
+      toast = document.createElement('div');
+      toast.className = 'map-toast';
+      toast.setAttribute('aria-live', 'polite');
+      toast.textContent = zoomHint;
+      container.appendChild(toast);
+    }
+
+    let toastTimer = null;
+    function showToast(msg = zoomHint){
+      toast.textContent = msg;
+      toast.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('visible'), 1400);
+    }
+
     let scale = 1;
     let x = 0, y = 0;
     let isDragging = false;
     let startX = 0, startY = 0;
     let initialDist = 0, initialScale = 1;
+    let startMidX = 0, startMidY = 0;
+    let isMapActive = false;
+
+    vp.addEventListener('focus', () => { isMapActive = true; });
+    vp.addEventListener('blur', () => { isMapActive = false; });
+    vp.addEventListener('click', () => { isMapActive = true; });
+
+    document.addEventListener('pointerdown', e => {
+      if(!container.contains(e.target)){
+        isMapActive = false;
+      }
+    });
 
     function applyTransform(animated = false){
       const rect = vp.getBoundingClientRect();
@@ -440,13 +477,14 @@ function initZoomableMaps(root){
       
       const resetBtn = $('[data-mzoom="reset"]', container);
       if(resetBtn) resetBtn.classList.toggle('active', scale > 1.05 || Math.abs(x) > 4 || Math.abs(y) > 4);
-      vp.style.cursor = scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'crosshair';
+      vp.style.cursor = scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default';
     }
 
     $$('[data-mzoom]', container).forEach(btn => {
       btn.addEventListener('click', e => {
         e.preventDefault();
         e.stopPropagation();
+        isMapActive = true;
         const action = btn.dataset.mzoom;
         if(action === 'in'){
           scale = Math.min(5, scale * 1.4);
@@ -461,13 +499,20 @@ function initZoomableMaps(root){
       });
     });
 
+    // Mausrad: Scrollt die Seite normal weiter, außer Strg/Cmd wird gehalten oder Karte ist aktiv
     vp.addEventListener('wheel', e => {
+      const modifier = e.ctrlKey || e.metaKey;
+      if(!modifier && !isMapActive){
+        showToast(zoomHint);
+        return; // Kein e.preventDefault(): Seite scrollt ungestört!
+      }
+
       e.preventDefault();
       const rect = vp.getBoundingClientRect();
       const mouseX = e.clientX - rect.left - rect.width / 2;
       const mouseY = e.clientY - rect.top - rect.height / 2;
 
-      const delta = e.deltaY < 0 ? 1.25 : 0.8;
+      const delta = e.deltaY < 0 ? 1.2 : 0.83;
       const prevScale = scale;
       const nextScale = Math.min(5, Math.max(1, scale * delta));
       if(nextScale === prevScale) return;
@@ -479,8 +524,10 @@ function initZoomableMaps(root){
       applyTransform(false);
     }, { passive: false });
 
+    // Dragging mit Maus
     vp.addEventListener('mousedown', e => {
       if(e.button !== 0) return;
+      isMapActive = true;
       isDragging = true;
       startX = e.clientX - x;
       startY = e.clientY - y;
@@ -504,8 +551,80 @@ function initZoomableMaps(root){
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
 
+    // Tastaturbedienung
+    vp.addEventListener('keydown', e => {
+      const step = 40;
+      let handled = true;
+      if(e.key === 'ArrowUp'){
+        y += step;
+      } else if(e.key === 'ArrowDown'){
+        y -= step;
+      } else if(e.key === 'ArrowLeft'){
+        x += step;
+      } else if(e.key === 'ArrowRight'){
+        x -= step;
+      } else if(e.key === '+' || e.key === '='){
+        scale = Math.min(5, scale * 1.3);
+      } else if(e.key === '-' || e.key === '_'){
+        scale = Math.max(1, scale / 1.3);
+      } else if(e.key === '0' || e.key === 'Escape'){
+        scale = 1; x = 0; y = 0;
+      } else {
+        handled = false;
+      }
+
+      if(handled){
+        e.preventDefault();
+        applyTransform(true);
+      }
+    });
+
+    // Touch-Gesten:
+    // 1 Finger: Seite scrollt ungestört (native)
+    // 2 Finger: Karte verschieben & Zoomen
+    let isTwoFingerTouch = false;
+    vp.addEventListener('touchstart', e => {
+      if(e.touches.length === 2){
+        isTwoFingerTouch = true;
+        initialDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        initialScale = scale;
+        startMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - x;
+        startMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - y;
+      } else {
+        isTwoFingerTouch = false;
+      }
+    }, { passive: true });
+
+    vp.addEventListener('touchmove', e => {
+      if(e.touches.length === 2 && isTwoFingerTouch){
+        e.preventDefault();
+        const dist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const curMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        const curMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+        
+        x = curMidX - startMidX;
+        y = curMidY - startMidY;
+        scale = Math.min(5, Math.max(1, initialScale * (dist / initialDist)));
+        applyTransform(false);
+      }
+    }, { passive: false });
+
+    vp.addEventListener('touchend', e => {
+      if(e.touches.length < 2){
+        isTwoFingerTouch = false;
+        applyTransform(true);
+      }
+    }, { passive: true });
+
     vp.addEventListener('dblclick', e => {
       e.preventDefault();
+      isMapActive = true;
       const rect = vp.getBoundingClientRect();
       const mouseX = e.clientX - rect.left - rect.width / 2;
       const mouseY = e.clientY - rect.top - rect.height / 2;
@@ -519,43 +638,6 @@ function initZoomableMaps(root){
       } else {
         scale = 1; x = 0; y = 0;
       }
-      applyTransform(true);
-    });
-
-    vp.addEventListener('touchstart', e => {
-      if(e.touches.length === 1){
-        isDragging = true;
-        startX = e.touches[0].clientX - x;
-        startY = e.touches[0].clientY - y;
-      } else if(e.touches.length === 2){
-        isDragging = false;
-        initialDist = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
-        initialScale = scale;
-      }
-    }, { passive: true });
-
-    vp.addEventListener('touchmove', e => {
-      if(e.touches.length === 1 && isDragging && scale > 1){
-        x = e.touches[0].clientX - startX;
-        y = e.touches[0].clientY - startY;
-        applyTransform(false);
-        e.preventDefault();
-      } else if(e.touches.length === 2){
-        const dist = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
-        scale = Math.min(5, Math.max(1, initialScale * (dist / initialDist)));
-        applyTransform(false);
-        e.preventDefault();
-      }
-    }, { passive: false });
-
-    vp.addEventListener('touchend', () => {
-      isDragging = false;
       applyTransform(true);
     });
 
