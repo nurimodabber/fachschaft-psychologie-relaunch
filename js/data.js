@@ -122,7 +122,7 @@ function terms(list,opt){
   return `<div class="tabs" data-tabs><div class="tablist" role="tablist" aria-label="Amtszeiten">${tabs}</div>${panels}</div>`;
 }
 function sessionBox(){
-  return `<div class="panel stone"><h3 style="margin-top:0">Sitzungen: montags, 18–20 Uhr</h3>
+  return `<div class="panel stone"><h3 style="margin-top:0">Sitzungen montags 18–20 Uhr</h3>
   <p>In der Vorlesungszeit treffen wir uns im Fachschaftskeller oder nach Absprache online. Wir freuen uns über jedes neue Gesicht, komm einfach vorbei!</p>
   <div class="btns"><a class="btn btn-primary btn-small noext" href="${BBB}">${ic('video')}Online teilnehmen</a><a class="btn btn-ghost btn-small" href="#/fachschaft/kontakt">${ic('pin')}So findest du uns</a></div></div>`;
 }
@@ -139,14 +139,14 @@ const TREE=[
 
 /* ============ Beiträge ============ */
 const POSTS=[
- {d:'2024-08-17',t:'(WebSite) Updates',u:'2024/08/website-updates/',c:['Allgemein','Leben am Institut'],x:'Mitglieder kommen und gehen. Alumni, Mentor:innen und Freund:innen sind bei uns aber immer willkommen. Warum unter der Corona-Pandemie vor allem unsere Öffentlichkeitsarbeit gelitten hat und was sich seitdem getan hat.'},
+ {d:'2024-08-17',t:'Website-Updates',u:'2024/08/website-updates/',c:['Allgemein','Leben am Institut'],x:'Mitglieder kommen und gehen, doch das Netzwerk aus Alumni, Mentor:innen und Freund:innen bleibt bestehen. Rückblick auf die Öffentlichkeitsarbeit nach der Corona-Pandemie und Ausblick auf neue Formate.'},
  {d:'2024-07-23',t:'BlackBox: neue Ausgabe',u:'2024/07/blackbox-neue-ausgabe/',c:['BlackBox'],x:'Den Necker-Würfel kennen viele aus der Vorlesung: Man sieht ihn von oben oder von unten, aber nie beides gleichzeitig. Mit diesem Kipp-Phänomen beginnt der Beitrag zur neuen BlackBox-Ausgabe.'},
  {d:'2023-05-01',t:'Die Rückkehr des FS-Wochenendes im April 2023',u:'2023/05/die-rueckkehr-des-fs-wochenendes-im-april-2023/',c:[],x:'Nach mehreren Jahren Pause gab es im April 2023 endlich wieder ein FS-Wochenende. Ein Rückblick, der zeigt, wie abwechslungsreich das Leben in der Fachschaft sein kann.'},
  {d:'2023-01-17',t:'Neu: Praktikumsdatenbank von Studis für Studis',u:'2023/01/neu-praktikumsdatenbank-von-studis-fuer-studis/',c:[],x:'Eine deutschlandweite Übersicht über Praktikumsplätze samt Erfahrungsberichten. Zum Suchen und zum Weiterempfehlen eigener Praktika.'},
  {d:'2022-05-07',t:'Neuer Vortrag zur Psychotherapie am PI',u:'2022/05/neuer-vortrag-zur-psychotherapie-am-pi/',c:['Leben am Institut'],x:'Gemeinsam mit dem IPP Heidelberg: ein Einblick in die tiefenpsychologische bzw. psychoanalytische Psychotherapie anhand eines Patientenfalls. Montag, 9. Mai 2022, 20:15 Uhr, Hörsaal 2 im Hintergebäude.'},
- {d:'2021-02-05',t:'WICHTIG: Psychotherapeutengesetz',u:'2021/02/psychotherapeutengesetz/',c:[],x:'Seit dem 1. September 2020 führt der Weg in die Psychotherapie über ein Approbationsstudium aus polyvalentem Psychologie-Bachelor und anschließendem Master Psychotherapie. Was das für dich bedeutet.'},
- {d:'2020-10-30',t:'Protokoll der Infoveranstaltung zur Psychologiestudiengangsreform',u:'2020/10/protokoll-der-infoveranstaltung-zur-psychologiestudiengangsreform/',c:[],x:'Am 22. Oktober 2020 fand gemeinsam mit Prof. Dr. Spinath, Prof. Dr. Barnow und Dr. Timm eine Infoveranstaltung zur Studiengangsreform statt. Das Protokoll steht für alle bereit.'},
- {d:'2020-08-05',t:'Update Psychotherapeut*innengesetz: diesen Freitag online',u:'2020/08/update-psychotherapeutinnengesetz-diesen-freitag-online/',c:[],x:'Es gibt ein neues Psychotherapeutengesetz, aber was ändert sich konkret? Eine Online-Infoveranstaltung bringt dich auf den Stand.'},
+ {d:'2021-02-05',t:'Psychotherapeutengesetz',u:'2021/02/psychotherapeutengesetz/',c:[],x:'Seit dem 1. September 2020 führt der Weg in die Psychotherapie über ein Approbationsstudium aus polyvalentem Psychologie-Bachelor und anschließendem Master Psychotherapie. Was das für dich bedeutet.'},
+ {d:'2020-10-30',t:'Protokoll der Infoveranstaltung zur Psychologiestudiengangsreform',u:'2020/10/protokoll-der-infoveranstaltung-zur-psychologiestudiengangsreform/',c:[],x:'Am 22. Oktober 2020 fand mit Prof. Dr. Spinath, Prof. Dr. Barnow und Dr. Timm eine Infoveranstaltung zur Studiengangsreform statt. Das Protokoll steht für alle bereit.'},
+ {d:'2020-08-05',t:'Infoveranstaltung zum Psychotherapeutengesetz',u:'2020/08/update-psychotherapeutinnengesetz-diesen-freitag-online/',c:[],x:'Es gibt ein neues Psychotherapeutengesetz, aber was ändert sich konkret? Eine Online-Infoveranstaltung bringt dich auf den Stand.'},
  {d:'2020-08-05',t:'Update-Post für das WiSe 2020',u:'2020/08/update-post-fuer-das-wise-2020/',c:[],x:'Antworten auf deine häufigsten Fragen zum Wintersemester 2020 und zum Verhältnis von Online- und Präsenzlehre nach dem ersten „Corona-Semester“.'},
  {d:'2020-06-02',t:'Update zum Psychotherapiegesetz',u:'2020/06/update-zum-psychotherapiegesetz/',c:[],x:'Die Folien der digitalen Infoveranstaltung der PsyFaKo e. V. zur Reform des Psychotherapiegesetzes zum Nachlesen, inklusive Stand der Umsetzung.'}
 ];
@@ -321,7 +321,7 @@ ${facts([['Abschluss','Master of Science'],['Regelstudienzeit','4 Semester'],['L
 <p>Nach erfolgreicher Bewerbung beginnt das Studium jeweils zum Wintersemester. Infos zur Bewerbung gibt es beim ${X(PI+'studium/master/bewerbung/','Psychologischen Institut')}.</p>
 ${callout('Zum Master-Test','<p>Weil wir oft danach gefragt werden: Uns als Fachschaft liegen keine Informationen zum Master-Test vor. Ohne den Test ist die Zulassungswahrscheinlichkeit allerdings sehr gering.</p>')}`},
 
-'studium/approbation':{t:'Weg zur Approbation',d:'Psychotherapie nach neuem Recht',lead:'Was gilt für alle, die ihr Bachelorstudium ab dem Wintersemester 2020/21 begonnen haben?',body:`
+'studium/approbation':{t:'Weg zur Approbation',d:'Psychotherapie nach neuem Recht',lead:'Was gilt, wenn du dein Bachelorstudium ab dem Wintersemester 2020/21 begonnen hast?',body:`
 <h2>Die neue Approbationsordnung</h2>
 <p>Seit dem 1. September 2020 gilt die neue Approbationsordnung für Psychotherapeut:innen (${X('https://www.gesetze-im-internet.de/psychthappro/BJNR044800020.html','PsychThApprO')}). Schon im Bachelor müssen Psychologiestudierende deshalb bestimmte approbationsrelevante Veranstaltungen aus dem klinischen Bereich belegen, um sich für die neuen Masterstudiengänge Klinische Psychologie und Psychotherapie zu qualifizieren.</p>
 <h2>Der neue Weg in die Psychotherapie</h2>
@@ -404,7 +404,7 @@ ${rows([
  [UNI+'de/studium/service-beratung/karriereentwicklung/careermatch-karriereportal-der-universitaet-heidelberg','globe','careerMATCH','Das Karriereportal der Universität Heidelberg']
 ])}`},
 
-'studium/lehrgestaltung':{t:'Arbeitskreis Lehrgestaltung',d:'Deine Anliegen rund um die Lehre',lead:'Wir sind eine Untergruppe der Fachschaft und wollen den Austausch über die Lehre am Psychologischen Institut fördern.',body:`
+'studium/lehrgestaltung':{t:'Arbeitskreis Lehrgestaltung',d:'Feedback und Austausch zur Lehre',lead:'Wir sind eine Untergruppe der Fachschaft und wollen den Austausch über die Lehre am Psychologischen Institut fördern.',body:`
 <p>Der Arbeitskreis Lehre ist deine Anlaufstelle bei Fragen oder Problemen in Lehrveranstaltungen, zum Beispiel:</p>
 <ul><li>Probleme in Seminaren oder Vorlesungen</li><li>fehlendes Feedback zu Referaten, Hausarbeiten oder der Abschlussarbeit</li><li>eigene Ideen, wie die Lehre am Institut besser werden kann</li></ul>
 <h2>So erreichst du uns</h2>
@@ -444,7 +444,7 @@ ${callout('Erste Hilfe','<p>Erste Hilfe bekommst du im Vordergebäude in Raum 11
 <section class="qa" id="bewerbung-ma"><h3>Wie bewerbe ich mich um einen Masterplatz?</h3><div class="a"><p>Alles Wichtige zu Bewerbung und Platzvergabe findest du ${X('http://www.psychologie.uni-heidelberg.de/studium/beratung/master/bewerbung.shtml','beim Institut')}.</p></div></section>
 <section class="qa" id="extern"><h3>Habe ich einen Nachteil, wenn ich meinen Bachelor nicht in Heidelberg gemacht habe?</h3><div class="a"><p>Kurz gesagt zählen für die Zulassung die Bachelornote, Berufsausbildungen und zusätzliche Tätigkeiten. Seit einigen Semestern kommt außerdem der Mastertest hinzu. ${X(PI+'studium/beratung/master/bewerbung.shtml','Mehr Infos')}</p><p>Die vollständigen Kriterien stehen in der ${X(PI+'studium/beratung/master/files/Zulassungssatzung%20MA%20Psychologie_13.10.2017.pdf','Zulassungsordnung')}. <em>Nur sie enthält die offiziellen und ausschlaggebenden Informationen.</em></p></div></section></div></div>`},
 
-'studium/links':{t:'Links',d:'Wichtige Adressen an Uni und Institut',lead:'Die wichtigsten Adressen rund um Universität, Institut und Stadt.',body:`
+'studium/links':{t:'Links',d:'Wichtige Adressen an Uni und Institut',lead:'Zentrale Anlaufstellen an Universität, Institut und in Heidelberg.',body:`
 <h2>Universität Heidelberg</h2>
 ${rows([
  ['http://www.ub.uni-heidelberg.de','link','Universitätsbibliothek',''],
@@ -473,7 +473,7 @@ ${rows([
 ])}`},
 
 'leben':{t:'Leben am Institut',d:'Partys, Kino, Grillen und mehr',lead:'Studium ist nicht alles. Mit unseren Veranstaltungen schaffen wir Gelegenheiten, sich über alle Semester hinweg kennenzulernen.',body:`
-<p>Zum Semesterstart veranstalten wir die ${L('leben/psychoparty','Psychoparty')} im Institut, bei der Studierende aller Semester zusammenkommen. Auch im kleineren Rahmen, etwa bei der ${L('leben/pumpkinparty','Pumpkinparty')} oder dem ${L('leben/wechslertreffen','Wechslertreffen')}, treffen sich Leute aus verschiedenen Semestern auf einen gemeinsamen Abend.</p>
+<p>Zum Semesterstart veranstalten wir die ${L('leben/psychoparty','Psychoparty')} im Institut, bei der Studierende aller Semester zusammenkommen. Auch im kleineren Rahmen, etwa bei der ${L('leben/pumpkinparty','Pumpkinparty')} oder dem ${L('leben/wechslertreffen','Wechslertreffen')}, treffen sich Leute aus verschiedenen Semestern im Fachschaftskeller.</p>
 <p>Außerdem organisieren wir das ${L('leben/grillen','Institutsgrillen')}, das ${L('leben/psychokino','PsychoKino')} mit Vortrag und das ${L('leben/ersti-we','Ersti-Wochenende')}. Damit schaffen wir einen Ausgleich zum Studienalltag und bringen die verschiedenen Semester zusammen.</p>
 <h2>Durchs Jahr</h2>
 <div class="year">
@@ -483,7 +483,7 @@ ${rows([
   <li><span>Ende November</span><div>${L('leben/ersti-we','Ersti-Wochenende')} im Nibelungenturm in Worms</div></li>
  </ol></div>
  <div><h3>Sommersemester</h3><ol>
-  <li><span>im Semester</span><div>${L('leben/psychoparty','Bipolare Psychoparty')} gemeinsam mit der SRH</div></li>
+  <li><span>im Semester</span><div>${L('leben/psychoparty','Bipolare Psychoparty')} mit der SRH</div></li>
   <li><span>Juni</span><div>${L('leben/grillen','Institutsgrillen')} im Innenhof</div></li>
  </ol></div>
 </div>
@@ -497,13 +497,13 @@ ${rows([
 'leben/psychoparty':{t:'Psychoparty',d:'Die Semesterstartparty im Institut',lead:'Zu Beginn jedes Wintersemesters steigt am Institut die Psychoparty, liebevoll auch „Psychopathie“ genannt.',body:`
 ${facts([['Wintersemester','Psychoparty','im Hintergebäude des Instituts'],['Sommersemester','Bipolare Psychoparty','mit der SRH Heidelberg']])}
 <p>Organisiert wird die Party von Fachschaftler:innen, umgesetzt mit Hilfe vieler Studierender und Professor:innen. Sie findet im Hintergebäude unseres Instituts statt und bietet alles, was es zum Feiern braucht: eine Bar, eine coole Location, viele gut gelaunte Studierende und jede Menge gute Musik.</p>
-<p>Meist gibt es ein oder zwei Stargäste, denn einige unserer Professor:innen heizen der feiernden Meute inzwischen routiniert mit ihrer Musik ein. Ob DJ Funk, DJ Carneval, DJ BiSpi oder DJ Dirk: Es lohnt sich auf jeden Fall! Und wer eine Pause von der Tanzfläche braucht, verschnauft im Innenhof.</p>
+<p>Meist gibt es ein oder zwei Stargäste, denn einige unserer Professor:innen heizen der feiernden Meute inzwischen routiniert mit ihrer Musik ein. Ob DJ Funk, DJ Carneval, DJ BiSpi oder DJ Dirk: Es lohnt sich auf jeden Fall. Und wer eine Pause von der Tanzfläche braucht, verschnauft im Innenhof.</p>
 <h2>Bipolare Psychoparty</h2>
 <p>Auch im Sommersemester wird gefeiert: Gemeinsam mit der SRH Heidelberg feiern wir mit allen, die in Heidelberg Psychologie studieren: die <strong>Bipolare Psychoparty</strong>.</p>
-${callout('Termine','<p>Wir geben die Termine über den '+L('fachschaft/kontakt','Verteiler')+' bekannt, sobald sie feststehen. Diese Partys solltest du nicht verpassen!</p>')}`},
+${callout('Termine','<p>Wir geben die Termine über den '+L('fachschaft/kontakt','Verteiler')+' bekannt, sobald sie feststehen. Die Termine werden rechtzeitig über den Verteiler geteilt.</p>')}`},
 
 'leben/blackbox':{t:'BlackBox',d:'Die Psychologie-Zeitschrift am Institut',lead:'Die BlackBox ist die neu aufgelegte Psychologie-Zeitschrift unseres Instituts. Die Fachschaft hat sie 2020 wiederbelebt, nachdem über 15 Jahre lang keine „Schwarze Schachtel“ mehr erschienen war.',body:`
-<p>Jedes Semester erscheint eine Ausgabe zu einem Thema oder Motto, mit Artikeln von Studierenden und Dozierenden, Umfragen, Memes und so ziemlich allen Ideen, die sich verwirklichen lassen. Stöbere in den Ausgaben, entdecke neue Perspektiven oder lach einfach über die Memes. In den PDFs kannst du per Klick zwischen den Beiträgen springen.</p>
+<p>Jedes Semester erscheint eine Ausgabe zu einem Thema oder Motto, mit Artikeln von Studierenden und Dozierenden, Umfragen, Memes und so ziemlich allen Ideen, die sich verwirklichen lassen. Die Hefte bieten Fachbeiträge, Umfragen, Interviews und Memes. In den PDFs kannst du per Inhaltsverzeichnis direkt zwischen den Beiträgen springen.</p>
 <h2>Neue Ausgabe und Archiv</h2>
 <ul class="issues">${ISSUES.map(([n,s,f],i)=>`<li class="${i===0?'newest':''}"><a class="noext" href="${U+f}"><span class="cover"><span class="bbn">BlackBox</span><span class="num">${n}</span></span><span class="meta">${s}${i===0?' (neu)':''}<span>${ic('download')} PDF herunterladen</span></span></a></li>`).join('')}</ul>
 <h2>Mitmachen</h2>
@@ -517,7 +517,7 @@ ${callout('Lieber im Original blättern?','<p>Komm gern zu den Sitzungszeiten vo
 'leben/pumpkinparty':{t:'Pumpkinparty',d:'Kürbisschnitzen zu Halloween',lead:'Pünktlich zu Halloween veranstalten wir jedes Jahr die berühmte Pumpkinparty.',body:`
 ${facts([['Wann','um Halloween','meist ab 19 Uhr, siehe Ankündigung'],['Wo','Fachschaftskeller','des Psychologischen Instituts']])}
 <p>Neben gemütlichem Beisammensein mit Glühwein, Keksen und Co. macht vor allem der <strong>Kürbis-Schnitzwettbewerb</strong> Spaß: Die Fachschaft stellt Kürbisse und Werkzeug, geschnitzt wird in Kleingruppen.</p>
-<p>Über die Platzierung entscheidet eine erfahrene Jury aus Fachschaftsmitgliedern. Dabei zählt nicht nur der Kürbis selbst, sondern auch die Geschichte, die dazu erzählt wird. Auf die ersten drei Plätze warten Preise. Nach der Party werden alle Kürbisse im Innenhof des Instituts ausgestellt.</p>`},
+<p>Über die Platzierung entscheidet eine erfahrene Jury aus Fachschaftsmitgliedern. Bewertet werden die Schnitzkunst und die dazugehörige Geschichte. Auf die ersten drei Plätze warten Preise. Nach der Party werden alle Kürbisse im Innenhof des Instituts ausgestellt.</p>`},
 
 'leben/wechslertreffen':{t:'Wechslertreffen',d:'Für Quereinsteiger:innen und Nachrücker:innen',lead:'Neu am Institut, aber nicht im ersten Semester? Dann ist das Wechslertreffen für dich.',body:`
 ${facts([['Für wen','Quereinsteiger:innen','und Nachrücker:innen'],['Wo','Fachschaftskeller','nach Ankündigung']])}
@@ -525,7 +525,7 @@ ${facts([['Für wen','Quereinsteiger:innen','und Nachrücker:innen'],['Wo','Fach
 
 'leben/grillen':{t:'Institutsgrillen',d:'Jedes Jahr im Juni im Innenhof',lead:'Einmal im Jahr wird der Innenhof zum Treffpunkt für das ganze Institut.',body:`
 ${facts([['Wann','jährlich im Juni','bei hoffentlich gutem Wetter'],['Wo','Innenhof','des Psychologischen Instituts'],['Für wen','alle','Studierende, Dozierende und Mitarbeitende']])}
-<p>Beim Institutsgrillen grillen wir gemeinsam und sitzen gemütlich zusammen. Meist bringen alle etwas für das Salat- und Nachtischbuffet mit, Getränke gibt es bei der Fachschaft zu kaufen.</p>
+<p>Beim Institutsgrillen kommen Studierende und Dozierende im Innenhof zusammen. Meist bringen alle etwas für das Salat- und Nachtischbuffet mit, Getränke gibt es bei der Fachschaft zu kaufen.</p>
 <p>In der Vergangenheit gab es sogar Live-Auftritte, Pub-Quizze und die Verleihung eines studentischen Lehrpreises.</p>
 <div class="photos">${photo('Institutsgrillen',U+'2015/03/Institutsgrillen.jpg')}${photo('Institutsgrillen, Juni 2024',U+'2024/07/IMG-20240622-WA0022-1.jpg')}</div>`},
 
@@ -537,8 +537,8 @@ ${facts([['Wann','Ende November','meist an einem der letzten Wochenenden'],['Wo'
 
 'leben/psychokino':{t:'PsychoKino',d:'Filme und Psychologie',lead:'Psychokino heißt: Wir schauen Filme und beschäftigen uns dabei ganz anders mit Psychologie als im Studienalltag.',body:`
 <p>Filme zeigen den riesigen Schatz menschlicher Erfahrung mit einer Unmittelbarkeit, die der normale Unibetrieb nur selten erreicht. Das Kino bietet so die Chance, sich mit der eigenen Psychologie zu verbinden: mit Gedanken, Vorstellungen und Empfindungen, manchmal auch mit Abgründen. Austausch, Begegnung und Bereicherung gehören ebenso dazu wie Auseinandersetzung, Konfrontation und Herausforderung.</p>
-<p>Begleitende Vorträge, Diskussionen und andere Formate füllen die gemeinsamen Abende mit Leben. Das PsychoKino ist offen für alle. Ob als Gast oder beim Mitgestalten: Wir freuen uns auf dich!</p>
-${callout('Aktuell','<p>Nach der Corona-Pause läuft das PsychoKino wieder. Hurra!</p>')}
+<p>Begleitende Vorträge und Diskussionen vertiefen die Filminhalte. Das PsychoKino steht allen Interessierten offen. Du kannst einfach vorbeikommen oder dich beim Vorbereiten einbringen.</p>
+${callout('Aktuell','<p>Das PsychoKino findet wieder regelmäßig im Institut statt.</p>')}
 <h2>Zuletzt gezeigt</h2>
 <div class="tablewrap"><table><thead><tr><th>Film</th><th>Beitrag von</th></tr></thead><tbody>
 <tr><td>Das Experiment</td><td>Prof. Dr. Joachim Funke</td></tr>
@@ -572,7 +572,7 @@ ${callout('Du willst dich engagieren?','<p>Für die Gremien können alle Psychol
 <p>Zu den Aufgaben des FachRats gehören:</p>
 <ul><li>Entwurf und Überarbeitung von Modulhandbüchern, Prüfungs- und Zulassungsordnungen</li><li>Planung des Lehrangebots</li><li>Evaluation der Lehre</li><li>Stellungnahmen zur Besetzung von Professuren</li></ul>
 <h2>Und was geht mich das an?</h2>
-<p>Im FachRat sitzen <strong>drei studentische Vertreter:innen</strong>. Sie werden jedes Wintersemester gewählt und beginnen ihre einjährige Amtszeit im Sommersemester. Die Fachschaft ruft rechtzeitig zu Wahl und Kandidatur auf. Bei Interesse melde dich gern bei uns!</p>
+<p>Im FachRat sitzen <strong>drei studentische Vertreter:innen</strong>. Sie werden jedes Wintersemester gewählt und beginnen ihre einjährige Amtszeit im Sommersemester. Die Fachschaft ruft rechtzeitig zu Wahl und Kandidatur auf. Bei Interesse kannst du dich jederzeit bei uns melden.</p>
 <h2>Studentische Vertreter:innen</h2>
 ${terms([
  {label:'2025/26',from:'2025-04-01',to:'2026-03-31',m:['Steffen Matthias Tietz','Nina Sophie Wimmer','Lucia Wagner'],s:['Benedikt A. Voß','Elias Staatz','Mia Sophie Dröge','Magdalena Eleonora Klevesath']},
@@ -587,16 +587,16 @@ ${facts([['Professor:innen','alle','der Fakultät'],['Mittelbau','4','Vertreter:
 <p>Zu den Aufgaben gehören zum Beispiel:</p>
 <ul><li>Besetzung untergeordneter Ausschüsse und Kommissionen</li><li>Beschluss von Prüfungs- und Zulassungsordnungen</li><li>Berufung von Professor:innen</li><li>Prüfung der Veranstaltungsverzeichnisse</li><li>Vergabe von Lehraufträgen</li><li>Verwendung der Qualitätssicherungsmittel für die Lehre</li></ul>
 <h2>Und was geht mich das an?</h2>
-<p>Im FakultätsRat sitzen auch studentische Vertreter:innen aus der Psychologie, gewählt für ein Jahr. Die Wahlen finden jeweils im Juni statt; die Fachschaft ruft rechtzeitig zu Wahl und Kandidatur auf. Bei Interesse melde dich gern bei uns!</p>
+<p>Im FakultätsRat sitzen auch studentische Vertreter:innen aus der Psychologie, gewählt für ein Jahr. Die Wahlen finden jeweils im Juni statt; die Fachschaft ruft rechtzeitig zu Wahl und Kandidatur auf. Bei Interesse kannst du dich jederzeit bei uns melden.</p>
 <h2>Studentische Vertreter:innen der Psychologie</h2>
 ${people(['Henriette Neuschwander','Lina-Marie Ruppert','Nele Josefine Haffner','Benedikt Voß','Mia Sophie Dröge'])}
 <p class="term-dates">${ic('cal')} Nächste Wahl: Juni 2026</p>`},
 
 'hopo/fachschaftsrat':{t:'Fachschaftsrat',d:'Das Exekutivorgan der Fachschaft',lead:'Der Fachschaftsrat (nicht zu verwechseln mit dem FachRat) ist die offizielle Vertretung der Psychologiestudierenden.',body:`
 <h2>Was ist der Fachschaftsrat?</h2>
-<p>Mit Einführung der Verfassten Studierendenschaft (${L('hopo/stura','StuRa')}) hat sich der Fachschaftsrat als offizielle Vertretung der Studierenden eines Fachs gebildet, bei uns der Psychologie. Er ist sozusagen das Exekutivorgan der Fachschaft und übernimmt vor allem organisatorische Aufgaben wie die Finanzplanung. Nicht verwechseln mit dem ${L('hopo/fachrat','FachRat')}!</p>
+<p>Mit Einführung der Verfassten Studierendenschaft (${L('hopo/stura','StuRa')}) hat sich der Fachschaftsrat als offizielle Vertretung der Studierenden eines Fachs gebildet, bei uns der Psychologie. Er ist sozusagen das Exekutivorgan der Fachschaft und übernimmt vor allem organisatorische Aufgaben wie die Finanzplanung. Nicht zu verwechseln mit dem ${L('hopo/fachrat','FachRat')}.</p>
 <h2>Und was geht mich das an?</h2>
-<p>Anders als in den übrigen Unigremien sitzen im Fachschaftsrat ausschließlich Studierende: <strong>sieben Psychologiestudierende</strong>, gewählt im Januar für ein Jahr ab dem Sommersemester. Die Fachschaft ruft rechtzeitig zu Wahl und Kandidatur auf. Bei Interesse melde dich gern bei uns!</p>
+<p>Anders als in den übrigen Unigremien sitzen im Fachschaftsrat ausschließlich Studierende: <strong>sieben Psychologiestudierende</strong>, gewählt im Januar für ein Jahr ab dem Sommersemester. Die Fachschaft ruft rechtzeitig zu Wahl und Kandidatur auf. Bei Interesse kannst du dich jederzeit bei uns melden.</p>
 <h2>Mitglieder</h2>
 ${terms([
  {label:'2025/26',from:'2025-04-01',to:'2026-03-31',m:['Nele Josefine Haffner','Elias Staatz','Henriette Neuschwander','Mia Sophie Dröge','Katharina Tomaszewski','Tobias Jenner','Lucia Wagner'],s:['Benedikt A. Voß','Magdalena Eleonora Klevesath']},
@@ -636,7 +636,7 @@ ${facts([['Professor:innen','2','eine:r davon im Vorsitz'],['Mittelbau','1'],['S
 <p>PsyFaKo steht für <strong>Psychologie-Fachschaften-Konferenz</strong>: die Interessenvertretung aller psychologischen Fachschaften in Deutschland.</p>
 <h2>Ziele der PsyFaKo</h2>
 <ul><li>Austausch über Hochschul- und Studienkonzepte</li><li>Vernetzung der Fachschaften</li><li>Stellungnahmen zu aktuellen studien- und berufspolitischen Themen</li></ul>
-${callout('PsyFaKo in Heidelberg','<p>Im Sommersemester 2022 war die PsyFaKo nach sieben Jahren zum zweiten Mal zu Gast in Heidelberg. Die Fachschaften der Universität und der SRH Heidelberg haben die Organisation gemeinsam übernommen. Wir haben uns über die vielen Teilnehmenden sehr gefreut!</p>')}
+${callout('PsyFaKo in Heidelberg','<p>Im Sommersemester 2022 war die PsyFaKo nach sieben Jahren zum zweiten Mal zu Gast in Heidelberg. Die Fachschaften der Universität und der SRH Heidelberg organisierten die Tagung im Verbund. Zahlreiche Fachschaften aus dem gesamten Bundesgebiet nahmen teil.</p>')}
 <p><a class="btn btn-primary noext" href="https://psyfako.org/">${ic('globe')}Zur Website der PsyFaKo</a></p>`},
 
 'impressum':{t:'Impressum',d:'Angaben zum Anbieter',lead:'',body:`

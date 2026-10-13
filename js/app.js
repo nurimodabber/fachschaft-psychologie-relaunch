@@ -27,7 +27,7 @@ function nextSession(){
   const dateStr=formatDateLong(d)+' · 18–20 Uhr';
   const inLecture=isLecturePeriod(d);
   const holiday=isHoliday(d);
-  let note='In der Vorlesungszeit, jede Woche. Neue Gesichter sind immer willkommen.';
+  let note='Montags in der Vorlesungszeit. Offen für alle Studierenden.';
   if(holiday){
     note='Gesetzlicher Feiertag in BW · Sitzung entfällt oder findet nach Absprache statt.';
   } else if(!inLecture){
@@ -55,7 +55,7 @@ function home(){
  <div class="in">
   <p class="eb">Universität Heidelberg</p>
   <h1 id="hero-h" tabindex="-1">Fachschaft Psychologie</h1>
-  <p class="lead">Herzlich willkommen! Wir sind die Studierendenvertretung am Psychologischen Institut.</p>
+  <p class="lead">Die studentische Vertretung am Psychologischen Institut der Universität Heidelberg.</p>
   <div class="btns"><a class="btn btn-primary" href="#/fachschaft">Über uns</a><a class="tlink" href="#/studium">Infos zum Studium${ic('chevr')}</a></div>
  </div>
  <p class="credit">${credit('hero')}</p>
@@ -73,7 +73,7 @@ function home(){
  <div class="sec-bg-map" aria-hidden="true">${mapSvg('mapbg-ambient')}</div>
  <div class="wrap intro">
   <div class="rv">
-   <p class="statement">Wir vertreten die Psychologiestudierenden in Heidelberg, organisieren Veranstaltungen und helfen dir bei allen Fragen rund ums Studium.</p>
+   <p class="statement">Wir vertreten die Psychologiestudierenden in Heidelberg, organisieren Veranstaltungen und helfen bei Fragen zum Studium.</p>
    <p class="more"><a class="tlink" href="#/fachschaft">Mehr über die Fachschaft${ic('chevr')}</a></p>
   </div>
   <aside class="session rv" aria-labelledby="sess-h">
@@ -91,7 +91,7 @@ function home(){
 
 <section class="sec tight" aria-labelledby="ex-h">
  <div class="wrap">
-  <div class="shead rv"><div><h2 class="sh2" id="ex-h">Was interessiert dich gerade?</h2></div></div>
+  <div class="shead rv"><div><h2 class="sh2" id="ex-h">Themen &amp; Einstiege</h2></div></div>
   <div class="bento3">
    <article class="tile t-study rv">
     <figure><img src="assets/images/fachschaft/institutsgrillen-2024.jpg" alt="Institutsgrillen im Innenhof des Psychologischen Instituts" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
