@@ -889,7 +889,7 @@ function applyPref(p){
 
 /* ============ Start ============ */
 function fitNav(){const g=$('#gnav'),inn=$('.in',g);g.classList.remove('compact');if(inn.scrollWidth>inn.clientWidth+1)g.classList.add('compact');}
-const RV=('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)?new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');RV.unobserve(en.target);}}),{rootMargin:'0px 0px -6% 0px'}):null;
+const RV=('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)?new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');RV.unobserve(en.target);}}),{rootMargin:'0px 0px 18% 0px'}):null;
 if(RV) root.classList.add('rv-on');
 buildNav(); footer(); $('#menuTheme').innerHTML=themeSeg(); decorateLinks($('#footer'));
 applyPref(getPref());

@@ -31,6 +31,7 @@
   --glass-modal-bg:rgba(255,255,255,.75);
   --shadow:0 1px 2px rgba(0,0,0,.04),0 10px 30px rgba(0,0,0,.08);
   --shadow-l:0 2px 8px rgba(0,0,0,.06),0 32px 64px rgba(0,0,0,.16);
+  --space-section:clamp(48px, 6vw, 84px);
   --map-bg:#dedee5; --map-mi:rgba(255,255,255,.65); --map-rd:#ffffff; --map-mj:#ffffff; --map-br:#ffffff; --map-label:#55555e;
   color-scheme:light;
 }
@@ -128,7 +129,9 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 .ib:hover{background:var(--glass-pill-hover);border-color:var(--glass-border);box-shadow:0 3px 10px rgba(0,0,0,.05),inset 0 1px 0 var(--glass-highlight)}
 .ib:active{transform:scale(.97)}
 .ib .i{width:18px;height:18px}
-@media (max-width:420px){.brand small{display:none}.ib.menu span{display:none}}
+@media (max-width:540px){.brand small{display:none}}
+@media (max-width:420px){.gnav .in{gap:10px;padding:0 12px}.brand .bt{font-size:13.5px}.ib{padding:0 10px}.ib span{display:none}}
+@media (max-width:340px){.gnav .in{gap:6px;padding:0 8px}.brand{gap:7px}.brand .bt{font-size:12.5px}.ib{width:34px;min-width:34px;height:34px;padding:0}}
 
 /* ---------- Lokale Navigation (Bereich, Liquid Glass) ---------- */
 .lnav{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--nav-h));z-index:50;height:52px;background:var(--nav-bg);-webkit-backdrop-filter:blur(30px) saturate(210%);backdrop-filter:blur(30px) saturate(210%);border-bottom:1px solid var(--glass-border);box-shadow:0 4px 16px -2px rgba(0,0,0,.03),inset 0 1px 0 0 var(--glass-highlight)}
@@ -166,7 +169,7 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 .badge.old{background:var(--bg3);color:var(--text2)}
 
 /* ---------- Sektionen ---------- */
-.sec{padding:clamp(80px,10vw,140px) 0}
+.sec{padding:var(--space-section) 0;position:relative}
 .sec.tight{padding-top:0}
 .sec.alt{background:var(--bg2)}
 .sh2{font-size:clamp(36px,5vw,64px);line-height:1.04;font-weight:700;letter-spacing:-.04em;margin:0}
@@ -181,7 +184,7 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 .hero .in{text-shadow:0 1px 20px rgba(0,0,0,.28)}
 .hero .btn{text-shadow:none}
 .hero .eb{font-size:17px;font-weight:600;letter-spacing:-.01em;margin:0;opacity:.92}
-.hero h1{font-size:clamp(54px,9vw,124px);line-height:.94;font-weight:700;letter-spacing:-.05em;margin:12px 0 22px;color:#fbfbfd;max-width:11ch}
+.hero h1{font-size:clamp(36px,8.5vw,124px);line-height:.96;font-weight:700;letter-spacing:-.045em;margin:12px 0 22px;color:#fbfbfd;max-width:11ch;hyphens:auto;overflow-wrap:break-word}
 .hero .lead{font-size:clamp(19px,1.9vw,24px);line-height:1.38;font-weight:450;letter-spacing:-.015em;margin:0 0 34px;max-width:30ch;color:rgba(251,251,253,.9)}
 .hero .tlink{color:#fbfbfd;padding:10px 22px;border-radius:999px;background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(24px) saturate(190%);backdrop-filter:blur(24px) saturate(190%);border:1px solid rgba(255,255,255,.32);box-shadow:0 4px 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.45);font-weight:500;transition:background .25s var(--ease),border-color .25s,transform .25s var(--ease),box-shadow .25s}
 .hero .tlink:hover{text-decoration:none;background:rgba(255,255,255,.24);border-color:rgba(255,255,255,.55);transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.6)}
@@ -207,8 +210,8 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 
 /* ---------- Begrüßung + Sitzung (Liquid Glass Card) ---------- */
 .intro{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:clamp(40px,7vw,110px);align-items:start}
-.statement{font-size:clamp(28px,3.4vw,46px);line-height:1.14;font-weight:650;letter-spacing:-.035em;margin:0;color:var(--text3)}
-.statement b{color:var(--text);font-weight:650}
+.statement{font-size:clamp(26px,3.2vw,44px);line-height:1.2;font-weight:650;letter-spacing:-.03em;margin:0;color:var(--text2)}
+.statement b{color:var(--text);font-weight:700}
 .intro .more{margin-top:32px}
 .session{background:var(--glass-card-bg);-webkit-backdrop-filter:blur(28px) saturate(190%);backdrop-filter:blur(28px) saturate(190%);border:1px solid var(--glass-card-border);border-radius:28px;padding:30px 30px 28px;box-shadow:var(--glass-card-shadow),inset 0 1px 0 var(--glass-highlight)}
 .session h2{font-size:15px;font-weight:600;color:var(--text2);margin:0;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -396,8 +399,7 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 @media (max-width:760px){.mapcard{position:relative;left:auto;top:auto;width:auto;margin:0;border-radius:0;background:var(--glass-card-bg);border:0;border-bottom:1px solid var(--glass-border);box-shadow:none;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);padding:20px var(--gut)}.pin-label{display:none}}
 
 /* ---------- Hintergrund-Karten (Ambient Watermarks mit weißen Straßen) ---------- */
-.sec{position:relative}
-.sec-bg-map{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;opacity:0.32;-webkit-mask:radial-gradient(circle at 76% 45%,#000 15%,transparent 72%);mask:radial-gradient(circle at 76% 45%,#000 15%,transparent 72%)}
+.sec-bg-map{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;opacity:0.16;-webkit-mask:radial-gradient(circle at 76% 45%,#000 15%,transparent 72%);mask:radial-gradient(circle at 76% 45%,#000 15%,transparent 72%)}
 .sec-bg-map svg{position:absolute;right:-10%;top:-20%;width:min(1250px,95vw);height:auto;transform:rotate(-3deg);--map-lop:0}
 .sec .wrap{position:relative;z-index:1}
 
@@ -427,7 +429,7 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 .banner figcaption{font-size:12px;color:var(--text3);margin-top:10px;text-align:right}
 .banner figcaption a{color:inherit;text-decoration:underline;text-underline-offset:.15em}
 @media (max-width:700px){.banner .bi{aspect-ratio:4/3;border-radius:20px}}
-.doc{max-width:var(--docw);margin:0 auto;padding:0 var(--gut) clamp(80px,10vw,140px)}
+.doc{max-width:var(--docw);margin:0 auto;padding:0 var(--gut) var(--space-section)}
 
 /* ---------- Fließtext ---------- */
 .prose>*{max-width:var(--textw)}
@@ -720,7 +722,7 @@ footer.site a:hover{color:var(--text)}
 @media (max-width:900px){.f-dir{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* ---------- Bewegung ---------- */
-html.rv-on .rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0) * 80ms)}
+html.rv-on .rv{opacity:0;transform:translateY(12px);transition:opacity .35s var(--ease),transform .35s var(--ease);transition-delay:calc(var(--i,0) * 45ms);will-change:opacity,transform}
 html.rv-on .rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html.rv-on .rv{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html.rv-on .rv{opacity:1!important;transform:none!important}}
 @media print{.gnav,.lnav,footer.site,.pager,.quick{display:none!important}.hero{height:auto;min-height:0}}
