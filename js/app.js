@@ -125,7 +125,7 @@ function home(){
      <h3>${t}</h3>
      <p>${desc}</p>
      <div class="why-chips">
-      ${chips.map(([href,label])=>`<a class="why-chip" href="#/${href}">${label}</a>`).join('')}
+      ${chips.map(([href,label])=>`<a class="why-chip" href="#/${href}"><span>${label}</span>${ic('chevr')}</a>`).join('')}
      </div>
     </article>
    `).join('')}
