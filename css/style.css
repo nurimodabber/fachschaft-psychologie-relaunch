@@ -113,7 +113,7 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 .brand:hover .seal{transform:scale(1.06);border-color:var(--accent-hover);box-shadow:0 4px 16px rgba(163,25,45,.45),0 0 0 1.5px var(--accent-hover),inset 0 1px 0 rgba(255,255,255,.35)}
 
 /* ---------- Globale Navigation (Liquid Glass) ---------- */
-.gnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:60;height:var(--nav-h);background:var(--nav-bg);-webkit-backdrop-filter:blur(30px) saturate(210%);backdrop-filter:blur(30px) saturate(210%);border-bottom:1px solid var(--glass-border);box-shadow:0 4px 20px -2px rgba(0,0,0,.03),inset 0 1px 0 0 var(--glass-highlight),inset 0 -1px 0 0 var(--glass-shadow);transition:background .3s var(--ease),border-color .3s,box-shadow .3s}
+.gnav{position:fixed;top:0;inset-inline:0;width:100%;z-index:60;height:var(--nav-h);background:var(--nav-bg);-webkit-backdrop-filter:blur(30px) saturate(210%);backdrop-filter:blur(30px) saturate(210%);border-bottom:1px solid var(--glass-border);box-shadow:0 4px 20px -2px rgba(0,0,0,.03),inset 0 1px 0 0 var(--glass-highlight),inset 0 -1px 0 0 var(--glass-shadow);transition:height .25s var(--ease)}
 .gnav .in{max-width:var(--maxw);margin:0 auto;height:100%;padding:0 var(--gut);display:flex;align-items:center;gap:28px}
 .brand{display:flex;align-items:center;gap:11px;color:var(--text);flex:none}
 .brand:hover{text-decoration:none;color:var(--text)}
@@ -135,7 +135,8 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 @media (max-width:340px){.gnav .in{gap:6px;padding:0 8px}.brand{gap:7px}.brand .bt{font-size:12.5px}.ib{width:34px;min-width:34px;height:34px;padding:0}}
 
 /* ---------- Lokale Navigation (Bereich, Liquid Glass) ---------- */
-.lnav{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--nav-h));z-index:50;height:52px;background:var(--nav-bg);-webkit-backdrop-filter:blur(30px) saturate(210%);backdrop-filter:blur(30px) saturate(210%);border-bottom:1px solid var(--glass-border);box-shadow:0 4px 16px -2px rgba(0,0,0,.03),inset 0 1px 0 0 var(--glass-highlight)}
+.lnav{position:sticky;top:var(--nav-h);z-index:50;height:52px;background:var(--nav-bg);-webkit-backdrop-filter:blur(30px) saturate(210%);backdrop-filter:blur(30px) saturate(210%);border-bottom:1px solid var(--glass-border);box-shadow:0 4px 16px -2px rgba(0,0,0,.03),inset 0 1px 0 0 var(--glass-highlight)}
+#app>.lnav:first-child{margin-top:var(--nav-h)}
 .lnav .in{max-width:var(--maxw);margin:0 auto;height:100%;padding:0 var(--gut);display:flex;align-items:center;gap:28px}
 .lnav .lt{font-size:19px;font-weight:650;letter-spacing:-.02em;color:var(--text);white-space:nowrap;flex:none}
 .lnav .lt:hover{text-decoration:none;color:var(--accent-text)}
@@ -178,7 +179,7 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 .shead{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:clamp(36px,5vw,56px)}
 
 /* ---------- Startseite: Hero ---------- */
-.hero{position:relative;height:calc(100svh - var(--nav-h) - env(safe-area-inset-top,0px));min-height:560px;max-height:1020px;overflow:hidden;background:#141416;color:#fbfbfd}
+.hero{position:relative;height:100svh;min-height:560px;max-height:1020px;overflow:hidden;background:#141416;color:#fbfbfd}
 .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 55%}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,.28) 0%,rgba(10,10,12,0) 26%,rgba(10,10,12,0) 42%,rgba(10,10,12,.7) 100%)}
 .hero .in{position:relative;z-index:1;height:100%;max-width:var(--maxw);margin:0 auto;padding:0 var(--gut) clamp(48px,8vh,96px);display:flex;flex-direction:column;justify-content:flex-end}
@@ -425,7 +426,8 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
 .doc{position:relative}
 
 /* ---------- Unterseiten ---------- */
-.phead{position:relative;overflow:hidden;--map-halo:var(--bg)}
+.phead{position:relative;overflow:hidden;--map-halo:var(--bg);padding-top:var(--nav-h)}
+#app>:first-child:not(.hero):not(.phead):not(.lnav){padding-top:var(--nav-h)}
 .phead .mapbg{position:absolute;right:-6%;top:50%;width:min(1050px,85vw);transform:translateY(-50%);opacity:.45;pointer-events:none;-webkit-mask:radial-gradient(closest-side,#000 35%,transparent);mask:radial-gradient(closest-side,#000 35%,transparent);--map-lop:0}
 .phead .mapbg{--accent:var(--map-mj);--map-br:var(--map-mj)}
 .phead .in{position:relative;max-width:var(--docw);margin:0 auto;padding:clamp(48px,7vw,96px) var(--gut) clamp(36px,5vw,64px)}
