@@ -447,6 +447,20 @@ function buildNav(){
     </section>`;
   }).join('');
   $('#menuQuick').innerHTML=[['','Startseite'],['aktuelles','Aktuelles'],['fachschaft/kontakt','Kontakt'],['impressum','Impressum']].map(([r,t])=>`<a href="#/${r}">${t}</a>`).join('');
+  syncDrawerAccordion();
+}
+function syncDrawerAccordion(){
+  const hash = decodeURIComponent(location.hash.replace(/^#\/?/,'')).split('?')[0];
+  const activeSec = (hash && sec(hash)) || 'fachschaft';
+  $$('.sheet-col').forEach(col => {
+    const s = col.dataset.sec;
+    const btn = $('.sheet-acc-toggle', col);
+    const isCurrent = s === activeSec;
+    if(btn){
+      btn.setAttribute('aria-expanded', isCurrent ? 'true' : 'false');
+    }
+    col.classList.toggle('is-open', isCurrent);
+  });
 }
 function markNav(route){
   const s=route?sec(route):'';
@@ -1077,8 +1091,26 @@ document.addEventListener('click',e=>{
   }
 });
 $('#openMenu').addEventListener('click',()=>{
+  syncDrawerAccordion();
   $('#drawer').showModal();
   $('#openMenu').setAttribute('aria-expanded','true');
+});
+$('#drawerBody').addEventListener('click', e => {
+  const toggleBtn = e.target.closest('.sheet-acc-toggle');
+  const head = !toggleBtn && !e.target.closest('a') ? e.target.closest('.sheet-col-head') : null;
+  const btn = toggleBtn || (head ? $('.sheet-acc-toggle', head) : null);
+  if(!btn) return;
+  const col = btn.closest('.sheet-col');
+  const wasExpanded = btn.getAttribute('aria-expanded') === 'true';
+  $$('.sheet-col').forEach(c => {
+    const b = $('.sheet-acc-toggle', c);
+    if(b) b.setAttribute('aria-expanded', 'false');
+    c.classList.remove('is-open');
+  });
+  if(!wasExpanded){
+    btn.setAttribute('aria-expanded', 'true');
+    col.classList.add('is-open');
+  }
 });
 $('#openSearch').addEventListener('click',openSearch);
 $('#drawer').addEventListener('close',()=>{
