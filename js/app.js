@@ -178,7 +178,7 @@ function home(){
     <div class="btns"><a class="btn btn-primary noext" href="${U+ISSUES[0][2]}">${ic('download')}Neue Ausgabe lesen</a><a class="tlink" href="#/leben/blackbox">Zum Archiv${ic('chevr')}</a></div>
    </div>
    <div class="orb" data-face="a">
-    <svg viewBox="0 0 240 220" role="img" aria-labelledby="necker-title" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
+    <svg viewBox="0 0 240 220" role="img" aria-label="Optische Täuschung: Necker-Würfel mit bistabiler Wahrnehmung" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
      <title id="necker-title">Optische Täuschung: Necker-Würfel mit bistabiler Wahrnehmung</title>
      <path class="fa" d="M30 80H150V200H30Z"/><path class="fb" d="M90 20H210V140H90Z"/>
      <path d="M30 80H150V200H30ZM90 20H210V140H90ZM30 80 90 20M150 80 210 20M150 200 210 140M30 200 90 140"/>
@@ -225,7 +225,7 @@ function home(){
      </div>
     </div>
    </div>
-   <p class="mapcredit">Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a> • Zoomen & Bewegen aktiv</p>
+   <p class="mapcredit">Kartendaten © <a class="noext" href="${OSM}">OpenStreetMap-Mitwirkende</a></p>
   </div>
  </div>
 </section>`;
@@ -519,10 +519,10 @@ function initZoomableMaps(root){
       });
     });
 
-    // Mausrad: Scrollt die Seite normal weiter, außer Strg/Cmd wird gehalten oder Karte ist aktiv
+    // Mausrad: Scrollt die Seite immer normal weiter, außer Strg/Cmd wird gehalten
     vp.addEventListener('wheel', e => {
       const modifier = e.ctrlKey || e.metaKey;
-      if(!modifier && !isMapActive){
+      if(!modifier){
         showToast(zoomHint);
         return; // Kein e.preventDefault(): Seite scrollt ungestört!
       }
