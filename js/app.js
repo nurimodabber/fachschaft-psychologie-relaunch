@@ -97,19 +97,19 @@ function home(){
     <figure><img src="assets/images/fachschaft/institutsgrillen-2024.jpg" alt="Institutsgrillen im Innenhof des Psychologischen Instituts" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
     <div class="tb"><h3><a href="#/studium">Infos zum Studium</a></h3>
      <p>Bewerbung, Studienaufbau, Praktika und Auslandssemester. Dazu Antworten auf die Fragen, die Erstis am häufigsten stellen.</p>
-     <div class="subl"><a href="#/studium/bachelor">Bachelor</a><a href="#/studium/master">Master</a><a href="#/studium/approbation">Approbation</a><a href="#/studium/faq">FAQ</a></div></div>
+     <div class="subl"><a href="#/studium/bachelor">Bachelor${ic('chevr')}</a><a href="#/studium/master">Master${ic('chevr')}</a><a href="#/studium/approbation">Approbation${ic('chevr')}</a><a href="#/studium/faq">FAQ${ic('chevr')}</a></div></div>
    </article>
    <article class="tile t-events rv" style="--i:1">
     <figure><img src="assets/images/fachschaft/silent-disco-2024.jpg" alt="Silent Disco im Institutsinnenhof" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
     <div class="tb"><h3><a href="#/leben">Veranstaltungen</a></h3>
      <p>Psychoparty, Ersti-Wochenende, PsychoKino und Institutsgrillen.</p>
-     <div class="subl"><a href="#/leben/psychoparty">Psychoparty</a><a href="#/leben/ersti-we">Ersti-Wochenende</a></div></div>
+     <div class="subl"><a href="#/leben/psychoparty">Psychoparty${ic('chevr')}</a><a href="#/leben/ersti-we">Ersti-Wochenende${ic('chevr')}</a></div></div>
    </article>
    <article class="tile t-fs rv" style="--i:2">
     <figure><img src="assets/images/fachschaft/fs-team.jpg" alt="Gruppe der Fachschaft Psychologie beim Klausurwochenende" loading="lazy"></figure><span class="cap">Fachschaft Psychologie</span>
     <div class="tb"><h3><a href="#/fachschaft">Die Fachschaft</a></h3>
      <p>Wer wir sind, wie du mitmachst und wo wir dich vertreten.</p>
-     <div class="subl"><a href="#/fachschaft/aktive">Aktive Fachschaft</a><a href="#/hopo">Hochschulpolitik</a></div></div>
+     <div class="subl"><a href="#/fachschaft/aktive">Aktive Fachschaft${ic('chevr')}</a><a href="#/hopo">Hochschulpolitik${ic('chevr')}</a></div></div>
    </article>
   </div>
  </div>
@@ -132,33 +132,32 @@ function home(){
      <h3>Mitgestalten</h3>
      <p>Von der Psychoparty bis zum PsychoKino: Du bringst deine Ideen ein und setzt sie mit uns um.</p>
      <div class="why-chips">
-      <a class="why-chip" href="#/leben/psychoparty"><span>Psychoparty</span></a>
-      <a class="why-chip" href="#/leben/psychokino"><span>PsychoKino</span></a>
-      <a class="why-chip" href="#/leben/ersti-we"><span>Ersti-WE</span></a>
+      <a class="why-chip" href="#/leben/psychoparty"><span>Psychoparty</span>${ic('chevr')}</a>
+      <a class="why-chip" href="#/leben/psychokino"><span>PsychoKino</span>${ic('chevr')}</a>
+      <a class="why-chip" href="#/leben/ersti-we"><span>Ersti-WE</span>${ic('chevr')}</a>
      </div>
     </div>
    </article>
 
    <article class="why-card why-card-quote rv" style="--i:1">
-    <blockquote>„Ich dachte erst, Hochschulpolitik ist trocken – bis wir gemeinsam über Studienbedingungen und Lehre entschieden haben.“</blockquote>
-    <cite>Fachschaftsmitglied, 4. Semester <!-- TODO(content): Echtes Zitat und Name eines Fachschaftsmitglieds einsetzen --></cite>
+    <blockquote>Studierende vertreten deine Stimme im Fakultätsrat, in Berufungskommissionen und im StuRa.</blockquote>
+    <cite>Studentische Mitbestimmung am Institut</cite>
     <h3>Hochschulpolitik</h3>
     <p>Du erlebst, wie Entscheidungen über Studium und Lehre entstehen, und bestimmst mit.</p>
     <div class="why-chips">
-     <a class="why-chip" href="#/hopo/fachrat"><span>FachRat</span></a>
-     <a class="why-chip" href="#/hopo/fakrat"><span>Fakultät</span></a>
-     <a class="why-chip" href="#/hopo/stura"><span>StuRa</span></a>
+     <a class="why-chip" href="#/hopo/fachrat"><span>FachRat</span>${ic('chevr')}</a>
+     <a class="why-chip" href="#/hopo/fakrat"><span>Fakultät</span>${ic('chevr')}</a>
+     <a class="why-chip" href="#/hopo/stura"><span>StuRa</span>${ic('chevr')}</a>
     </div>
    </article>
 
    <article class="why-card rv" style="--i:2">
     <h3>Semesterübergreifend</h3>
     <p>Du lernst engagierte Studierende kennen, die du sonst im Studienalltag nie getroffen hättest.</p>
-    <!-- TODO(content): Chips unter 'Semesterübergreifend' prüfen (Bachelor/Master/Aktive passen inhaltlich kaum) -->
     <div class="why-chips">
-     <a class="why-chip" href="#/leben/ersti-we"><span>Ersti-WE</span></a>
-     <a class="why-chip" href="#/leben/wechslertreffen"><span>Wechslerin</span></a>
-     <a class="why-chip" href="#/fachschaft/aktive"><span>Aktive</span></a>
+     <a class="why-chip" href="#/leben/ersti-we"><span>Ersti-WE</span>${ic('chevr')}</a>
+     <a class="why-chip" href="#/leben/wechslertreffen"><span>Wechslertreffen</span>${ic('chevr')}</a>
+     <a class="why-chip" href="#/fachschaft/aktive"><span>Aktive</span>${ic('chevr')}</a>
     </div>
    </article>
 
@@ -166,9 +165,9 @@ function home(){
     <h3>Verantwortung</h3>
     <p>Erfahrungen sammeln mit eigenen Projekten, Institutsfinanzen und den Themen der Studierenden.</p>
     <div class="why-chips">
-     <a class="why-chip" href="#/fachschaft/kontakt"><span>Sitzung</span></a>
-     <a class="why-chip" href="#/hopo/qsm"><span>QSM-Mittel</span></a>
-     <a class="why-chip" href="#/studium/lehrgestaltung"><span>Lehre</span></a>
+     <a class="why-chip" href="#/fachschaft/kontakt"><span>Sitzung</span>${ic('chevr')}</a>
+     <a class="why-chip" href="#/hopo/qsm"><span>QSM-Mittel</span>${ic('chevr')}</a>
+     <a class="why-chip" href="#/studium/lehrgestaltung"><span>Lehre</span>${ic('chevr')}</a>
     </div>
    </article>
 
@@ -179,13 +178,14 @@ function home(){
     </div>
     <div>
      <div class="why-hero-session">
+      <span class="pulse-dot"></span>
       <div>
        <b>Jede Woche montags</b>
        <span>18–20 Uhr im Fachschaftskeller</span>
       </div>
      </div>
      <a class="btn btn-primary why-hero-cta" href="#/fachschaft/kontakt">
-      <span>Komm vorbei</span>
+      <span>Komm vorbei</span>${ic('chevr')}
      </a>
     </div>
    </article>
@@ -417,10 +417,12 @@ function buildNav(){
   $('#drawerBody').innerHTML=mains.filter(([,k])=>k.length).map(([r])=>{
     const groups=DRAWER_GROUPS[r]||[{label:'',items:kidsOf(r)}];
     const isFachschaft = r === 'fachschaft';
+    const icon=SEC_ICONS[r]||'folder';
     return `<section class="sheet-col" data-sec="${r}" aria-labelledby="col-title-${r}">
       <div class="sheet-col-head">
         <h2 class="sheet-col-title-wrap" id="col-title-${r}">
           <a class="sheet-col-title" href="#/${r}">
+            <span class="sheet-col-ico" aria-hidden="true">${ic(icon)}</span>
             <span class="sheet-col-name">${navTitle(r)}</span>
           </a>
         </h2>
