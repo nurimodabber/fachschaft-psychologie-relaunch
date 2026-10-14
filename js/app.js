@@ -30,14 +30,16 @@ function home(){
 <section class="hero" aria-labelledby="hero-h">
  ${pic('hero','',true)}
  <div class="in">
-  <p class="eb">Universität Heidelberg</p>
-  <h1 id="hero-h" tabindex="-1">Fachschaft Psychologie</h1>
-  <p class="lead">Die studentische Vertretung am Psychologischen Institut der Universität Heidelberg.</p>
-  <div class="btns">
-   <a class="btn btn-primary" href="#/fachschaft"><span>Über uns</span></a>
-   <a class="hero-btn-secondary" href="#/studium"><span>Infos zum Studium</span>${ic('chevr')}</a>
+  <div class="hero-content">
+   <p class="eb">Universität Heidelberg</p>
+   <h1 id="hero-h" tabindex="-1">Fachschaft<br>Psychologie</h1>
+   <p class="lead">Die studentische Vertretung am Psychologischen Institut der Universität Heidelberg.</p>
+   <div class="btns">
+    <a class="btn btn-primary" href="#/fachschaft"><span>Über uns</span></a>
+    <a class="hero-btn-secondary" href="#/studium"><span>Infos zum Studium</span>${ic('chevr')}</a>
+   </div>
+   ${heroSession}
   </div>
-  ${heroSession}
  </div>
  <p class="credit">Foto: Samuel Scherer, <a class="noext" href="${CCBYSA}">CC BY-SA 4.0</a></p>
 </section>
@@ -183,6 +185,11 @@ function home(){
      <span class="pin" style="left:${MAP_META.ix}%;top:${MAP_META.iy}%"></span>
      <span class="pin-label" style="left:${MAP_META.ix}%;top:${MAP_META.iy}%">Psychologisches Institut</span>
     </div>
+   </div>
+   <div class="map-switcher" role="group" aria-label="Kartenstil auswählen">
+    <button type="button" class="mswitch-btn is-active" data-mstyle="lineart" aria-pressed="true">Line Art</button>
+    <button type="button" class="mswitch-btn" data-mstyle="karte" aria-pressed="false">Karte</button>
+    <button type="button" class="mswitch-btn" data-mstyle="satellit" aria-pressed="false">Satellit</button>
    </div>
    <div class="map-ctrls" role="toolbar" aria-label="Karte zoomen">
     <button type="button" class="mctrl-btn" data-mzoom="in" title="Vergrößern (Reinzoomen)" aria-label="Vergrößern"><svg viewBox="0 0 24 24" class="i" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
@@ -500,24 +507,108 @@ function initZoomableMaps(root){
       const centerCoords = [49.41169, 8.69788];
       const kellerCoords = [49.41148, 8.69795];
 
-      const tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-      const tileOpts = {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende'
+      const LAYERS = {
+        lineart: {
+          url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          opts: {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende'
+          }
+        },
+        karte: {
+          url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          opts: {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende'
+          }
+        },
+        satellit: {
+          url: 'https://server.arcgisonline.com/' + 'ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+          opts: {
+            maxZoom: 19,
+            attribution: 'Tiles &copy; <a href="https://www.esri.com" target="_blank" rel="noopener">Esri</a>'
+          }
+        }
       };
+
+      container.classList.add('map-mode-lineart');
 
       const map = Leaflet.map(vp, {
         center: centerCoords,
         zoom: 17,
         minZoom: 14,
-        maxZoom: 19,
+        maxZoom: 20,
         scrollWheelZoom: false,
         touchZoom: true,
         zoomControl: false,
         attributionControl: true
       });
 
-      Leaflet.tileLayer(tileUrl, tileOpts).addTo(map);
+      let activeStyle = 'lineart';
+      let currentTileLayer = Leaflet.tileLayer(LAYERS.lineart.url, LAYERS.lineart.opts).addTo(map);
+
+      // Gebäudeumrisse (Vektor-Lineart bei Zoom)
+      let geojsonLayer = null;
+      let buildingsData = null;
+
+      function getBuildingStyle(feature){
+        const isInst = feature?.properties?.isInstitute;
+        const isMain = isInst && feature?.properties?.name !== 'Zentrum für Psychologische Psychotherapie';
+        if(isMain){
+          return {
+            color: '#e02844',
+            weight: 2.5,
+            fillColor: '#e02844',
+            fillOpacity: activeStyle === 'satellit' ? 0.35 : 0.22
+          };
+        }
+        if(activeStyle === 'lineart'){
+          return {
+            color: 'rgba(255, 255, 255, 0.42)',
+            weight: 1.2,
+            fillColor: 'rgba(255, 255, 255, 0.05)',
+            fillOpacity: 1
+          };
+        }
+        if(activeStyle === 'satellit'){
+          return {
+            color: 'rgba(255, 255, 255, 0.45)',
+            weight: 1.2,
+            fillColor: 'transparent',
+            fillOpacity: 0
+          };
+        }
+        return {
+          color: 'rgba(0, 0, 0, 0.28)',
+          weight: 1.2,
+          fillColor: 'transparent',
+          fillOpacity: 0
+        };
+      }
+
+      function updateBuildings(){
+        if(!buildingsData) return;
+        const curZoom = map.getZoom();
+        if(geojsonLayer) map.removeLayer(geojsonLayer);
+
+        geojsonLayer = Leaflet.geoJSON(buildingsData, {
+          filter: feat => feat?.properties?.isInstitute || curZoom >= 16,
+          style: getBuildingStyle
+        }).addTo(map);
+
+        if(instMarker) instMarker.bringToFront();
+        if(kellerMarker) kellerMarker.bringToFront();
+      }
+
+      fetch('assets/vendor/leaflet/buildings.json')
+        .then(res => res.json())
+        .then(data => {
+          buildingsData = data;
+          updateBuildings();
+        })
+        .catch(() => {});
+
+      map.on('zoomend', updateBuildings);
 
       const instIcon = Leaflet.divIcon({
         className: 'leaflet-pin-wrapper marker-inst',
@@ -525,7 +616,7 @@ function initZoomableMaps(root){
         iconSize: [210, 36],
         iconAnchor: [13, 18]
       });
-      Leaflet.marker(centerCoords, { icon: instIcon, title: 'Psychologisches Institut, Hauptstraße 47–51' }).addTo(map);
+      const instMarker = Leaflet.marker(centerCoords, { icon: instIcon, title: 'Psychologisches Institut, Hauptstraße 47–51' }).addTo(map);
 
       const kellerIcon = Leaflet.divIcon({
         className: 'leaflet-pin-wrapper marker-keller',
@@ -533,7 +624,30 @@ function initZoomableMaps(root){
         iconSize: [260, 30],
         iconAnchor: [10, 15]
       });
-      Leaflet.marker(kellerCoords, { icon: kellerIcon, title: 'Fachschaftskeller (Tor zum Innenhof)' }).addTo(map);
+      const kellerMarker = Leaflet.marker(kellerCoords, { icon: kellerIcon, title: 'Fachschaftskeller (Tor zum Innenhof)' }).addTo(map);
+
+      function setMapStyle(styleName){
+        if(!LAYERS[styleName] || styleName === activeStyle) return;
+        map.removeLayer(currentTileLayer);
+        currentTileLayer = Leaflet.tileLayer(LAYERS[styleName].url, LAYERS[styleName].opts).addTo(map);
+        activeStyle = styleName;
+
+        $$('.mswitch-btn', container).forEach(b => {
+          const isAct = b.dataset.mstyle === styleName;
+          b.classList.toggle('is-active', isAct);
+          b.setAttribute('aria-pressed', isAct ? 'true' : 'false');
+        });
+
+        container.classList.toggle('map-mode-lineart', styleName === 'lineart');
+        updateBuildings();
+      }
+
+      $$('.mswitch-btn', container).forEach(b => {
+        b.addEventListener('click', e => {
+          e.preventDefault();
+          setMapStyle(b.dataset.mstyle);
+        });
+      });
 
       vp.addEventListener('wheel', e => {
         const modifier = e.ctrlKey || e.metaKey;

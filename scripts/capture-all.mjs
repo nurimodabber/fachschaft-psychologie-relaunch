@@ -82,8 +82,8 @@ async function main(){
     // 1. Hero Desktop
     console.log('Capturing Hero Desktop...');
     await send('Runtime.evaluate', { expression: "window.scrollTo(0, 0); document.documentElement.dataset.theme = 'dark';" });
-    await new Promise(r => setTimeout(r, 500));
     await capture('preview_hero_desktop.png', { x: 0, y: 0, width: 1366, height: 820, scale: 2 });
+    await capture('preview_hero_desktop_fixed.png', { x: 0, y: 0, width: 1366, height: 820, scale: 2 });
 
     // 1a. Intro Section Desktop (Dark)
     console.log('Capturing Intro Section Desktop...');
@@ -156,26 +156,53 @@ async function main(){
     // Give Leaflet tiles time to fetch and render
     await new Promise(r => setTimeout(r, 2200));
 
-    const mapRectRes = await send('Runtime.evaluate', {
+    // 4a. Map Line Art (Desktop)
+    // 4a. Map Line Art (Desktop)
+    console.log('Capturing Map Line Art (Desktop)...');
+    await capture('preview_map_lineart.png');
+
+    // 4b. Map Karte (Desktop)
+    console.log('Capturing Map Karte (Desktop)...');
+    await send('Runtime.evaluate', { expression: "document.querySelector('[data-mstyle=\"karte\"]')?.click();" });
+    await new Promise(r => setTimeout(r, 1600));
+    await capture('preview_map_karte.png');
+
+    // 4c. Map Satellit (Desktop)
+    console.log('Capturing Map Satellit (Desktop)...');
+    await send('Runtime.evaluate', { expression: "document.querySelector('[data-mstyle=\"satellit\"]')?.click();" });
+    await new Promise(r => setTimeout(r, 2200));
+    await capture('preview_map_satellit.png');
+
+    // Switch back to Line Art
+    await send('Runtime.evaluate', { expression: "document.querySelector('[data-mstyle=\"lineart\"]')?.click();" });
+    await new Promise(r => setTimeout(r, 800));
+
+    // 4d. Map Mobile
+    console.log('Capturing Map Mobile (390px)...');
+    await send('Emulation.setDeviceMetricsOverride', {
+      width: 390,
+      height: 844,
+      deviceScaleFactor: 2,
+      mobile: true
+    });
+    await new Promise(r => setTimeout(r, 800));
+    await send('Runtime.evaluate', {
       expression: `
-        (() => {
-          const r = document.querySelector('.mapwrap').getBoundingClientRect();
-          return JSON.stringify({ x: Math.max(0, r.left), y: Math.max(0, r.top), width: Math.round(r.width), height: Math.round(r.height) });
-        })()
+        const m = document.querySelector('.mapwrap');
+        m.scrollIntoView({ behavior: 'instant', block: 'center' });
       `
     });
-    const mapRect = JSON.parse(mapRectRes.result?.value || mapRectRes.result?.description || '{}');
-    if(mapRect.width && mapRect.height){
-      await capture('preview_map_zoomed.png', {
-        x: mapRect.x,
-        y: mapRect.y,
-        width: mapRect.width,
-        height: mapRect.height,
-        scale: 2
-      });
-    } else {
-      await capture('preview_map_zoomed.png');
-    }
+    await new Promise(r => setTimeout(r, 1200));
+    await capture('preview_map_mobile.png');
+
+    // Restore Desktop Metrics
+    await send('Emulation.setDeviceMetricsOverride', {
+      width: 1366,
+      height: 900,
+      deviceScaleFactor: 2,
+      mobile: false
+    });
+    await new Promise(r => setTimeout(r, 400));
 
     // 5. Subpage Desktop (#/studium)
     console.log('Capturing Subpage Desktop (#/studium)...');
