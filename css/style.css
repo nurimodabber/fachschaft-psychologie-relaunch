@@ -385,6 +385,24 @@ a.ext::after{content:"";display:inline-block;width:.62em;height:.62em;margin-lef
   filter: invert(100%) hue-rotate(180deg) brightness(88%) contrast(135%) grayscale(100%);
 }
 
+/* Vektor-Gebäudeumrisse im Leaflet-Layer */
+.building-institute{
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: fill-opacity .25s ease, stroke .25s ease;
+}
+.building-surrounding{
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.map-zoomed .building-surrounding{
+  opacity: 1;
+}
+
+
 /* Vektor-Pfade der Karte (Weiße Straßen) */
 .m-mi{fill:none;stroke:var(--map-mi);stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
 .m-rd{fill:none;stroke:var(--map-rd);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}

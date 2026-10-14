@@ -504,28 +504,34 @@ function initZoomableMaps(root){
     const Leaflet = window.Leaflet || window.L;
     if(Leaflet && typeof Leaflet.map === 'function'){
       vp.innerHTML = '';
-      const centerCoords = [49.41169, 8.69788];
-      const kellerCoords = [49.41148, 8.69795];
+      const centerCoords = [49.41142, 8.69792];
+      const kellerCoords = [49.41145, 8.69795];
 
       const LAYERS = {
         lineart: {
           url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           opts: {
-            maxZoom: 19,
+            minZoom: 14,
+            maxZoom: 20,
+            maxNativeZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende'
           }
         },
         karte: {
           url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           opts: {
-            maxZoom: 19,
+            minZoom: 14,
+            maxZoom: 20,
+            maxNativeZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende'
           }
         },
         satellit: {
           url: 'https://server.arcgisonline.com/' + 'ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
           opts: {
-            maxZoom: 19,
+            minZoom: 14,
+            maxZoom: 20,
+            maxNativeZoom: 19,
             attribution: 'Tiles &copy; <a href="https://www.esri.com" target="_blank" rel="noopener">Esri</a>'
           }
         }
@@ -547,7 +553,7 @@ function initZoomableMaps(root){
       let activeStyle = 'lineart';
       let currentTileLayer = Leaflet.tileLayer(LAYERS.lineart.url, LAYERS.lineart.opts).addTo(map);
 
-      // Gebäudeumrisse (Vektor-Lineart bei Zoom)
+      // Gebäudeumrisse (Vektor-Lineart)
       let geojsonLayer = null;
       let buildingsData = null;
 
@@ -557,9 +563,10 @@ function initZoomableMaps(root){
         if(isMain){
           return {
             color: '#e02844',
-            weight: 2.5,
+            weight: 2.2,
             fillColor: '#e02844',
-            fillOpacity: activeStyle === 'satellit' ? 0.35 : 0.22
+            fillOpacity: activeStyle === 'satellit' ? 0.35 : 0.22,
+            className: 'building-institute'
           };
         }
         if(activeStyle === 'lineart'){
@@ -567,7 +574,8 @@ function initZoomableMaps(root){
             color: 'rgba(255, 255, 255, 0.42)',
             weight: 1.2,
             fillColor: 'rgba(255, 255, 255, 0.05)',
-            fillOpacity: 1
+            fillOpacity: 1,
+            className: 'building-surrounding'
           };
         }
         if(activeStyle === 'satellit'){
@@ -575,40 +583,34 @@ function initZoomableMaps(root){
             color: 'rgba(255, 255, 255, 0.45)',
             weight: 1.2,
             fillColor: 'transparent',
-            fillOpacity: 0
+            fillOpacity: 0,
+            className: 'building-surrounding'
           };
         }
         return {
           color: 'rgba(0, 0, 0, 0.28)',
           weight: 1.2,
           fillColor: 'transparent',
-          fillOpacity: 0
+          fillOpacity: 0,
+          className: 'building-surrounding'
         };
       }
 
-      function updateBuildings(){
-        if(!buildingsData) return;
-        const curZoom = map.getZoom();
-        if(geojsonLayer) map.removeLayer(geojsonLayer);
-
-        geojsonLayer = Leaflet.geoJSON(buildingsData, {
-          filter: feat => feat?.properties?.isInstitute || curZoom >= 16,
-          style: getBuildingStyle
-        }).addTo(map);
-
-        if(instMarker) instMarker.bringToFront();
-        if(kellerMarker) kellerMarker.bringToFront();
+      function updateZoomState(){
+        container.classList.toggle('map-zoomed', map.getZoom() >= 16);
       }
+      map.on('zoom', updateZoomState);
+      updateZoomState();
 
       fetch('assets/vendor/leaflet/buildings.json')
         .then(res => res.json())
         .then(data => {
           buildingsData = data;
-          updateBuildings();
+          geojsonLayer = Leaflet.geoJSON(buildingsData, {
+            style: getBuildingStyle
+          }).addTo(map);
         })
         .catch(() => {});
-
-      map.on('zoomend', updateBuildings);
 
       const instIcon = Leaflet.divIcon({
         className: 'leaflet-pin-wrapper marker-inst',
@@ -616,7 +618,11 @@ function initZoomableMaps(root){
         iconSize: [210, 36],
         iconAnchor: [13, 18]
       });
-      const instMarker = Leaflet.marker(centerCoords, { icon: instIcon, title: 'Psychologisches Institut, Hauptstraße 47–51' }).addTo(map);
+      const instMarker = Leaflet.marker([49.41166, 8.69788], {
+        icon: instIcon,
+        title: 'Psychologisches Institut, Hauptstraße 47–51',
+        zIndexOffset: 500
+      }).addTo(map);
 
       const kellerIcon = Leaflet.divIcon({
         className: 'leaflet-pin-wrapper marker-keller',
@@ -624,7 +630,11 @@ function initZoomableMaps(root){
         iconSize: [260, 30],
         iconAnchor: [10, 15]
       });
-      const kellerMarker = Leaflet.marker(kellerCoords, { icon: kellerIcon, title: 'Fachschaftskeller (Tor zum Innenhof)' }).addTo(map);
+      const kellerMarker = Leaflet.marker([49.41136, 8.69798], {
+        icon: kellerIcon,
+        title: 'Fachschaftskeller (Tor zum Innenhof)',
+        zIndexOffset: 450
+      }).addTo(map);
 
       function setMapStyle(styleName){
         if(!LAYERS[styleName] || styleName === activeStyle) return;
@@ -639,7 +649,9 @@ function initZoomableMaps(root){
         });
 
         container.classList.toggle('map-mode-lineart', styleName === 'lineart');
-        updateBuildings();
+        if(geojsonLayer){
+          geojsonLayer.setStyle(getBuildingStyle);
+        }
       }
 
       $$('.mswitch-btn', container).forEach(b => {
@@ -649,6 +661,8 @@ function initZoomableMaps(root){
         });
       });
 
+      let wheelTimer = null;
+      let wheelAcc = 0;
       vp.addEventListener('wheel', e => {
         const modifier = e.ctrlKey || e.metaKey;
         if(!modifier){
@@ -656,11 +670,17 @@ function initZoomableMaps(root){
           return;
         }
         e.preventDefault();
-        if(e.deltaY < 0){
-          map.zoomIn(1);
-        } else {
-          map.zoomOut(1);
-        }
+        wheelAcc += e.deltaY;
+        if(wheelTimer) return;
+        wheelTimer = setTimeout(() => {
+          if(wheelAcc < -20){
+            map.zoomIn(1);
+          } else if(wheelAcc > 20){
+            map.zoomOut(1);
+          }
+          wheelAcc = 0;
+          wheelTimer = null;
+        }, 60);
       }, { passive: false });
 
       $$('[data-mzoom]', container).forEach(btn => {

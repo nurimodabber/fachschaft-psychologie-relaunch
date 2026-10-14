@@ -173,9 +173,17 @@ async function main(){
     await new Promise(r => setTimeout(r, 2200));
     await capture('preview_map_satellit.png');
 
-    // Switch back to Line Art
+    // 4d. Map Zoomed In (Desktop)
+    console.log('Capturing Map Zoomed (Desktop)...');
     await send('Runtime.evaluate', { expression: "document.querySelector('[data-mstyle=\"lineart\"]')?.click();" });
+    await new Promise(r => setTimeout(r, 600));
+    await send('Runtime.evaluate', { expression: "document.querySelector('[data-mzoom=\"in\"]')?.click();" });
     await new Promise(r => setTimeout(r, 800));
+    await capture('preview_map_zoomed.png');
+    // Reset view
+    await send('Runtime.evaluate', { expression: "document.querySelector('[data-mzoom=\"reset\"]')?.click();" });
+    await new Promise(r => setTimeout(r, 800));
+
 
     // 4d. Map Mobile
     console.log('Capturing Map Mobile (390px)...');
