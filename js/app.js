@@ -30,16 +30,14 @@ function home(){
 <section class="hero" aria-labelledby="hero-h">
  ${pic('hero','',true)}
  <div class="in">
-  <div class="hero-content">
-   <p class="eb">Universität Heidelberg</p>
-   <h1 id="hero-h" tabindex="-1">Fachschaft<br>Psychologie</h1>
-   <p class="lead">Die studentische Vertretung am Psychologischen Institut der Universität Heidelberg.</p>
-   <div class="btns">
-    <a class="btn btn-primary" href="#/fachschaft"><span>Über uns</span></a>
-    <a class="hero-btn-secondary" href="#/studium"><span>Infos zum Studium</span>${ic('chevr')}</a>
-   </div>
-   ${heroSession}
+  <p class="eb">Universität Heidelberg</p>
+  <h1 id="hero-h" tabindex="-1">Fachschaft<br>Psychologie</h1>
+  <p class="lead">Die studentische Vertretung am Psychologischen Institut der Universität Heidelberg.</p>
+  <div class="btns">
+   <a class="btn btn-primary" href="#/fachschaft"><span>Über uns</span></a>
+   <a class="hero-btn-secondary" href="#/studium"><span>Infos zum Studium</span>${ic('chevr')}</a>
   </div>
+  ${heroSession}
  </div>
  <p class="credit">Foto: Samuel Scherer, <a class="noext" href="${CCBYSA}">CC BY-SA 4.0</a></p>
 </section>
@@ -47,8 +45,8 @@ function home(){
 <section class="sec sec-intro" aria-labelledby="intro-h">
  <h2 class="sr" id="intro-h">Über die Fachschaft</h2>
  <div class="sec-bg-map" aria-hidden="true">${mapSvg('mapbg-ambient')}</div>
- <div class="wrap intro">
-  <div class="rv">
+ <div class="wrap">
+  <div class="intro rv">
    <p class="statement">Wir vertreten die Psychologiestudierenden in Heidelberg, organisieren Veranstaltungen und helfen bei Fragen zum Studium.</p>
    <p class="more"><a class="tlink" href="#/fachschaft"><span>Mehr über die Fachschaft</span>${ic('chevr')}</a></p>
   </div>
